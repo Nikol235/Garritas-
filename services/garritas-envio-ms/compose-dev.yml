@@ -1,0 +1,18 @@
+name: garritas-envio-dev
+
+services:
+  postgres-envio-dev:
+    image: postgres:16-alpine
+    container_name: garritas-postgres-envio-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: garritas_envio_db
+      POSTGRES_USER: garritas
+      POSTGRES_PASSWORD: garritas
+    ports:
+      - "15443:5432"
+    volumes:
+      - garritas_envio_dev_data:/var/lib/postgresql/data
+
+volumes:
+  garritas_envio_dev_data:

@@ -1,0 +1,15 @@
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    uid: garritas-prometheus
+    type: prometheus
+    access: proxy
+    url: http://garritas-prometheus:9090
+    isDefault: true
+
+  - name: Loki
+    uid: garritas-loki
+    type: loki
+    access: proxy
+    url: http://garritas-loki:3100

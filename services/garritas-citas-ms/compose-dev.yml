@@ -1,0 +1,18 @@
+name: garritas-citas-dev
+
+services:
+  postgres-citas-dev:
+    image: postgres:16-alpine
+    container_name: garritas-postgres-citas-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: garritas_citas_db
+      POSTGRES_USER: garritas
+      POSTGRES_PASSWORD: garritas
+    ports:
+      - "15444:5432"
+    volumes:
+      - garritas_citas_dev_data:/var/lib/postgresql/data
+
+volumes:
+  garritas_citas_dev_data:

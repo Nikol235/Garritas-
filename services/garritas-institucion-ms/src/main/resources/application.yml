@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: garritas-institucion-ms
+  profiles:
+    active: dev
+  config:
+    import: "optional:configserver:${CONFIG_SERVER_URL:http://localhost:18888}"

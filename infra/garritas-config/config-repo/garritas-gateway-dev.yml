@@ -1,0 +1,58 @@
+server:
+  port: 18080
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: garritas-venta
+              uri: lb://garritas-venta-ms
+              predicates:
+                - Path=/api/v1/ventas/**
+            - id: garritas-institucion
+              uri: lb://garritas-institucion-ms
+              predicates:
+                - Path=/api/v1/sedes/**
+            - id: garritas-envio
+              uri: lb://garritas-envio-ms
+              predicates:
+                - Path=/api/v1/envios/**
+            - id: garritas-citas
+              uri: lb://garritas-citas-ms
+              predicates:
+                - Path=/api/v1/citas/**
+            - id: garritas-catalogo-categorias
+              uri: lb://garritas-catalogo-ms
+              predicates:
+                - Path=/api/v1/categorias/**
+            - id: garritas-catalogo-productos
+              uri: lb://garritas-catalogo-ms
+              predicates:
+                - Path=/api/v1/productos/**
+            - id: garritas-usuario
+              uri: lb://garritas-usuario-ms
+              predicates:
+                - Path=/api/v1/usuarios/**
+            - id: garritas-pago
+              uri: lb://garritas-pago-ms
+              predicates:
+                - Path=/api/v1/pagos/**
+
+eureka:
+  instance:
+    hostname: localhost
+    instance-id: ${spring.application.name}:${server.port}
+  client:
+    service-url:
+      defaultZone: http://localhost:18761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always

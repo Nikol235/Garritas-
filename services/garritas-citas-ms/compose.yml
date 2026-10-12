@@ -1,0 +1,52 @@
+name: garritas-citas-prod
+
+services:
+  postgres-citas:
+    image: postgres:16-alpine
+    container_name: garritas-postgres-citas
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    volumes:
+      - garritas_citas_data:/var/lib/postgresql/data
+    ports:
+      - "25444:5432"
+    networks:
+      - garritas-citas-int
+
+  garritas-citas-ms:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      postgres-citas:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      CONFIG_SERVER_URL: ${CONFIG_SERVER_URL}
+      DB_HOST: garritas-postgres-citas
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - garritas-citas-int
+      - garritas-prod-net
+
+volumes:
+  garritas_citas_data:
+
+networks:
+  garritas-citas-int:
+    name: garritas-citas-int
+  garritas-prod-net:
+    external: true

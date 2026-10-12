@@ -1,0 +1,52 @@
+name: garritas-usuario-prod
+
+services:
+  postgres-usuario:
+    image: postgres:16-alpine
+    container_name: garritas-postgres-usuario
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    volumes:
+      - garritas_usuario_data:/var/lib/postgresql/data
+    ports:
+      - "25446:5432"
+    networks:
+      - garritas-usuario-int
+
+  garritas-usuario-ms:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      postgres-usuario:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      CONFIG_SERVER_URL: ${CONFIG_SERVER_URL}
+      DB_HOST: garritas-postgres-usuario
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - garritas-usuario-int
+      - garritas-prod-net
+
+volumes:
+  garritas_usuario_data:
+
+networks:
+  garritas-usuario-int:
+    name: garritas-usuario-int
+  garritas-prod-net:
+    external: true

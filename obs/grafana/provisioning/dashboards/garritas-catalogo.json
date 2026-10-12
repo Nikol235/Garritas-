@@ -1,0 +1,55 @@
+{
+  "title": "Garritas - Catalogo en tiempo real",
+  "uid": "garritas-catalogo",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": true,
+  "timezone": "browser",
+  "time": { "from": "now-30m", "to": "now" },
+  "refresh": "10s",
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "Productos creados por minuto",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "garritas-prometheus" },
+      "targets": [
+        {
+          "expr": "rate(garritas_productos_creados_total[1m]) * 60",
+          "refId": "A",
+          "datasource": { "type": "prometheus", "uid": "garritas-prometheus" }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Total de productos creados (5m)",
+      "gridPos": { "h": 8, "w": 6, "x": 12, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "garritas-prometheus" },
+      "targets": [
+        {
+          "expr": "increase(garritas_productos_creados_total[5m])",
+          "refId": "A",
+          "datasource": { "type": "prometheus", "uid": "garritas-prometheus" }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "bargauge",
+      "title": "Busquedas fallidas por recurso",
+      "gridPos": { "h": 8, "w": 6, "x": 18, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "garritas-prometheus" },
+      "targets": [
+        {
+          "expr": "sum by (recurso) (garritas_recursos_no_encontrados_total)",
+          "legendFormat": "{{recurso}}",
+          "refId": "A",
+          "datasource": { "type": "prometheus", "uid": "garritas-prometheus" }
+        }
+      ]
+    }
+  ]
+}

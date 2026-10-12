@@ -1,0 +1,52 @@
+name: garritas-catalogo-prod
+
+services:
+  postgres-catalogo:
+    image: postgres:16-alpine
+    container_name: garritas-postgres-catalogo
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    volumes:
+      - garritas_catalogo_data:/var/lib/postgresql/data
+    ports:
+      - "25445:5432"
+    networks:
+      - garritas-catalogo-int
+
+  garritas-catalogo-ms:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      postgres-catalogo:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      CONFIG_SERVER_URL: ${CONFIG_SERVER_URL}
+      DB_HOST: garritas-postgres-catalogo
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - garritas-catalogo-int
+      - garritas-prod-net
+
+volumes:
+  garritas_catalogo_data:
+
+networks:
+  garritas-catalogo-int:
+    name: garritas-catalogo-int
+  garritas-prod-net:
+    external: true

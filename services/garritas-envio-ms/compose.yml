@@ -1,0 +1,52 @@
+name: garritas-envio-prod
+
+services:
+  postgres-envio:
+    image: postgres:16-alpine
+    container_name: garritas-postgres-envio
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    volumes:
+      - garritas_envio_data:/var/lib/postgresql/data
+    ports:
+      - "25443:5432"
+    networks:
+      - garritas-envio-int
+
+  garritas-envio-ms:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      postgres-envio:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      CONFIG_SERVER_URL: ${CONFIG_SERVER_URL}
+      DB_HOST: garritas-postgres-envio
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - garritas-envio-int
+      - garritas-prod-net
+
+volumes:
+  garritas_envio_data:
+
+networks:
+  garritas-envio-int:
+    name: garritas-envio-int
+  garritas-prod-net:
+    external: true

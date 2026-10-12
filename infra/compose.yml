@@ -1,0 +1,57 @@
+name: garritas-infra-prod
+
+services:
+  garritas-config:
+    build:
+      context: ./garritas-config
+      dockerfile: Dockerfile
+    container_name: garritas-config
+    restart: unless-stopped
+    ports:
+      - "28888:8888"
+    volumes:
+      - ./garritas-config/config-repo:/config-repo
+    environment:
+      SERVER_PORT: 8888
+      SPRING_PROFILES_ACTIVE: native
+      CONFIG_REPO_LOCATION: file:/config-repo
+    networks:
+      - garritas-prod-net
+
+  garritas-eureka:
+    build:
+      context: ./garritas-eureka
+      dockerfile: Dockerfile
+    container_name: garritas-eureka
+    restart: unless-stopped
+    depends_on:
+      - garritas-config
+    ports:
+      - "28761:8761"
+    environment:
+      SERVER_PORT: 8761
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://garritas-config:8888
+    networks:
+      - garritas-prod-net
+
+  garritas-gateway:
+    build:
+      context: ./garritas-gateway
+      dockerfile: Dockerfile
+    container_name: garritas-gateway
+    restart: unless-stopped
+    depends_on:
+      - garritas-config
+      - garritas-eureka
+    ports:
+      - "28080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://garritas-config:8888
+    networks:
+      - garritas-prod-net
+
+networks:
+  garritas-prod-net:
+    name: garritas-prod-net

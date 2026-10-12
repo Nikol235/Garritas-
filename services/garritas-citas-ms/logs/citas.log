@@ -1,0 +1,85 @@
+2026-09-11 09:01:00.679 [] INFO  p.e.u.g.c.GarritasCitasMsApplication - Starting GarritasCitasMsApplication v0.0.1-SNAPSHOT using Java 21.0.12 with PID 1 (/app/app.jar started by root in /app)
+2026-09-11 09:01:00.681 [] INFO  p.e.u.g.c.GarritasCitasMsApplication - The following 1 profile is active: "prod"
+2026-09-11 09:01:00.714 [] INFO  o.s.c.c.c.ConfigServerConfigDataLoader - Fetching config from server at : http://garritas-config:8888
+2026-09-11 09:01:00.715 [] INFO  o.s.c.c.c.ConfigServerConfigDataLoader - Located environment: name=garritas-citas-ms, profiles=[default], label=null, version=null, state=null
+2026-09-11 09:01:00.716 [] INFO  o.s.c.c.c.ConfigServerConfigDataLoader - Fetching config from server at : http://garritas-config:8888
+2026-09-11 09:01:00.716 [] INFO  o.s.c.c.c.ConfigServerConfigDataLoader - Located environment: name=garritas-citas-ms, profiles=[prod], label=null, version=null, state=null
+2026-09-11 09:01:01.356 [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-11 09:01:01.452 [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 88 ms. Found 1 JPA repository interface.
+2026-09-11 09:01:01.771 [] INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=704c5860-0f51-30dc-a836-878da50bac4f
+2026-09-11 09:01:02.134 [] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-09-11 09:01:02.149 [] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-09-11 09:01:02.149 [] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-09-11 09:01:02.179 [] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1460 ms
+2026-09-11 09:01:02.535 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-09-11 09:01:02.752 [] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4504a4ed
+2026-09-11 09:01:02.754 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-09-11 09:01:02.780 [] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://garritas-postgres-citas:5432/garritas_citas_db (PostgreSQL 16.14)
+2026-09-11 09:01:02.823 [] INFO  o.f.c.i.s.JdbcTableSchemaHistory - Schema history table "public"."flyway_schema_history" does not exist yet
+2026-09-11 09:01:02.826 [] INFO  o.f.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.017s)
+2026-09-11 09:01:02.846 [] INFO  o.f.c.i.s.JdbcTableSchemaHistory - Creating Schema History table "public"."flyway_schema_history" ...
+2026-09-11 09:01:02.921 [] INFO  o.f.core.internal.command.DbMigrate - Current version of schema "public": << Empty Schema >>
+2026-09-11 09:01:02.926 [] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version "1 - create citas tables"
+2026-09-11 09:01:02.958 [] INFO  o.f.core.internal.command.DbMigrate - Successfully applied 1 migration to schema "public", now at version v1 (execution time 00:00.014s)
+2026-09-11 09:01:03.027 [] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-09-11 09:01:03.088 [] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.24.Final
+2026-09-11 09:01:03.535 [] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-11 09:01:03.601 [] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://garritas-postgres-citas:5432/garritas_citas_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 16.14
+	Default catalog/schema: garritas_citas_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-09-11 09:01:04.384 [] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-11 09:01:04.470 [] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-11 09:01:04.630 [] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-09-11 09:01:04.848 [] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-11 09:01:05.304 [] INFO  o.s.c.n.e.c.DiscoveryClientOptionalArgsConfiguration - Eureka HTTP Client uses RestClient.
+2026-09-11 09:01:05.333 [] WARN  o.s.c.l.c.LoadBalancerCacheAutoConfiguration$LoadBalancerCaffeineWarnLogger - Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2026-09-11 09:01:05.340 [] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2026-09-11 09:01:05.398 [] INFO  o.s.c.n.eureka.InstanceInfoFactory - Setting initial instance status as: STARTING
+2026-09-11 09:01:05.416 [] INFO  c.netflix.discovery.DiscoveryClient - Initializing Eureka in region us-east-1
+2026-09-11 09:01:05.418 [] INFO  c.n.d.s.r.aws.ConfigClusterResolver - Resolving eureka endpoints via configuration
+2026-09-11 09:01:05.423 [] INFO  c.netflix.discovery.DiscoveryClient - Disable delta property : false
+2026-09-11 09:01:05.423 [] INFO  c.netflix.discovery.DiscoveryClient - Single vip registry refresh property : null
+2026-09-11 09:01:05.424 [] INFO  c.netflix.discovery.DiscoveryClient - Force full registry fetch : false
+2026-09-11 09:01:05.424 [] INFO  c.netflix.discovery.DiscoveryClient - Application is null : false
+2026-09-11 09:01:05.424 [] INFO  c.netflix.discovery.DiscoveryClient - Registered Applications size is zero : true
+2026-09-11 09:01:05.424 [] INFO  c.netflix.discovery.DiscoveryClient - Application version is -1: true
+2026-09-11 09:01:05.425 [] INFO  c.netflix.discovery.DiscoveryClient - Getting all instance registry info from the eureka server
+2026-09-11 09:01:05.643 [] INFO  c.netflix.discovery.DiscoveryClient - The response status is 200
+2026-09-11 09:01:05.645 [] INFO  c.netflix.discovery.DiscoveryClient - Starting heartbeat executor: renew interval is: 30
+2026-09-11 09:01:05.646 [] INFO  c.n.discovery.InstanceInfoReplicator - InstanceInfoReplicator onDemand update allowed rate per min is 4
+2026-09-11 09:01:05.648 [] INFO  c.netflix.discovery.DiscoveryClient - Discovery Client initialized at timestamp 1789117265647 with initial instances count: 5
+2026-09-11 09:01:05.650 [] INFO  o.s.c.n.e.s.EurekaServiceRegistry - Registering application GARRITAS-CITAS-MS with eureka with status UP
+2026-09-11 09:01:05.651 [] INFO  c.netflix.discovery.DiscoveryClient - Saw local status change event StatusChangeEvent [timestamp=1789117265651, current=UP, previous=STARTING]
+2026-09-11 09:01:05.652 [] INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_GARRITAS-CITAS-MS/garritas-citas-ms:4f3e31427fabd72b09db9d67abc50f04: registering service...
+2026-09-11 09:01:05.663 [] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-09-11 09:01:05.664 [] INFO  o.s.c.n.e.s.EurekaAutoServiceRegistration - Updating port to 8084
+2026-09-11 09:01:05.671 [] INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_GARRITAS-CITAS-MS/garritas-citas-ms:4f3e31427fabd72b09db9d67abc50f04 - registration status: 204
+2026-09-11 09:01:05.673 [] INFO  p.e.u.g.c.GarritasCitasMsApplication - Started GarritasCitasMsApplication in 6.207 seconds (process running for 6.969)
+2026-09-11 09:01:58.431 [] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-09-11 09:01:58.432 [] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-09-11 09:01:58.435 [] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2026-09-11 09:06:05.412 [] INFO  c.n.d.s.r.aws.ConfigClusterResolver - Resolving eureka endpoints via configuration
+2026-09-11 09:11:05.398 [] INFO  c.n.d.s.r.aws.ConfigClusterResolver - Resolving eureka endpoints via configuration
+2026-09-11 09:16:05.386 [] INFO  c.n.d.s.r.aws.ConfigClusterResolver - Resolving eureka endpoints via configuration
+2026-09-11 09:21:05.373 [] INFO  c.n.d.s.r.aws.ConfigClusterResolver - Resolving eureka endpoints via configuration
+2026-09-11 09:26:05.361 [] INFO  c.n.d.s.r.aws.ConfigClusterResolver - Resolving eureka endpoints via configuration
+2026-09-11 09:31:05.347 [] INFO  c.n.d.s.r.aws.ConfigClusterResolver - Resolving eureka endpoints via configuration
+2026-09-11 09:36:00.063 [] INFO  o.s.c.n.e.s.EurekaServiceRegistry - Unregistering application GARRITAS-CITAS-MS with eureka with status DOWN
+2026-09-11 09:36:00.064 [] INFO  c.netflix.discovery.DiscoveryClient - Saw local status change event StatusChangeEvent [timestamp=1789119360064, current=DOWN, previous=UP]
+2026-09-11 09:36:00.065 [] INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_GARRITAS-CITAS-MS/garritas-citas-ms:4f3e31427fabd72b09db9d67abc50f04: registering service...
+2026-09-11 09:36:00.079 [] INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_GARRITAS-CITAS-MS/garritas-citas-ms:4f3e31427fabd72b09db9d67abc50f04 - registration status: 204
+2026-09-11 09:36:00.105 [] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-09-11 09:36:00.114 [] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-09-11 09:36:00.138 [] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-11 09:36:00.162 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-09-11 09:36:00.170 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-09-11 09:36:00.173 [] INFO  c.netflix.discovery.DiscoveryClient - Shutting down DiscoveryClient ...

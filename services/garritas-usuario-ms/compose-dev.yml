@@ -1,0 +1,18 @@
+name: garritas-usuario-dev
+
+services:
+  postgres-usuario-dev:
+    image: postgres:16-alpine
+    container_name: garritas-postgres-usuario-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: garritas_usuario_db
+      POSTGRES_USER: garritas
+      POSTGRES_PASSWORD: garritas
+    ports:
+      - "15446:5432"
+    volumes:
+      - garritas_usuario_dev_data:/var/lib/postgresql/data
+
+volumes:
+  garritas_usuario_dev_data:

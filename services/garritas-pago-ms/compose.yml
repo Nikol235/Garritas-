@@ -1,0 +1,52 @@
+name: garritas-pago-prod
+
+services:
+  postgres-pago:
+    image: postgres:16-alpine
+    container_name: garritas-postgres-pago
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    volumes:
+      - garritas_pago_data:/var/lib/postgresql/data
+    ports:
+      - "25447:5432"
+    networks:
+      - garritas-pago-int
+
+  garritas-pago-ms:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      postgres-pago:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      CONFIG_SERVER_URL: ${CONFIG_SERVER_URL}
+      DB_HOST: garritas-postgres-pago
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - garritas-pago-int
+      - garritas-prod-net
+
+volumes:
+  garritas_pago_data:
+
+networks:
+  garritas-pago-int:
+    name: garritas-pago-int
+  garritas-prod-net:
+    external: true
