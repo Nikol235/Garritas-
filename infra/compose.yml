@@ -1,57 +1,61 @@
 name: garritas-infra-prod
-
 services:
   garritas-config:
     build:
-      context: ./garritas-config
+      context: ..
       dockerfile: Dockerfile
+      args:
+        MODULE: infra/garritas-config
     container_name: garritas-config
     restart: unless-stopped
     ports:
-      - "28888:8888"
-    volumes:
-      - ./garritas-config/config-repo:/config-repo
+    - 28888:8888
+    volumes: []
     environment:
       SERVER_PORT: 8888
       SPRING_PROFILES_ACTIVE: native
       CONFIG_REPO_LOCATION: file:/config-repo
     networks:
-      - garritas-prod-net
-
+    - garritas-prod-net
   garritas-eureka:
     build:
-      context: ./garritas-eureka
+      context: ..
       dockerfile: Dockerfile
+      args:
+        MODULE: infra/garritas-eureka
     container_name: garritas-eureka
     restart: unless-stopped
     depends_on:
-      - garritas-config
+    - garritas-config
     ports:
-      - "28761:8761"
+    - 28761:8761
     environment:
       SERVER_PORT: 8761
       SPRING_PROFILES_ACTIVE: prod
       CONFIG_SERVER_URL: http://garritas-config:8888
     networks:
-      - garritas-prod-net
-
+    - garritas-prod-net
   garritas-gateway:
     build:
-      context: ./garritas-gateway
+      context: ..
       dockerfile: Dockerfile
+      args:
+        MODULE: infra/garritas-gateway
     container_name: garritas-gateway
     restart: unless-stopped
     depends_on:
-      - garritas-config
-      - garritas-eureka
+    - garritas-config
+    - garritas-eureka
     ports:
-      - "28080:8080"
+    - 28080:8080
     environment:
       SPRING_PROFILES_ACTIVE: prod
       CONFIG_SERVER_URL: http://garritas-config:8888
+      KAFKA_BOOTSTRAP_SERVERS: garritas-kafka:9092
+      OIDC_ISSUER_URI: ${OIDC_ISSUER_URI:-http://localhost:18180/realms/garritas}
+      OIDC_JWK_SET_URI: http://garritas-keycloak:8080/realms/garritas/protocol/openid-connect/certs
     networks:
-      - garritas-prod-net
-
+    - garritas-prod-net
 networks:
   garritas-prod-net:
     name: garritas-prod-net

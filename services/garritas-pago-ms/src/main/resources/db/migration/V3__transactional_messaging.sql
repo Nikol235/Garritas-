@@ -1,0 +1,7 @@
+CREATE TABLE outbox_event (
+ sequence BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+ event_id UUID NOT NULL UNIQUE, aggregate_id VARCHAR(100) NOT NULL, payload TEXT NOT NULL,
+ created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP, published_at TIMESTAMPTZ
+);
+CREATE INDEX ix_outbox_pending ON outbox_event(sequence) WHERE published_at IS NULL;
+CREATE TABLE inbox_event(event_id UUID PRIMARY KEY, processed_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP);

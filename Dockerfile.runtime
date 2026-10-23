@@ -1,0 +1,9 @@
+# Alternative for restricted builders: compile and verify JARs on the host first.
+FROM eclipse-temurin:21-jre
+ARG MODULE
+WORKDIR /app
+RUN mkdir -p /app/logs && chown -R 10001:10001 /app
+COPY --chown=10001:10001 ${MODULE}/target/*-SNAPSHOT.jar /app/app.jar
+COPY --chown=10001:10001 infra/garritas-config/config-repo /config-repo
+USER 10001
+ENTRYPOINT ["java","-XX:MaxRAMPercentage=70","-jar","/app/app.jar"]

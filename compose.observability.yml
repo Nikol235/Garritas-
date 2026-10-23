@@ -1,0 +1,44 @@
+services:
+  garritas-prometheus:
+    image: prom/prometheus:v3.14.0
+    restart: unless-stopped
+    ports:
+    - 127.0.0.1:29090:9090
+    volumes:
+    - ./obs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+  garritas-loki:
+    image: grafana/loki:3.7.6
+    restart: unless-stopped
+    ports:
+    - 127.0.0.1:23100:3100
+    volumes: []
+  garritas-promtail:
+    image: grafana/promtail:3.6.8
+    restart: unless-stopped
+    volumes:
+    - ./obs/promtail/promtail-config-dev.yml:/etc/promtail/config.yml:ro
+    - config-logs:/var/log/garritas/garritas-config:ro
+    - eureka-logs:/var/log/garritas/garritas-eureka:ro
+    - gateway-logs:/var/log/garritas/garritas-gateway:ro
+    - catalogo-logs:/var/log/garritas/garritas-catalogo-ms:ro
+    - venta-logs:/var/log/garritas/garritas-venta-ms:ro
+    - pago-logs:/var/log/garritas/garritas-pago-ms:ro
+    - usuario-logs:/var/log/garritas/garritas-usuario-ms:ro
+    - institucion-logs:/var/log/garritas/garritas-institucion-ms:ro
+    - envio-logs:/var/log/garritas/garritas-envio-ms:ro
+    - citas-logs:/var/log/garritas/garritas-citas-ms:ro
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+    - garritas-loki
+  garritas-grafana:
+    image: grafana/grafana:11.4.0
+    restart: unless-stopped
+    ports:
+    - 127.0.0.1:23000:3000
+    environment:
+    - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+    - ./obs/grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+    - garritas-prometheus
+    - garritas-loki

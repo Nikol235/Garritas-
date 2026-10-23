@@ -1,6 +1,5 @@
 server:
   port: 8084
-
 spring:
   datasource:
     url: jdbc:postgresql://localhost:15444/garritas_citas_db
@@ -17,20 +16,26 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    open-in-view: false
   devtools:
     restart:
       enabled: true
     livereload:
       enabled: true
-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${OIDC_ISSUER_URI:http://localhost:18180/realms/garritas}
+          jwk-set-uri: ${OIDC_JWK_SET_URI:http://localhost:18180/realms/garritas/protocol/openid-connect/certs}
+          audiences:
+          - garritas-api
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
-
 logging:
   level:
     pe.edu.upeu.garritas.citas: DEBUG
-
 eureka:
   instance:
     hostname: localhost
@@ -38,7 +43,6 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:18761/eureka
-
 management:
   endpoints:
     web:
@@ -46,4 +50,11 @@ management:
         include: health,info,metrics,prometheus
   endpoint:
     health:
-      show-details: always
+      show-details: when_authorized
+      probes:
+        enabled: true
+      group:
+        liveness:
+          include: livenessState
+        readiness:
+          include: readinessState,db

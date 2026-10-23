@@ -1,5 +1,4 @@
 name: garritas-citas-prod
-
 services:
   postgres-citas:
     image: postgres:16-alpine
@@ -10,20 +9,25 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASS}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      test:
+      - CMD-SHELL
+      - pg_isready -U ${DB_USER} -d ${DB_NAME}
       interval: 10s
       timeout: 5s
       retries: 10
       start_period: 20s
     volumes:
-      - garritas_citas_data:/var/lib/postgresql/data
+    - garritas_citas_data:/var/lib/postgresql/data
     ports:
-      - "25444:5432"
+    - 25444:5432
     networks:
-      - garritas-citas-int
-
+    - garritas-citas-int
   garritas-citas-ms:
-    build: .
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+      args:
+        MODULE: services/garritas-citas-ms
     restart: unless-stopped
     depends_on:
       postgres-citas:
@@ -36,15 +40,16 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
+      KAFKA_BOOTSTRAP_SERVERS: garritas-kafka:9092
+      OIDC_ISSUER_URI: ${OIDC_ISSUER_URI:-http://localhost:18180/realms/garritas}
+      OIDC_JWK_SET_URI: http://garritas-keycloak:8080/realms/garritas/protocol/openid-connect/certs
     volumes:
-      - ./logs:/app/logs
+    - ./logs:/app/logs
     networks:
-      - garritas-citas-int
-      - garritas-prod-net
-
+    - garritas-citas-int
+    - garritas-prod-net
 volumes:
-  garritas_citas_data:
-
+  garritas_citas_data: null
 networks:
   garritas-citas-int:
     name: garritas-citas-int

@@ -1,31 +1,39 @@
 name: garritas-obs-dev
-
 services:
   garritas-prometheus:
     image: prom/prometheus:v3.14.0
     container_name: garritas-prometheus-dev
     restart: unless-stopped
     ports:
-      - "19090:9090"
+    - 127.0.0.1:19090:9090
     volumes:
-      - ./prometheus/prometheus-dev.yml:/etc/prometheus/prometheus.yml:ro
+    - ./prometheus/prometheus-dev.yml:/etc/prometheus/prometheus.yml:ro
     extra_hosts:
-      - "host.docker.internal:host-gateway"
-
+    - host.docker.internal:host-gateway
   garritas-loki:
     image: grafana/loki:3.7.6
     container_name: garritas-loki-dev
     restart: unless-stopped
     ports:
-      - "13100:3100"
-
+    - 127.0.0.1:13100:3100
   garritas-promtail:
     image: grafana/promtail:3.6.8
     container_name: garritas-promtail-dev
     restart: unless-stopped
     volumes:
-      - ./promtail/promtail-config-dev.yml:/etc/promtail/config.yml:ro
-      - ../services:/var/log/garritas:ro
+    - ./promtail/promtail-config-dev.yml:/etc/promtail/config.yml:ro
+    - ../.runtime:/var/log/garritas:ro
     command: -config.file=/etc/promtail/config.yml
     depends_on:
-      - garritas-loki
+    - garritas-loki
+  garritas-grafana:
+    image: grafana/grafana:11.4.0
+    ports:
+    - 127.0.0.1:13000:3000
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-local-grafana}
+    volumes:
+    - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+    - garritas-prometheus
+    - garritas-loki
