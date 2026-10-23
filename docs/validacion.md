@@ -1,4 +1,4 @@
-# Evidencia de validación S11
+# Evidencia de validación
 
 Las comprobaciones se ejecutaron en la máquina de nube de esta tarea. Esto no acredita publicación del entorno ni restauración en una tarea nueva.
 

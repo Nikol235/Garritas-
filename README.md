@@ -1,6 +1,6 @@
 # Garritas Store
 
-Tienda de mascotas con Java 21, Spring Boot 4, Spring Cloud, PostgreSQL/Flyway, Kafka, Keycloak y Angular 22. La adaptación de Pagatu hasta S11 y las decisiones de consistencia están en [el análisis arquitectónico](docs/arquitectura-s11.md).
+Tienda de mascotas con Java 21, Spring Boot 4, Spring Cloud, PostgreSQL/Flyway, Kafka, Keycloak y Angular 22. La arquitectura del proyecto y las decisiones de consistencia están en [el análisis arquitectónico](docs/arquitectura.md).
 
 ## Desarrollo local
 
@@ -91,4 +91,4 @@ Si ya hay Chromium instalado, se puede ejecutar `CHROMIUM_PATH=/usr/bin/chromium
 
 Para probar duplicados y recuperaciones con caída deliberada de Pago y Kafka, ejecutar `python3 scripts/faults.py` únicamente contra el stack DEV desechable. El script detiene procesos propios y recupera el broker; no usar contra producción.
 
-Consulta [la arquitectura](docs/arquitectura-s11.md) para contratos de eventos, manejo de duplicados, recuperación de DLT, cambios incompatibles de API y límites del despliegue local. Los resultados y el bloqueo de disco del Compose completo están en [la evidencia de validación](docs/validacion-s11.md).
+Consulta [la arquitectura](docs/arquitectura.md) para contratos de eventos, manejo de duplicados, recuperación de DLT, cambios incompatibles de API y límites del despliegue local. Los resultados y el bloqueo de disco del Compose completo están en [la evidencia de validación](docs/validacion.md).

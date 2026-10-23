@@ -15,7 +15,7 @@ WEB = os.environ.get('WEB_URL', 'http://localhost:4200')
 
 
 def request(path, token=None, method='GET', body=None, key=None, expected=200):
-    headers = {'Content-Type': 'application/json', 'X-Trace-ID': 'smoke-s11'}
+    headers = {'Content-Type': 'application/json', 'X-Trace-ID': 'smoke-garritas'}
     if token:
         headers['Authorization'] = 'Bearer ' + token
     if key:
@@ -64,8 +64,8 @@ def main():
         context, page, cliente = login(browser, 'cliente', 'Cliente123!')
         print('PASS: login real PKCE con Keycloak, sesión Angular sin tokens persistidos')
         suffix = str(uuid.uuid4())[:8]
-        categoria = request('/categorias', admin, 'POST', {'nombre': 'Smoke ' + suffix, 'descripcion': 'S11'}, expected=201)
-        producto = request('/productos', admin, 'POST', {'nombre': 'Alimento ' + suffix, 'descripcion': 'Prueba S11', 'precio': 12.5, 'stock': 10, 'activo': True, 'categoriaId': categoria['id']}, expected=201)
+        categoria = request('/categorias', admin, 'POST', {'nombre': 'Smoke ' + suffix, 'descripcion': 'Prueba de integración'}, expected=201)
+        producto = request('/productos', admin, 'POST', {'nombre': 'Alimento ' + suffix, 'descripcion': 'Prueba de integración', 'precio': 12.5, 'stock': 10, 'activo': True, 'categoriaId': categoria['id']}, expected=201)
         try:
             request('/ventas', expected=401)
             request('/productos', cliente, 'POST', {}, expected=403)

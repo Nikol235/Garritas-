@@ -1,7 +1,7 @@
-# Garritas Store: análisis de Pagatu y adaptación hasta S11
+# Garritas Store: arquitectura y decisiones de diseño
 
 Referencia inspeccionada: [262dist/pagatu](https://github.com/262dist/pagatu/tree/0eac74ce274b3de9b2240aa157f16912ed57b62d), commit `0eac74ce274b3de9b2240aa157f16912ed57b62d`.
-Se contrastaron el README, `mkdocs.yml`, las guías de `docs/sesiones/` y las implementaciones de infraestructura, catálogo, órdenes, pagos y Angular. El README de referencia conserva algunos rótulos «pendiente» para Keycloak/S11, aunque hay código y manuales: este análisis diferencia esos rótulos de los archivos presentes.
+Se contrastaron el README, `mkdocs.yml`, las guías de `docs/sesiones/` y las implementaciones de infraestructura, catálogo, órdenes, pagos y Angular. El README de referencia conserva algunos rótulos «pendiente» para Keycloak y la integración frontend, aunque hay código y manuales: este análisis diferencia esos rótulos de los archivos presentes.
 
 ## Qué aporta cada semana
 
@@ -17,9 +17,9 @@ Se contrastaron el README, `mkdocs.yml`, las guías de `docs/sesiones/` y las im
 | S8 | Kafka, eventos de orden y pago | Ausente | Contrato versionado, topic particionado por venta y tres grupos consumidores |
 | S9 | Consumo idempotente, Saga, pago fallido y compensación | Estados modificables manualmente, pagos siempre aprobados | Inbox y restricciones únicas; reserva atómica de todos los artículos; pago simulado y liberación idempotente |
 | S10 | Actuator, liveness/readiness, Prometheus, Loki/Promtail/Grafana y correlación | Stack y dashboards parciales | Probes, Gateway medible, Keycloak observado, logs DEV correctos y overlay para Compose raíz |
-| S11 | Angular, Authorization Code + PKCE, CORS, pedidos con polling | Ausente | Angular 22, SDK oficial Keycloak con renovación, catálogo, carrito, categorías ADMIN, pedidos y consulta de pago |
+| Integración frontend | Angular, Authorization Code + PKCE, CORS, pedidos con polling | Ausente | Angular 22, SDK oficial Keycloak con renovación, catálogo, carrito, categorías ADMIN, pedidos y consulta de pago |
 
-Fuentes del manual: [S6](https://github.com/262dist/pagatu/blob/0eac74ce274b3de9b2240aa157f16912ed57b62d/docs/sesiones/S06_Comunicacion_Sincrona_Resiliente.md), [S7b](https://github.com/262dist/pagatu/blob/0eac74ce274b3de9b2240aa157f16912ed57b62d/docs/sesiones/S07b_Seguridad_Distribuida_Keycloak.md), [S8](https://github.com/262dist/pagatu/blob/0eac74ce274b3de9b2240aa157f16912ed57b62d/docs/sesiones/S08_Mensajeria_Asincrona_Entre_Servicios.md), [S9](https://github.com/262dist/pagatu/blob/0eac74ce274b3de9b2240aa157f16912ed57b62d/docs/sesiones/S09_Consistencia_Distribuida_Procesos_Negocio.md), [S10](https://github.com/262dist/pagatu/blob/0eac74ce274b3de9b2240aa157f16912ed57b62d/docs/sesiones/S10_Observabilidad_Diagnostico_Sistemas_Distribuidos.md), [S11](https://github.com/262dist/pagatu/blob/0eac74ce274b3de9b2240aa157f16912ed57b62d/docs/sesiones/S11_Integracion_Cliente_Frontend_Angular_Keycloak.md).
+Fuentes del manual: [S6](https://github.com/262dist/pagatu/blob/0eac74ce274b3de9b2240aa157f16912ed57b62d/docs/sesiones/S06_Comunicacion_Sincrona_Resiliente.md), [S7b](https://github.com/262dist/pagatu/blob/0eac74ce274b3de9b2240aa157f16912ed57b62d/docs/sesiones/S07b_Seguridad_Distribuida_Keycloak.md), [S8](https://github.com/262dist/pagatu/blob/0eac74ce274b3de9b2240aa157f16912ed57b62d/docs/sesiones/S08_Mensajeria_Asincrona_Entre_Servicios.md), [S9](https://github.com/262dist/pagatu/blob/0eac74ce274b3de9b2240aa157f16912ed57b62d/docs/sesiones/S09_Consistencia_Distribuida_Procesos_Negocio.md), [S10](https://github.com/262dist/pagatu/blob/0eac74ce274b3de9b2240aa157f16912ed57b62d/docs/sesiones/S10_Observabilidad_Diagnostico_Sistemas_Distribuidos.md), [Integración frontend](https://github.com/262dist/pagatu/blob/0eac74ce274b3de9b2240aa157f16912ed57b62d/docs/sesiones/S11_Integracion_Cliente_Frontend_Angular_Keycloak.md).
 
 ## Límites de dominio y dependencias
 
@@ -42,7 +42,7 @@ flowchart LR
   K --> V
 ```
 
-Usuario, Institución, Envío y Citas se conservan, compilan, arrancan y quedan protegidos como operaciones ADMIN. No se inventan relaciones automáticas de esos dominios con la Saga de compra: no forman parte del flujo de referencia de S11. El perfil Usuario sigue siendo una entidad de negocio separada de la identidad de Keycloak.
+Usuario, Institución, Envío y Citas se conservan, compilan, arrancan y quedan protegidos como operaciones ADMIN. No se inventan relaciones automáticas de esos dominios con la Saga de compra: no forman parte del flujo de compra de referencia. El perfil Usuario sigue siendo una entidad de negocio separada de la identidad de Keycloak.
 
 ## Consistencia y concurrencia
 
@@ -83,7 +83,7 @@ Se retiran las operaciones manuales `confirmar`, `cancelar`, borrar ventas y cre
 - Un evento en DLT puede dejar una Saga pendiente: requiere intervención; no hay compensación automática por tiempo ni una falsa confirmación en frontend. Se conservan inbox y outbox sin purga automática; una política de retención debe respetar los periodos de reenvío.
 - La pasarela es una **simulación**: por defecto TRANSFERENCIA rechaza y el resto aprueba. No procesa dinero, tarjetas ni reembolsos. `app.pagos.metodo-rechazado` permite variar el fallo didáctico.
 - Kafka es de un solo nodo, réplica 1; PostgreSQL y Keycloak también tienen una instancia. La tolerancia a caídas de proceso verificada no equivale a alta disponibilidad del despliegue.
-- La interfaz cubre catálogo, categorías, compra y pedidos/pagos. La administración visual de productos y de los cuatro dominios adicionales queda fuera del cliente S11; sus APIs siguen disponibles según roles.
+- La interfaz cubre catálogo, categorías, compra y pedidos/pagos. La administración visual de productos y de los cuatro dominios adicionales queda fuera del cliente web; sus APIs siguen disponibles según roles.
 - La referencia usa Promtail; se mantiene la compatibilidad del stack existente. Para una plataforma pública nueva se debe evaluar su sustitución por un agente mantenido y asegurar Loki/Grafana.
 
 ## Validación reproducible
