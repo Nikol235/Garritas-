@@ -18,7 +18,7 @@ scrape_configs:
   metrics_path: /metrics
   static_configs:
   - targets:
-    - host.docker.internal:19000
+    - garritas-keycloak:9000
 - job_name: garritas-config-eureka
   metrics_path: /actuator/prometheus
   static_configs:

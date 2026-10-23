@@ -83,7 +83,7 @@ Se retiran las operaciones manuales `confirmar`, `cancelar`, borrar ventas y cre
 - Un evento en DLT puede dejar una Saga pendiente: requiere intervención; no hay compensación automática por tiempo ni una falsa confirmación en frontend. Se conservan inbox y outbox sin purga automática; una política de retención debe respetar los periodos de reenvío.
 - La pasarela es una **simulación**: por defecto TRANSFERENCIA rechaza y el resto aprueba. No procesa dinero, tarjetas ni reembolsos. `app.pagos.metodo-rechazado` permite variar el fallo didáctico.
 - Kafka es de un solo nodo, réplica 1; PostgreSQL y Keycloak también tienen una instancia. La tolerancia a caídas de proceso verificada no equivale a alta disponibilidad del despliegue.
-- La interfaz cubre catálogo, categorías, compra y pedidos/pagos. La administración visual de productos y de los cuatro dominios adicionales queda fuera del cliente web; sus APIs siguen disponibles según roles.
+- La interfaz cubre catálogo, categorías, nueva orden, carrito persistente y pedidos/pagos. La administración visual de productos y de los cuatro dominios adicionales queda fuera del cliente web; sus APIs siguen disponibles según roles.
 - La referencia usa Promtail; se mantiene la compatibilidad del stack existente. Para una plataforma pública nueva se debe evaluar su sustitución por un agente mantenido y asegurar Loki/Grafana.
 
 ## Validación reproducible

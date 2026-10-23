@@ -6,12 +6,18 @@ services:
     - 127.0.0.1:29090:9090
     volumes:
     - ./obs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    environment:
+      NO_PROXY: ${NO_PROXY:-localhost,127.0.0.1},garritas-prometheus,garritas-loki,garritas-keycloak,keycloak,garritas-eureka,garritas-config,host.docker.internal
+      no_proxy: ${no_proxy:-localhost,127.0.0.1},garritas-prometheus,garritas-loki,garritas-keycloak,keycloak,garritas-eureka,garritas-config,host.docker.internal
   garritas-loki:
     image: grafana/loki:3.7.6
     restart: unless-stopped
     ports:
     - 127.0.0.1:23100:3100
     volumes: []
+    environment:
+      NO_PROXY: ${NO_PROXY:-localhost,127.0.0.1},garritas-prometheus,garritas-loki,garritas-keycloak,keycloak,garritas-eureka,garritas-config,host.docker.internal
+      no_proxy: ${no_proxy:-localhost,127.0.0.1},garritas-prometheus,garritas-loki,garritas-keycloak,keycloak,garritas-eureka,garritas-config,host.docker.internal
   garritas-promtail:
     image: grafana/promtail:3.6.8
     restart: unless-stopped
@@ -30,13 +36,18 @@ services:
     command: -config.file=/etc/promtail/config.yml
     depends_on:
     - garritas-loki
+    environment:
+      NO_PROXY: ${NO_PROXY:-localhost,127.0.0.1},garritas-prometheus,garritas-loki,garritas-keycloak,keycloak,garritas-eureka,garritas-config,host.docker.internal
+      no_proxy: ${no_proxy:-localhost,127.0.0.1},garritas-prometheus,garritas-loki,garritas-keycloak,keycloak,garritas-eureka,garritas-config,host.docker.internal
   garritas-grafana:
     image: grafana/grafana:11.4.0
     restart: unless-stopped
     ports:
     - 127.0.0.1:23000:3000
     environment:
-    - GF_SECURITY_ADMIN_PASSWORD=admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      NO_PROXY: ${NO_PROXY:-localhost,127.0.0.1},garritas-prometheus,garritas-loki,garritas-keycloak,keycloak,garritas-eureka,garritas-config,host.docker.internal
+      no_proxy: ${no_proxy:-localhost,127.0.0.1},garritas-prometheus,garritas-loki,garritas-keycloak,keycloak,garritas-eureka,garritas-config,host.docker.internal
     volumes:
     - ./obs/grafana/provisioning:/etc/grafana/provisioning:ro
     depends_on:
