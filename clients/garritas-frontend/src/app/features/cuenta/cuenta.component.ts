@@ -8,6 +8,7 @@ import { DomainApi, Feedback, Perfil, Mascota } from "../../core/domain-api";
 })
 export class CuentaComponent extends Feedback {
   private readonly api = inject(DomainApi);
+  readonly loading = signal(true);
   readonly perfil = signal<Perfil | null>(null);
   readonly mascotas = signal<Mascota[]>([]);
   model = { nombre: "", email: "", telefono: "", direccion: "" };
@@ -18,6 +19,7 @@ export class CuentaComponent extends Feedback {
     this.load();
   }
   load() {
+    this.loading.set(true);
     this.api.get<Perfil>("/usuarios/me").subscribe({
       next: (p) => {
         this.perfil.set(p);
@@ -27,9 +29,11 @@ export class CuentaComponent extends Feedback {
           telefono: p.telefono ?? "",
           direccion: p.direccion ?? "",
         };
+        this.loading.set(false);
         this.loadPets();
       },
       error: (e) => {
+        this.loading.set(false);
         if (e.status !== 404) this.report(e);
       },
     });

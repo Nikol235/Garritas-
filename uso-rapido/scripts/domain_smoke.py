@@ -100,6 +100,7 @@ def main():
         for label, value in [('Nombre completo','Cliente prueba'),('Correo de contacto','cliente-'+key+'@example.test'),('Teléfono de contacto','999300002'),('Dirección de contacto','Av. Arequipa 100, Lima')]:
             page.get_by_label(label, exact=True).fill(value)
         profile = submit(page, 'Guardar perfil', 'PUT', '/usuarios/me')
+        assert profile['email'] == 'cliente-'+key+'@example.test', 'El perfil no persistió el correo introducido'
         page.get_by_label('Nombre de mascota', exact=True).fill('Luna '+key)
         page.get_by_role('combobox', name='Especie', exact=True).select_option(label='Gato')
         page.get_by_label('Raza', exact=True).fill('Criolla')

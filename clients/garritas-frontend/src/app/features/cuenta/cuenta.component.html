@@ -11,6 +11,9 @@
 @if (message()) {
   <p class="notice" role="status">{{ message() }}</p>
 }
+@if (loading()) {
+  <p role="status">Cargando tu perfil…</p>
+} @else {
 <section class="panel">
   <h2>Mi perfil</h2>
   <form #f="ngForm" (ngSubmit)="save()">
@@ -46,6 +49,7 @@
     </button>
   </form>
 </section>
+}
 @if (perfil()) {
   <div class="page-heading"><h2>Mis mascotas</h2></div>
   <div class="grid">
