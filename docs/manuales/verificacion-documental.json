@@ -1,0 +1,23 @@
+{
+  "pdfs": [
+    {
+      "archivo": "01-Ejecucion-y-puertos.pdf",
+      "paginas": 13,
+      "bytes": 190922
+    },
+    {
+      "archivo": "02-Construccion-desde-cero-con-codigo.pdf",
+      "paginas": 262,
+      "bytes": 961967
+    },
+    {
+      "archivo": "03-Arquitectura-clases-y-conexiones.pdf",
+      "paginas": 108,
+      "bytes": 797193
+    }
+  ],
+  "archivos_zip": 436,
+  "hashes_zip": "OK",
+  "cobertura_clases_y_sql": "OK",
+  "paginas_sin_vacios": "OK"
+}

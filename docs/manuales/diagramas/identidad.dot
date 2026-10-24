@@ -1,0 +1,7 @@
+digraph G { graph [bgcolor="white",fontname="DejaVu Sans",pad="0.15",nodesep="0.3",ranksep="0.5"]; node [shape=box,style="rounded,filled",fillcolor="#edf4ee",color="#4d7b64",fontname="DejaVu Sans",fontsize=11]; edge [fontname="DejaVu Sans",fontsize=9,color="#48685a"];rankdir=TB; a[label="1. Angular pide login
+code challenge S256"];b[label="2. Keycloak verifica credenciales
+y devuelve código"];c[label="3. SDK intercambia código + verifier
+por tokens en memoria"];d[label="4. Interceptor adjunta Bearer JWT
+a peticiones de la API propia"];e[label="5. Gateway y servicio validan
+firma / issuer / audiencia / roles"];f[label="6. CurrentUser.subject()
+comparado con propietario persistido"];a->b->c->d->e->f;}

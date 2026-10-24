@@ -118,3 +118,11 @@ Si no usas Chromium del sistema, instala el navegador de Playwright con `python3
 - [Compose integrado opcional](uso-rapido/docker/README.md)
 
 La documentación puede construirse con `pip install -r docs/requirements.txt` y `mkdocs build --strict`.
+
+## Manuales en PDF
+
+1. [Ejecutar Garritas: instalación, puertos y diagnóstico](docs/manuales/01-Ejecucion-y-puertos.pdf).
+2. [Construir desde cero: pasos, rutas y código completo](docs/manuales/02-Construccion-desde-cero-con-codigo.pdf).
+3. [Entender arquitectura, clases, tecnologías y conexiones](docs/manuales/03-Arquitectura-clases-y-conexiones.pdf).
+
+[Índice y evidencias de los manuales](docs/manuales/README.md). Se incluye un ZIP de fuentes sin dependencias/binarios, con manifiesto SHA-256; fue extraído y compilado en una carpeta nueva.

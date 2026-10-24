@@ -1,0 +1,5 @@
+PASS: Kafka UI abre y muestra el broker conectado
+PASS: consola administrativa Keycloak permite iniciar sesión
+PASS: Eureka abre con los ocho servicios y Gateway registrados
+PASS: Grafana abre, carga dashboards y conecta con Prometheus y Loki
+PASS: Prometheus muestra todos los targets UP; Loki recibe logs de Catálogo

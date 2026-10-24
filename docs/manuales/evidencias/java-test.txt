@@ -1,0 +1,39 @@
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.167 s -- in pe.edu.upeu.garritas.common.SagaContractTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.70 s -- in pe.edu.upeu.garritas.config.GarritasConfigApplicationTests
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.53 s -- in pe.edu.upeu.garritas.eureka.GarritasEurekaApplicationTests
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.768 s -- in pe.edu.upeu.garritas.gateway.GarritasGatewayApplicationTests
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 14.43 s -- in pe.edu.upeu.garritas.catalogo.GarritasCatalogoMsApplicationTests
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.34 s -- in pe.edu.upeu.garritas.citas.GarritasCitasMsApplicationTests
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.424 s -- in pe.edu.upeu.garritas.envio.GarritasEnvioMsApplicationTests
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.511 s -- in pe.edu.upeu.garritas.institucion.GarritasInstitucionMsApplicationTests
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.35 s -- in pe.edu.upeu.garritas.pago.GarritasPagoMsApplicationTests
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.18 s -- in pe.edu.upeu.garritas.usuario.GarritasUsuarioMsApplicationTests
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.99 s -- in pe.edu.upeu.garritas.venta.GarritasVentaMsApplicationTests
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.04 s -- in pe.edu.upeu.garritas.bienestar.EspecialidadesIntegrationTests
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.022 s -- in pe.edu.upeu.garritas.bienestar.GarritasBienestarMsApplicationTests
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+[INFO] garritas-distributed ............................... SUCCESS [  3.949 s]
+[INFO] garritas-config .................................... SUCCESS [ 12.659 s]
+[INFO] garritas-eureka .................................... SUCCESS [ 12.388 s]
+[INFO] garritas-gateway ................................... SUCCESS [  9.716 s]
+[INFO] garritas-catalogo-ms ............................... SUCCESS [ 16.280 s]
+[INFO] garritas-citas-ms .................................. SUCCESS [ 14.724 s]
+[INFO] garritas-envio-ms .................................. SUCCESS [  9.874 s]
+[INFO] garritas-institucion-ms ............................ SUCCESS [ 11.355 s]
+[INFO] garritas-pago-ms ................................... SUCCESS [ 11.782 s]
+[INFO] garritas-usuario-ms ................................ SUCCESS [ 11.550 s]
+[INFO] garritas-venta-ms .................................. SUCCESS [ 15.630 s]
+[INFO] garritas-bienestar-ms .............................. SUCCESS [ 12.436 s]
+[INFO] garritas-store ..................................... SUCCESS [  0.000 s]
+[INFO] BUILD SUCCESS

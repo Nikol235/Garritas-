@@ -1,0 +1,25 @@
+[INFO] Building garritas-store 0.0.1-SNAPSHOT                           [13/13]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for garritas-store 0.0.1-SNAPSHOT:
+[INFO] 
+[INFO] garritas-distributed ............................... SUCCESS [  4.826 s]
+[INFO] garritas-config .................................... SUCCESS [  2.053 s]
+[INFO] garritas-eureka .................................... SUCCESS [  1.193 s]
+[INFO] garritas-gateway ................................... SUCCESS [  0.822 s]
+[INFO] garritas-catalogo-ms ............................... SUCCESS [  2.567 s]
+[INFO] garritas-citas-ms .................................. SUCCESS [  2.159 s]
+[INFO] garritas-envio-ms .................................. SUCCESS [  2.375 s]
+[INFO] garritas-institucion-ms ............................ SUCCESS [  1.214 s]
+[INFO] garritas-pago-ms ................................... SUCCESS [  1.340 s]
+[INFO] garritas-usuario-ms ................................ SUCCESS [  1.452 s]
+[INFO] garritas-venta-ms .................................. SUCCESS [  1.335 s]
+[INFO] garritas-bienestar-ms .............................. SUCCESS [  1.297 s]
+[INFO] garritas-store ..................................... SUCCESS [  0.000 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  24.058 s
+[INFO] Finished at: 2026-10-24T06:10:30Z
+[INFO] ------------------------------------------------------------------------

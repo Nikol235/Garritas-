@@ -1,0 +1,19 @@
+OK    Tienda Angular           puerto 4200  
+OK    Kafka UI                 puerto 18085 
+OK    Keycloak                 puerto 18180 
+OK    Eureka                   puerto 18761 
+OK    Config Server            puerto 18888 
+OK    Gateway                  puerto 18080 
+OK    Catálogo por Gateway     puerto 18080 
+OK    Bienestar                puerto 8088  
+OK    Venta                    puerto 8081  
+OK    Institución              puerto 8082  
+OK    Envío                    puerto 8083  
+OK    Citas                    puerto 8084  
+OK    Catálogo                 puerto 8085  
+OK    Usuario                  puerto 8086  
+OK    Pago                     puerto 8087  
+OK    Grafana                  puerto 13000 
+OK    Prometheus               puerto 19090 
+OK    Loki                     puerto 13100 
+OK    Kafka broker y topic de ventas

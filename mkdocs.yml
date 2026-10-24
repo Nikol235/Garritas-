@@ -8,6 +8,10 @@ nav:
   - Arquitectura: arquitectura.md
   - Validación: validacion.md
   - Guía de ejecución: ejecucion.md
+  - Manuales PDF: manuales/README.md
 markdown_extensions:
   - tables
   - fenced_code
+
+exclude_docs: |
+  /manuales/fuentes/*.md

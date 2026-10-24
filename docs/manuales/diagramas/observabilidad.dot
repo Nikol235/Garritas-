@@ -1,0 +1,4 @@
+digraph G { graph [bgcolor="white",fontname="DejaVu Sans",pad="0.15",nodesep="0.3",ranksep="0.5"]; node [shape=box,style="rounded,filled",fillcolor="#edf4ee",color="#4d7b64",fontname="DejaVu Sans",fontsize=11]; edge [fontname="DejaVu Sans",fontsize=9,color="#48685a"];rankdir=LR;apps[label="11 aplicaciones Java
+/actuator/prometheus"];kc[label="Keycloak
+:9000/metrics interno"];prom[label="Prometheus · 19090"];logs[label=".runtime/*/application.log
+y logs de infraestructura"];tail[label="Promtail"];loki[label="Loki · 13100"];graf[label="Grafana · 13000"];apps->prom[label="scrape"];kc->prom;logs->tail->loki;prom->graf[label="consultas PromQL"];loki->graf[label="consultas LogQL"];}

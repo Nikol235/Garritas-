@@ -6,7 +6,7 @@ Las comprobaciones se ejecutaron en la máquina de nube de esta tarea. Esto no a
 |---|---|
 | Reactor Maven: librería común, tres aplicaciones de infraestructura y ocho servicios | Compilación correcta |
 | `bash uso-rapido/scripts/dev.sh test` | **15 pruebas, 0 fallos, 0 errores, 0 omitidas**: once contextos Spring, tres pruebas de contrato/correlación/propiedad y una integración de muchos a muchos |
-| Angular `npm test` | **9 pruebas correctas**, estados y carrito: cantidades, totales, persistencia, cambios de stock e idempotencia |
+| Angular `npm test` | **11 pruebas correctas**, estados y carrito: cantidades, totales, persistencia, cambios de stock e idempotencia |
 | Angular `npm run build` | Compilación de producción correcta |
 | Arranque DEV | Config Server, Eureka, Gateway y los ocho servicios con readiness, ocho PostgreSQL, Kafka y Keycloak |
 | Readiness y exportación Prometheus | HTTP 200 y métricas JVM verificadas en los once componentes Java; exportadores añadidos también a Config Server y Eureka |
@@ -39,3 +39,11 @@ La estructura se alineó con Pagatu: `clients`, `docs`, `infra`, `kafka`, `keycl
 Se revisaron las vistas de sedes, especialistas y citas en escritorio y móvil, sin desbordamiento horizontal. El cliente ve seis sedes ficticias de Perú; solo ADMIN las modifica. Las pruebas de consola comprobaron nueve aplicaciones registradas en Eureka y al menos doce targets activos en Prometheus. El ejemplo Python de Kafka publicó y consumió tres mensajes reales en un topic aislado. `mkdocs build --strict` pasó.
 
 El lanzador PowerShell se incluye para Windows, pero no se ejecutó en una máquina Windows. La validación funcional acreditada corresponde al flujo DEV de Linux/nube; el arranque simultáneo de todos los servicios en Docker continúa pendiente por la limitación descrita arriba. CI se añadió al repositorio; su ejecución en GitHub requiere que corra el workflow tras el push.
+
+## Revisión para los manuales PDF — 24/10/2026
+
+Se reinició el flujo DEV y se repitieron compilación Java, 15 pruebas Java, 11 pruebas Angular, build de producción, smoke de compra, recorrido de todos los dominios y consolas. Se corrigió una carrera al cargar el perfil: el formulario espera la respuesta antes de permitir edición; dos pruebas de regresión cubren respuesta tardía y perfil inexistente. El recorrido real comprobó además que se persiste el correo introducido.
+
+Las pruebas de fallo repitieron replay/duplicado Kafka, detención y recuperación de Pago, caída del broker y entrega tras recuperar outbox. El ejemplo Python publicó/consumió tres mensajes. El ZIP de código se extrajo en una carpeta nueva: el reactor Maven y Angular compilaron sin los targets ni node_modules originales.
+
+Los resultados, límites y PDF están en [manuales](manuales/README.md), con `revision.json` y evidencia resumida. Sigue sin acreditarse ejecución PowerShell en Windows ni arranque simultáneo del despliegue integral Docker.

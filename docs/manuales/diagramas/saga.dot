@@ -1,0 +1,8 @@
+digraph G { graph [bgcolor="white",fontname="DejaVu Sans",pad="0.15",nodesep="0.3",ranksep="0.5"]; node [shape=box,style="rounded,filled",fillcolor="#edf4ee",color="#4d7b64",fontname="DejaVu Sans",fontsize=11]; edge [fontname="DejaVu Sans",fontsize=9,color="#48685a"];rankdir=TB; a[label="POST /ventas
+Identidad + sede + precio + idempotencia"];b[label="Tx Venta: venta PENDIENTE_STOCK
++ outbox venta.creada"];c[label="Kafka: venta.creada"];d[label="Tx Catálogo: inbox + reserva atómica
++ outbox inventario.*"];e[label="Inventario reservado
+Venta PENDIENTE_PAGO"];f[label="Tx Pago: inbox + pago único
++ outbox pago.*"];g[label="pago.validado → Venta PAGADA"];h[label="pago.fallido → COMPENSANDO"];i[label="Catálogo: stock restaurado una vez
+inventario.liberado"];j[label="Venta CANCELADA"];k[label="Inventario rechazado
+Venta CANCELADA"];a->b->c->d;d->e[label="Disponible"];d->k[label="Sin stock / precio distinto"];e->f;f->g[label="YAPE / PLIN / otros aprobados"];f->h[label="TRANSFERENCIA (simulación)"];h->i->j;}

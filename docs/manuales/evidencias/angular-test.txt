@@ -1,0 +1,22 @@
+
+> garritas-frontend@0.0.0 test
+> ng test --watch=false
+
+❯ Building...
+✔ Building...
+Application bundle generation complete. [2.350 seconds] - 2026-10-24T06:03:58.975Z
+
+
+ RUN  v4.1.12 /workspace/Garritas-/clients/garritas-frontend
+
+
+ Test Files  3 passed (3)
+      Tests  11 passed (11)
+   Start at  06:03:59
+   Duration  1.73s (transform 311ms, setup 1.56s, import 297ms, tests 169ms, environment 2.38s)
+
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
