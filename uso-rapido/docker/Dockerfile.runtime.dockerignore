@@ -1,0 +1,11 @@
+**
+!infra
+!infra/*
+!infra/*/target
+!infra/*/target/*-SNAPSHOT.jar
+!services
+!services/*
+!services/*/target
+!services/*/target/*-SNAPSHOT.jar
+!infra/garritas-config/config-repo
+!infra/garritas-config/config-repo/**

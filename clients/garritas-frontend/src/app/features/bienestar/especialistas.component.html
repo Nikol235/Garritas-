@@ -1,0 +1,170 @@
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">BIENESTAR ANIMAL</p>
+    <h1>Especialistas</h1>
+    <p>Profesionales y especialidades para acompañar a tu mascota.</p>
+  </div>
+  <button (click)="load()">Actualizar especialistas</button>
+</div>
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+@if (message()) {
+  <p class="notice">{{ message() }}</p>
+}
+<p class="muted">
+  Perfiles ficticios de demostración. Las citas se reservan en bloques de 30
+  minutos.
+</p>
+<div class="grid">
+  @for (p of profesionales(); track p.id) {
+    <article>
+      <div class="avatar">{{ p.nombre.charAt(0) }}</div>
+      <h2>{{ p.nombre }}</h2>
+      <p>{{ sede(p.sedeId) }}</p>
+      <p>{{ p.telefono }} · {{ p.email }}</p>
+      <div class="tags">
+        @for (e of p.especialidades; track e.id) {
+          <span class="badge">{{ e.nombre }}</span>
+        }
+      </div>
+      <div class="actions">
+        <button
+          class="primary"
+          [disabled]="!p.activo"
+          (click)="reservar.emit(p.id)"
+        >
+          Reservar cita
+        </button>
+        @if (auth.admin()) {
+          <button (click)="edit(p)" [attr.aria-label]="'Editar ' + p.nombre">
+            Editar</button
+          ><button [disabled]="!p.activo || busy()" (click)="deactivate(p)">
+            Desactivar
+          </button>
+        }
+      </div>
+    </article>
+  }
+</div>
+@if (auth.admin()) {
+  <section class="panel">
+    <h2>{{ id ? "Editar profesional" : "Nuevo profesional" }}</h2>
+    <form #f="ngForm" (ngSubmit)="save()">
+      <div class="field-grid">
+        <label
+          >Nombre del profesional<input
+            name="nombre"
+            [(ngModel)]="model.nombre"
+            required
+            maxlength="100" /></label
+        ><label
+          >Correo del profesional<input
+            name="email"
+            type="email"
+            [(ngModel)]="model.email"
+            required
+            email
+            maxlength="150" /></label
+        ><label
+          >Teléfono del profesional<input
+            name="telefono"
+            [(ngModel)]="model.telefono"
+            maxlength="20" /></label
+        ><label
+          >Sede de atención<select name="sedeId" [(ngModel)]="model.sedeId">
+            <option [ngValue]="0">Todas las sedes</option>
+            @for (s of sedes(); track s.id) {
+              @if (s.activo) {
+                <option [ngValue]="s.id">{{ s.nombre }}</option>
+              }
+            }
+          </select></label
+        >
+      </div>
+      <fieldset>
+        <legend>Especialidades del profesional</legend>
+        <div class="check-list">
+          @for (e of especialidades(); track e.id) {
+            @if (e.activo) {
+              <label class="check"
+                ><input
+                  type="checkbox"
+                  [checked]="model.especialidadIds.includes(e.id)"
+                  (change)="toggle(e.id)"
+                />{{ e.nombre }}</label
+              >
+            }
+          }
+        </div>
+      </fieldset>
+      <label class="check"
+        ><input
+          name="activo"
+          type="checkbox"
+          [(ngModel)]="model.activo"
+        />Profesional activo</label
+      ><button
+        class="primary"
+        [disabled]="f.invalid || !model.especialidadIds.length || busy()"
+      >
+        Guardar profesional
+      </button>
+    </form>
+  </section>
+  <section class="panel">
+    <h2>Especialidades</h2>
+    <p class="muted">
+      Cada profesional puede tener varias especialidades y una especialidad
+      puede pertenecer a varios profesionales.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Especialidad</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (e of especialidades(); track e.id) {
+            <tr>
+              <td>{{ e.nombre }}</td>
+              <td>{{ e.descripcion }}</td>
+              <td>
+                <button (click)="editEsp(e)">Editar especialidad</button
+                ><button (click)="deleteEsp(e)">Eliminar</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <form #ef="ngForm" (ngSubmit)="saveEsp()">
+      <div class="field-grid">
+        <label
+          >Nombre de especialidad<input
+            name="nombreEspecialidad"
+            [(ngModel)]="esp.nombre"
+            required
+            maxlength="100" /></label
+        ><label
+          >Descripción de especialidad<input
+            name="descripcionEspecialidad"
+            [(ngModel)]="esp.descripcion"
+            maxlength="255"
+        /></label>
+      </div>
+      <label class="check"
+        ><input
+          name="especialidadActiva"
+          type="checkbox"
+          [(ngModel)]="esp.activo"
+        />Especialidad activa</label
+      ><button class="primary" [disabled]="ef.invalid || busy()">
+        Guardar especialidad
+      </button>
+    </form>
+  </section>
+}

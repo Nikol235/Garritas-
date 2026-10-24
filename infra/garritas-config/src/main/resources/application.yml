@@ -1,6 +1,5 @@
 server:
   port: 18888
-
 spring:
   application:
     name: garritas-config
@@ -11,12 +10,13 @@ spring:
       server:
         native:
           search-locations: ${CONFIG_REPO_LOCATION:file:./config-repo}
-
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
+        include: health,info,metrics,prometheus
   endpoint:
     health:
       show-details: always
+      probes:
+        enabled: true

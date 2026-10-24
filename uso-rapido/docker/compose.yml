@@ -1,0 +1,729 @@
+name: garritas-store
+services:
+  kafka:
+    image: apache/kafka:4.3.1
+    hostname: garritas-kafka
+    networks:
+      default:
+        aliases:
+        - garritas-kafka
+    ports:
+    - 127.0.0.1:19092:19092
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: INTERNAL://:9092,EXTERNAL://:19092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://garritas-kafka:9092,EXTERNAL://localhost:19092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@garritas-kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+    volumes:
+    - kafka-data:/var/lib/kafka/data
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list >/dev/null
+        2>&1
+      interval: 10s
+      timeout: 10s
+      retries: 15
+      start_period: 20s
+  keycloak-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-local-keycloak-db}
+    volumes:
+    - keycloak-db:/var/lib/postgresql/data
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - pg_isready -U keycloak -d keycloak
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.8.0
+    command:
+    - start-dev
+    - --import-realm
+    networks:
+      default:
+        aliases:
+        - garritas-keycloak
+    ports:
+    - 127.0.0.1:18180:8080
+    - 127.0.0.1:19000:9000
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-local-admin-change-me}
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-local-keycloak-db}
+      KC_HOSTNAME: http://localhost:18180
+      KC_HOSTNAME_STRICT: 'false'
+      KC_HEALTH_ENABLED: 'true'
+      KC_METRICS_ENABLED: 'true'
+    volumes:
+    - ../../keycloak/garritas-realm.json:/opt/keycloak/data/import/garritas-realm.json:ro
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
+    healthcheck:
+      test:
+      - CMD
+      - bash
+      - -ec
+      - 'exec 3<>/dev/tcp/127.0.0.1/9000; printf ''GET /health/ready HTTP/1.1\r\nHost:
+        localhost\r\nConnection: close\r\n\r\n'' >&3; read -r line <&3; [[ "$$line"
+        == *" 200 "* ]]'
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
+  postgres-venta:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: garritas_venta_db
+      POSTGRES_USER: garritas
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-local-garritas-db}
+    volumes:
+    - postgres-venta:/var/lib/postgresql/data
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - pg_isready -U garritas -d garritas_venta_db
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  postgres-institucion:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: garritas_institucion_db
+      POSTGRES_USER: garritas
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-local-garritas-db}
+    volumes:
+    - postgres-institucion:/var/lib/postgresql/data
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - pg_isready -U garritas -d garritas_institucion_db
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  postgres-envio:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: garritas_envio_db
+      POSTGRES_USER: garritas
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-local-garritas-db}
+    volumes:
+    - postgres-envio:/var/lib/postgresql/data
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - pg_isready -U garritas -d garritas_envio_db
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  postgres-citas:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: garritas_citas_db
+      POSTGRES_USER: garritas
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-local-garritas-db}
+    volumes:
+    - postgres-citas:/var/lib/postgresql/data
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - pg_isready -U garritas -d garritas_citas_db
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  postgres-catalogo:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: garritas_catalogo_db
+      POSTGRES_USER: garritas
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-local-garritas-db}
+    volumes:
+    - postgres-catalogo:/var/lib/postgresql/data
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - pg_isready -U garritas -d garritas_catalogo_db
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  postgres-usuario:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: garritas_usuario_db
+      POSTGRES_USER: garritas
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-local-garritas-db}
+    volumes:
+    - postgres-usuario:/var/lib/postgresql/data
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - pg_isready -U garritas -d garritas_usuario_db
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  postgres-pago:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: garritas_pago_db
+      POSTGRES_USER: garritas
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-local-garritas-db}
+    volumes:
+    - postgres-pago:/var/lib/postgresql/data
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - pg_isready -U garritas -d garritas_pago_db
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  garritas-config:
+    build:
+      context: ../..
+      dockerfile: uso-rapido/docker/Dockerfile
+      args:
+        MODULE: infra/garritas-config
+    image: garritas/config:local
+    environment:
+      SPRING_PROFILES_ACTIVE: native
+      SERVER_PORT: 8888
+      CONFIG_REPO_LOCATION: file:/config-repo
+      JAVA_TOOL_OPTIONS: -Xms64m -Xmx256m
+      SPRING_CONFIG_IMPORT: ''
+      LOGGING_FILE_NAME: /app/logs/config.log
+    restart: on-failure
+    volumes:
+    - config-logs:/app/logs
+    ports:
+    - 127.0.0.1:28888:8888
+    healthcheck:
+      test:
+      - CMD
+      - bash
+      - -ec
+      - 'exec 3<>/dev/tcp/127.0.0.1/8888; printf ''GET /actuator/health/readiness
+        HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n'' >&3; read -r line
+        <&3; [[ "$$line" == *" 200 "* ]]'
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
+  garritas-eureka:
+    build:
+      context: ../..
+      dockerfile: uso-rapido/docker/Dockerfile
+      args:
+        MODULE: infra/garritas-eureka
+    image: garritas/eureka:local
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://garritas-config:8888
+      JAVA_TOOL_OPTIONS: -Xms64m -Xmx384m
+      SPRING_CONFIG_IMPORT: configserver:http://garritas-config:8888
+      LOGGING_FILE_NAME: /app/logs/eureka.log
+    restart: on-failure
+    volumes:
+    - eureka-logs:/app/logs
+    depends_on:
+      garritas-config:
+        condition: service_healthy
+    ports:
+    - 127.0.0.1:28761:8761
+    healthcheck:
+      test:
+      - CMD
+      - bash
+      - -ec
+      - 'exec 3<>/dev/tcp/127.0.0.1/8761; printf ''GET /actuator/health/readiness
+        HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n'' >&3; read -r line
+        <&3; [[ "$$line" == *" 200 "* ]]'
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
+  garritas-gateway:
+    build:
+      context: ../..
+      dockerfile: uso-rapido/docker/Dockerfile
+      args:
+        MODULE: infra/garritas-gateway
+    image: garritas/gateway:local
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://garritas-config:8888
+      JAVA_TOOL_OPTIONS: -Xms64m -Xmx384m
+      OIDC_ISSUER_URI: http://localhost:18180/realms/garritas
+      OIDC_JWK_SET_URI: http://garritas-keycloak:8080/realms/garritas/protocol/openid-connect/certs
+      KAFKA_BOOTSTRAP_SERVERS: garritas-kafka:9092
+      SPRING_CONFIG_IMPORT: configserver:http://garritas-config:8888
+      LOGGING_FILE_NAME: /app/logs/gateway.log
+    restart: on-failure
+    volumes:
+    - gateway-logs:/app/logs
+    depends_on:
+      garritas-config:
+        condition: service_healthy
+      garritas-eureka:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    ports:
+    - 127.0.0.1:28080:8080
+    healthcheck:
+      test:
+      - CMD
+      - bash
+      - -ec
+      - 'exec 3<>/dev/tcp/127.0.0.1/8080; printf ''GET /actuator/health/readiness
+        HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n'' >&3; read -r line
+        <&3; [[ "$$line" == *" 200 "* ]]'
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
+  garritas-venta-ms:
+    build:
+      context: ../..
+      dockerfile: uso-rapido/docker/Dockerfile
+      args:
+        MODULE: services/garritas-venta-ms
+    image: garritas/venta:local
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://garritas-config:8888
+      JAVA_TOOL_OPTIONS: -Xms64m -Xmx384m
+      OIDC_ISSUER_URI: http://localhost:18180/realms/garritas
+      OIDC_JWK_SET_URI: http://garritas-keycloak:8080/realms/garritas/protocol/openid-connect/certs
+      KAFKA_BOOTSTRAP_SERVERS: garritas-kafka:9092
+      DB_HOST: postgres-venta
+      DB_PORT: 5432
+      DB_NAME: garritas_venta_db
+      DB_USER: garritas
+      DB_PASS: ${DB_PASSWORD:-local-garritas-db}
+      SERVER_PORT: 8081
+      SPRING_CONFIG_IMPORT: configserver:http://garritas-config:8888
+    restart: on-failure
+    volumes:
+    - venta-logs:/app/logs
+    depends_on:
+      garritas-config:
+        condition: service_healthy
+      garritas-eureka:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+      postgres-venta:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test:
+      - CMD
+      - bash
+      - -ec
+      - 'exec 3<>/dev/tcp/127.0.0.1/8081; printf ''GET /actuator/health/readiness
+        HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n'' >&3; read -r line
+        <&3; [[ "$$line" == *" 200 "* ]]'
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
+  garritas-institucion-ms:
+    build:
+      context: ../..
+      dockerfile: uso-rapido/docker/Dockerfile
+      args:
+        MODULE: services/garritas-institucion-ms
+    image: garritas/institucion:local
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://garritas-config:8888
+      JAVA_TOOL_OPTIONS: -Xms64m -Xmx384m
+      OIDC_ISSUER_URI: http://localhost:18180/realms/garritas
+      OIDC_JWK_SET_URI: http://garritas-keycloak:8080/realms/garritas/protocol/openid-connect/certs
+      KAFKA_BOOTSTRAP_SERVERS: garritas-kafka:9092
+      DB_HOST: postgres-institucion
+      DB_PORT: 5432
+      DB_NAME: garritas_institucion_db
+      DB_USER: garritas
+      DB_PASS: ${DB_PASSWORD:-local-garritas-db}
+      SERVER_PORT: 8082
+      SPRING_CONFIG_IMPORT: configserver:http://garritas-config:8888
+      SPRING_FLYWAY_LOCATIONS: ${DEMO_MIGRATION_LOCATIONS:-classpath:db/migration,classpath:db/demo}
+    restart: on-failure
+    volumes:
+    - institucion-logs:/app/logs
+    depends_on:
+      garritas-config:
+        condition: service_healthy
+      garritas-eureka:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+      postgres-institucion:
+        condition: service_healthy
+    healthcheck:
+      test:
+      - CMD
+      - bash
+      - -ec
+      - 'exec 3<>/dev/tcp/127.0.0.1/8082; printf ''GET /actuator/health/readiness
+        HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n'' >&3; read -r line
+        <&3; [[ "$$line" == *" 200 "* ]]'
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
+  garritas-envio-ms:
+    build:
+      context: ../..
+      dockerfile: uso-rapido/docker/Dockerfile
+      args:
+        MODULE: services/garritas-envio-ms
+    image: garritas/envio:local
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://garritas-config:8888
+      JAVA_TOOL_OPTIONS: -Xms64m -Xmx384m
+      OIDC_ISSUER_URI: http://localhost:18180/realms/garritas
+      OIDC_JWK_SET_URI: http://garritas-keycloak:8080/realms/garritas/protocol/openid-connect/certs
+      KAFKA_BOOTSTRAP_SERVERS: garritas-kafka:9092
+      DB_HOST: postgres-envio
+      DB_PORT: 5432
+      DB_NAME: garritas_envio_db
+      DB_USER: garritas
+      DB_PASS: ${DB_PASSWORD:-local-garritas-db}
+      SERVER_PORT: 8083
+      SPRING_CONFIG_IMPORT: configserver:http://garritas-config:8888
+    restart: on-failure
+    volumes:
+    - envio-logs:/app/logs
+    depends_on:
+      garritas-config:
+        condition: service_healthy
+      garritas-eureka:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+      postgres-envio:
+        condition: service_healthy
+    healthcheck:
+      test:
+      - CMD
+      - bash
+      - -ec
+      - 'exec 3<>/dev/tcp/127.0.0.1/8083; printf ''GET /actuator/health/readiness
+        HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n'' >&3; read -r line
+        <&3; [[ "$$line" == *" 200 "* ]]'
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
+  garritas-citas-ms:
+    build:
+      context: ../..
+      dockerfile: uso-rapido/docker/Dockerfile
+      args:
+        MODULE: services/garritas-citas-ms
+    image: garritas/citas:local
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://garritas-config:8888
+      JAVA_TOOL_OPTIONS: -Xms64m -Xmx384m
+      OIDC_ISSUER_URI: http://localhost:18180/realms/garritas
+      OIDC_JWK_SET_URI: http://garritas-keycloak:8080/realms/garritas/protocol/openid-connect/certs
+      KAFKA_BOOTSTRAP_SERVERS: garritas-kafka:9092
+      DB_HOST: postgres-citas
+      DB_PORT: 5432
+      DB_NAME: garritas_citas_db
+      DB_USER: garritas
+      DB_PASS: ${DB_PASSWORD:-local-garritas-db}
+      SERVER_PORT: 8084
+      SPRING_CONFIG_IMPORT: configserver:http://garritas-config:8888
+    restart: on-failure
+    volumes:
+    - citas-logs:/app/logs
+    depends_on:
+      garritas-config:
+        condition: service_healthy
+      garritas-eureka:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+      postgres-citas:
+        condition: service_healthy
+    healthcheck:
+      test:
+      - CMD
+      - bash
+      - -ec
+      - 'exec 3<>/dev/tcp/127.0.0.1/8084; printf ''GET /actuator/health/readiness
+        HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n'' >&3; read -r line
+        <&3; [[ "$$line" == *" 200 "* ]]'
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
+  garritas-catalogo-ms:
+    build:
+      context: ../..
+      dockerfile: uso-rapido/docker/Dockerfile
+      args:
+        MODULE: services/garritas-catalogo-ms
+    image: garritas/catalogo:local
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://garritas-config:8888
+      JAVA_TOOL_OPTIONS: -Xms64m -Xmx384m
+      OIDC_ISSUER_URI: http://localhost:18180/realms/garritas
+      OIDC_JWK_SET_URI: http://garritas-keycloak:8080/realms/garritas/protocol/openid-connect/certs
+      KAFKA_BOOTSTRAP_SERVERS: garritas-kafka:9092
+      DB_HOST: postgres-catalogo
+      DB_PORT: 5432
+      DB_NAME: garritas_catalogo_db
+      DB_USER: garritas
+      DB_PASS: ${DB_PASSWORD:-local-garritas-db}
+      SERVER_PORT: 8085
+      SPRING_CONFIG_IMPORT: configserver:http://garritas-config:8888
+      SPRING_FLYWAY_LOCATIONS: ${CATALOGO_MIGRATION_LOCATIONS:-classpath:db/migration,classpath:db/demo}
+    restart: on-failure
+    volumes:
+    - catalogo-logs:/app/logs
+    depends_on:
+      garritas-config:
+        condition: service_healthy
+      garritas-eureka:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+      postgres-catalogo:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test:
+      - CMD
+      - bash
+      - -ec
+      - 'exec 3<>/dev/tcp/127.0.0.1/8085; printf ''GET /actuator/health/readiness
+        HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n'' >&3; read -r line
+        <&3; [[ "$$line" == *" 200 "* ]]'
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
+  garritas-usuario-ms:
+    build:
+      context: ../..
+      dockerfile: uso-rapido/docker/Dockerfile
+      args:
+        MODULE: services/garritas-usuario-ms
+    image: garritas/usuario:local
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://garritas-config:8888
+      JAVA_TOOL_OPTIONS: -Xms64m -Xmx384m
+      OIDC_ISSUER_URI: http://localhost:18180/realms/garritas
+      OIDC_JWK_SET_URI: http://garritas-keycloak:8080/realms/garritas/protocol/openid-connect/certs
+      KAFKA_BOOTSTRAP_SERVERS: garritas-kafka:9092
+      DB_HOST: postgres-usuario
+      DB_PORT: 5432
+      DB_NAME: garritas_usuario_db
+      DB_USER: garritas
+      DB_PASS: ${DB_PASSWORD:-local-garritas-db}
+      SERVER_PORT: 8086
+      SPRING_CONFIG_IMPORT: configserver:http://garritas-config:8888
+    restart: on-failure
+    volumes:
+    - usuario-logs:/app/logs
+    depends_on:
+      garritas-config:
+        condition: service_healthy
+      garritas-eureka:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+      postgres-usuario:
+        condition: service_healthy
+    healthcheck:
+      test:
+      - CMD
+      - bash
+      - -ec
+      - 'exec 3<>/dev/tcp/127.0.0.1/8086; printf ''GET /actuator/health/readiness
+        HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n'' >&3; read -r line
+        <&3; [[ "$$line" == *" 200 "* ]]'
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
+  garritas-pago-ms:
+    build:
+      context: ../..
+      dockerfile: uso-rapido/docker/Dockerfile
+      args:
+        MODULE: services/garritas-pago-ms
+    image: garritas/pago:local
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://garritas-config:8888
+      JAVA_TOOL_OPTIONS: -Xms64m -Xmx384m
+      OIDC_ISSUER_URI: http://localhost:18180/realms/garritas
+      OIDC_JWK_SET_URI: http://garritas-keycloak:8080/realms/garritas/protocol/openid-connect/certs
+      KAFKA_BOOTSTRAP_SERVERS: garritas-kafka:9092
+      DB_HOST: postgres-pago
+      DB_PORT: 5432
+      DB_NAME: garritas_pago_db
+      DB_USER: garritas
+      DB_PASS: ${DB_PASSWORD:-local-garritas-db}
+      SERVER_PORT: 8087
+      SPRING_CONFIG_IMPORT: configserver:http://garritas-config:8888
+    restart: on-failure
+    volumes:
+    - pago-logs:/app/logs
+    depends_on:
+      garritas-config:
+        condition: service_healthy
+      garritas-eureka:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+      postgres-pago:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test:
+      - CMD
+      - bash
+      - -ec
+      - 'exec 3<>/dev/tcp/127.0.0.1/8087; printf ''GET /actuator/health/readiness
+        HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n'' >&3; read -r line
+        <&3; [[ "$$line" == *" 200 "* ]]'
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
+  frontend:
+    build:
+      context: ../../clients/garritas-frontend
+    ports:
+    - 127.0.0.1:4200:80
+    depends_on:
+      garritas-gateway:
+        condition: service_healthy
+  kafka-ui:
+    image: ghcr.io/kafbat/kafka-ui:v1.5.0
+    ports:
+    - 127.0.0.1:18085:8080
+    environment:
+      KAFKA_CLUSTERS_0_NAME: garritas
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: garritas-kafka:9092
+      DYNAMIC_CONFIG_ENABLED: 'false'
+    depends_on:
+      kafka:
+        condition: service_healthy
+  postgres-bienestar:
+    environment:
+      POSTGRES_DB: garritas_bienestar_db
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-local-garritas-db}
+      POSTGRES_USER: garritas
+    healthcheck:
+      interval: 5s
+      retries: 20
+      test:
+      - CMD-SHELL
+      - pg_isready -U garritas -d garritas_bienestar_db
+      timeout: 5s
+    image: postgres:16-alpine
+    volumes:
+    - postgres-bienestar:/var/lib/postgresql/data
+  garritas-bienestar-ms:
+    build:
+      args:
+        MODULE: services/garritas-bienestar-ms
+      context: ../..
+      dockerfile: uso-rapido/docker/Dockerfile
+    depends_on:
+      garritas-config:
+        condition: service_healthy
+      garritas-eureka:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+      postgres-bienestar:
+        condition: service_healthy
+    environment:
+      CONFIG_SERVER_URL: http://garritas-config:8888
+      DB_HOST: postgres-bienestar
+      DB_NAME: garritas_bienestar_db
+      DB_PASS: ${DB_PASSWORD:-local-garritas-db}
+      DB_PORT: 5432
+      DB_USER: garritas
+      JAVA_TOOL_OPTIONS: -Xms64m -Xmx384m
+      KAFKA_BOOTSTRAP_SERVERS: garritas-kafka:9092
+      OIDC_ISSUER_URI: http://localhost:18180/realms/garritas
+      OIDC_JWK_SET_URI: http://garritas-keycloak:8080/realms/garritas/protocol/openid-connect/certs
+      SERVER_PORT: 8088
+      SPRING_CONFIG_IMPORT: configserver:http://garritas-config:8888
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_FLYWAY_LOCATIONS: ${DEMO_MIGRATION_LOCATIONS:-classpath:db/migration,classpath:db/demo}
+    healthcheck:
+      interval: 10s
+      retries: 18
+      start_period: 30s
+      test:
+      - CMD
+      - bash
+      - -ec
+      - 'exec 3<>/dev/tcp/127.0.0.1/8088; printf ''GET /actuator/health/readiness
+        HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n'' >&3; read -r line
+        <&3; [[ "$$line" == *" 200 "* ]]'
+      timeout: 5s
+    image: garritas/bienestar:local
+    restart: on-failure
+    volumes:
+    - bienestar-logs:/app/logs
+volumes:
+  kafka-data: {}
+  keycloak-db: {}
+  postgres-venta: {}
+  postgres-institucion: {}
+  postgres-envio: {}
+  postgres-citas: {}
+  postgres-catalogo: {}
+  postgres-usuario: {}
+  postgres-pago: {}
+  config-logs: {}
+  eureka-logs: {}
+  gateway-logs: {}
+  venta-logs: {}
+  institucion-logs: {}
+  envio-logs: {}
+  citas-logs: {}
+  catalogo-logs: {}
+  usuario-logs: {}
+  pago-logs: {}
+  postgres-bienestar: {}
+  bienestar-logs: {}
+networks:
+  default:
+    name: garritas-prod-net

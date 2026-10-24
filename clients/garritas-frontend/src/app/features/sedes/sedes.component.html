@@ -1,0 +1,91 @@
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">CERCA DE TI</p>
+    <h1>Nuestras sedes</h1>
+    <p>Elige dónde recoger tu compra o reservar una cita.</p>
+  </div>
+  <button (click)="load()">Actualizar sedes</button>
+</div>
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+@if (message()) {
+  <p class="notice" role="status">{{ message() }}</p>
+}
+<p class="muted">Sedes y direcciones de demostración en el Perú.</p>
+<div class="grid">
+  @for (s of sedes(); track s.id) {
+    <article class="location-card">
+      <span class="location-icon">📍</span><small>{{ s.ciudad }}</small>
+      <h2>{{ s.nombre }}</h2>
+      <p>{{ s.direccion }}</p>
+      <p>Teléfono: {{ s.telefono }}</p>
+      <span class="badge" [class.waiting]="!s.activo">{{
+        s.activo ? "Activa" : "Inactiva"
+      }}</span>
+      <div class="actions">
+        <button
+          class="primary"
+          [disabled]="!s.activo"
+          (click)="choose(s)"
+          [attr.aria-label]="'Seleccionar ' + s.nombre"
+        >
+          {{
+            cart.sedeId() === s.id ? "Sede seleccionada" : "Seleccionar sede"
+          }}
+        </button>
+        @if (auth.admin()) {
+          <button (click)="edit(s)" [attr.aria-label]="'Editar ' + s.nombre">
+            Editar</button
+          ><button [disabled]="!s.activo || busy()" (click)="deactivate(s)">
+            Desactivar
+          </button>
+        }
+      </div>
+    </article>
+  } @empty {
+    <p>No hay sedes disponibles.</p>
+  }
+</div>
+@if (auth.admin()) {
+  <section class="panel">
+    <h2>{{ id ? "Editar sede" : "Nueva sede" }}</h2>
+    <form #f="ngForm" (ngSubmit)="save()">
+      <div class="field-grid">
+        <label
+          >Nombre de sede<input
+            name="nombre"
+            [(ngModel)]="model.nombre"
+            required
+            maxlength="100" /></label
+        ><label
+          >Ciudad<input
+            name="ciudad"
+            [(ngModel)]="model.ciudad"
+            required
+            maxlength="100" /></label
+        ><label
+          >Dirección<input
+            name="direccion"
+            [(ngModel)]="model.direccion"
+            required
+            maxlength="255" /></label
+        ><label
+          >Teléfono<input
+            name="telefono"
+            [(ngModel)]="model.telefono"
+            maxlength="20"
+        /></label>
+      </div>
+      <label class="check"
+        ><input type="checkbox" name="activo" [(ngModel)]="model.activo" />Sede
+        activa</label
+      >
+      <div class="actions">
+        <button class="primary" [disabled]="f.invalid || busy()">
+          Guardar sede</button
+        ><button type="button" (click)="reset()">Cancelar edición</button>
+      </div>
+    </form>
+  </section>
+}

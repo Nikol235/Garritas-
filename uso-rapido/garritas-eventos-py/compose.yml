@@ -1,0 +1,12 @@
+name: garritas-eventos-py
+services:
+  eventos:
+    build: .
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: garritas-kafka:9092
+      KAFKA_TOPIC: garritas.demo.v1
+    networks:
+      - garritas-kafka-dev-net
+networks:
+  garritas-kafka-dev-net:
+    external: true

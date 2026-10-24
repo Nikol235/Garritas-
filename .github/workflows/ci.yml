@@ -1,0 +1,33 @@
+name: Build and frontend tests
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  java:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Build every service
+        run: bash infra/garritas-config/mvnw -f uso-rapido/pom.xml -B package -DskipTests
+      - name: Validate integrated Compose
+        run: docker compose -f uso-rapido/docker/compose.yml config --quiet
+  angular:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: clients/garritas-frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: clients/garritas-frontend/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run build

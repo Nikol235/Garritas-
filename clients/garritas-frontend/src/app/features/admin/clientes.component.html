@@ -1,0 +1,82 @@
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">ADMINISTRACIÓN</p>
+    <h1>Clientes</h1>
+    <p>
+      Perfiles de negocio. Las credenciales de acceso se gestionan en Keycloak.
+    </p>
+  </div>
+  <button (click)="load()">Actualizar clientes</button>
+</div>
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+@if (message()) {
+  <p class="notice">{{ message() }}</p>
+}
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Correo</th>
+        <th>Teléfono</th>
+        <th>Dirección</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (p of clientes(); track p.id) {
+        <tr>
+          <td>{{ p.nombre }}</td>
+          <td>{{ p.email }}</td>
+          <td>{{ p.telefono }}</td>
+          <td>{{ p.direccion }}</td>
+          <td>
+            <button (click)="edit(p)">Editar cliente</button
+            ><button (click)="remove(p)">Eliminar cliente</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="5">No hay perfiles registrados.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+<section class="panel">
+  <h2>{{ id ? "Editar cliente" : "Nuevo perfil de cliente" }}</h2>
+  <form #f="ngForm" (ngSubmit)="save()">
+    <div class="field-grid">
+      <label
+        >Nombre del cliente<input
+          name="nombre"
+          [(ngModel)]="model.nombre"
+          required
+          maxlength="100" /></label
+      ><label
+        >Correo del cliente<input
+          name="email"
+          type="email"
+          [(ngModel)]="model.email"
+          required
+          email
+          maxlength="150" /></label
+      ><label
+        >Teléfono del cliente<input
+          name="telefono"
+          [(ngModel)]="model.telefono"
+          maxlength="20" /></label
+      ><label
+        >Dirección del cliente<input
+          name="direccion"
+          [(ngModel)]="model.direccion"
+          maxlength="255"
+      /></label>
+    </div>
+    <button class="primary" [disabled]="f.invalid || busy()">
+      Guardar cliente
+    </button>
+  </form>
+</section>

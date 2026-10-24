@@ -1,28 +1,19 @@
 package pe.edu.upeu.garritas.citas.dto;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+import java.time.Instant;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.Instant;
 
 @Getter
 @Setter
 public class CitaRequest {
+  @NotNull @Positive private Long idMascota;
+  @NotNull @Positive private Long idSede;
+  @NotNull @Positive private Long profesionalId;
+  @NotNull @Future private Instant fechaHora;
 
-    @NotNull
-    private Long idCliente;
-
-    @NotNull
-    private Long idMascota;
-
-    @NotNull
-    private Long idSede;
-
-    @NotNull
-    private Instant fechaHora;
-
-    @Size(max = 255)
-    private String motivo;
+  @NotBlank
+  @Size(max = 255)
+  private String motivo;
 }

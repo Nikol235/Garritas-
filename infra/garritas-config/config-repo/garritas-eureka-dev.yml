@@ -1,6 +1,5 @@
 server:
   port: 18761
-
 eureka:
   server:
     enable-self-preservation: false
@@ -9,3 +8,18 @@ eureka:
     fetch-registry: false
     service-url:
       defaultZone: http://localhost:18761/eureka/
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: when_authorized
+      group:
+        liveness:
+          include: livenessState
+        readiness:
+          include: readinessState
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus

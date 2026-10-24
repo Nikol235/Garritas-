@@ -1,0 +1,1 @@
+ALTER TABLE ventas ADD COLUMN id_sede BIGINT;

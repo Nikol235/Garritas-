@@ -1,0 +1,125 @@
+<section class="cart-panel" aria-labelledby="cart-title">
+  <div class="heading">
+    <h2 id="cart-title">Tu carrito</h2>
+    <span class="badge">{{cart.count()}} unidades</span>
+  </div>
+  <label
+    >Sede de la compra<select
+      [ngModel]="cart.sedeId()"
+      (ngModelChange)="cart.selectSede(+$event)"
+      [disabled]="busy()"
+    >
+      <option [ngValue]="0">Selecciona una sede</option>
+      @for(s of cart.sedes();track s.id){@if(s.activo){
+      <option [ngValue]="s.id">{{s.nombre}} · {{s.ciudad}}</option>
+      }}
+    </select></label
+  >
+  @if(!cart.sedeId()){
+  <p class="muted">Selecciona una sede para confirmar tu compra.</p>
+  } @if(message()){
+  <p class="error" role="alert">{{message()}}</p>
+  } @for(line of cart.lines();track line.id){
+  <article class="cart-line" [class.unavailable]="!line.disponible">
+    <div class="heading">
+      <h3>{{line.producto?.nombre ?? 'Producto no disponible'}}</h3>
+      <button
+        class="text-button"
+        [disabled]="busy()"
+        (click)="cart.remove(line.id)"
+        [attr.aria-label]="'Quitar '+(line.producto?.nombre ?? 'producto')"
+      >
+        Quitar
+      </button>
+    </div>
+    @if(line.producto; as p){
+    <p>
+      {{p.precio|currency:'PEN':'S/ '}} por unidad · {{p.stock}} disponibles
+    </p>
+    <div class="quantity-control">
+      <button
+        [disabled]="busy()||line.cantidad<=1"
+        (click)="cart.setQuantity(line.id,line.cantidad-1)"
+        [attr.aria-label]="'Reducir '+p.nombre"
+      >
+        −
+      </button>
+      <input
+        #quantity
+        type="number"
+        min="1"
+        [max]="p.stock"
+        [value]="line.cantidad"
+        [disabled]="busy()"
+        (change)="change(line.id,quantity.valueAsNumber,quantity)"
+        [attr.aria-label]="'Cantidad de '+p.nombre"
+      />
+      <button
+        [disabled]="busy()||line.cantidad>=p.stock||!p.activo"
+        (click)="cart.setQuantity(line.id,line.cantidad+1)"
+        [attr.aria-label]="'Aumentar '+p.nombre"
+      >
+        +
+      </button>
+      <strong>{{line.subtotal|currency:'PEN':'S/ '}}</strong>
+    </div>
+    } @if(!line.disponible){
+    <p class="stock-warning" role="status">
+      El producto ya no está disponible o su stock cambió. Ajusta la cantidad o
+      quítalo para continuar.
+    </p>
+    }
+  </article>
+  }@empty{
+  <div class="empty-state">
+    <span>🛒</span>
+    <h3>Tu carrito está esperando</h3>
+    <p>Añade alimentos, juguetes o accesorios para tu mascota.</p>
+  </div>
+  } @if(cart.lines().length){
+  <div class="cart-summary">
+    <span>Total estimado</span
+    ><strong data-testid="cart-total"
+      >{{cart.total()|currency:'PEN':'S/ '}}</strong
+    >
+  </div>
+  <p class="muted">
+    Los precios y el stock se verifican al confirmar. No se agregan cargos
+    adicionales.
+  </p>
+  <label
+    >Método de pago<select
+      [ngModel]="cart.metodo()"
+      (ngModelChange)="cart.setPayment($event)"
+      [disabled]="busy()"
+    >
+      <option>TARJETA</option>
+      <option>YAPE</option>
+      <option>PLIN</option>
+      <option>TRANSFERENCIA</option>
+    </select></label
+  >
+  <p class="muted">
+    Modo demostración: TRANSFERENCIA simula un rechazo y devuelve el stock. No
+    se realizan cobros reales.
+  </p>
+  @if(authenticated()){<button
+    class="primary checkout-button"
+    [disabled]="busy()||!cart.valid()"
+    (click)="checkout.emit()"
+  >
+    {{busy()?'Enviando pedido…':'Confirmar compra'}}</button
+  >} @else{<button class="primary checkout-button" (click)="login.emit()">
+    Inicia sesión para comprar
+  </button>
+  <p class="muted">Conservaremos tu carrito al iniciar sesión.</p>
+  }
+  <button
+    class="text-button"
+    [disabled]="busy()"
+    (click)="cart.clear();message.set('')"
+  >
+    Vaciar carrito
+  </button>
+  }
+</section>

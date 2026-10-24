@@ -1,55 +1,61 @@
 name: garritas-obs-prod
-
 services:
   garritas-prometheus:
     image: prom/prometheus:v3.14.0
     container_name: garritas-prometheus
     restart: unless-stopped
     ports:
-      - "29090:9090"
+    - 29090:9090
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     networks:
-      - garritas-prod-net
-
+    - garritas-prod-net
+    environment:
+      NO_PROXY: ${NO_PROXY:-localhost,127.0.0.1},garritas-prometheus,garritas-loki,garritas-keycloak,keycloak,garritas-eureka,garritas-config,host.docker.internal
+      no_proxy: ${no_proxy:-localhost,127.0.0.1},garritas-prometheus,garritas-loki,garritas-keycloak,keycloak,garritas-eureka,garritas-config,host.docker.internal
   garritas-loki:
     image: grafana/loki:3.7.6
     container_name: garritas-loki
     restart: unless-stopped
     ports:
-      - "23100:3100"
+    - 23100:3100
     networks:
-      - garritas-prod-net
-
+    - garritas-prod-net
+    environment:
+      NO_PROXY: ${NO_PROXY:-localhost,127.0.0.1},garritas-prometheus,garritas-loki,garritas-keycloak,keycloak,garritas-eureka,garritas-config,host.docker.internal
+      no_proxy: ${no_proxy:-localhost,127.0.0.1},garritas-prometheus,garritas-loki,garritas-keycloak,keycloak,garritas-eureka,garritas-config,host.docker.internal
   garritas-promtail:
     image: grafana/promtail:3.6.8
     container_name: garritas-promtail
     restart: unless-stopped
     volumes:
-      - ./promtail/promtail-config.yml:/etc/promtail/config.yml:ro
-      - ../services:/var/log/garritas:ro
+    - ./promtail/promtail-config.yml:/etc/promtail/config.yml:ro
+    - ../services:/var/log/garritas:ro
     command: -config.file=/etc/promtail/config.yml
     depends_on:
-      - garritas-loki
+    - garritas-loki
     networks:
-      - garritas-prod-net
-
+    - garritas-prod-net
+    environment:
+      NO_PROXY: ${NO_PROXY:-localhost,127.0.0.1},garritas-prometheus,garritas-loki,garritas-keycloak,keycloak,garritas-eureka,garritas-config,host.docker.internal
+      no_proxy: ${no_proxy:-localhost,127.0.0.1},garritas-prometheus,garritas-loki,garritas-keycloak,keycloak,garritas-eureka,garritas-config,host.docker.internal
   garritas-grafana:
     image: grafana/grafana:11.4.0
     container_name: garritas-grafana
     restart: unless-stopped
     ports:
-      - "23000:3000"
+    - 23000:3000
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      NO_PROXY: ${NO_PROXY:-localhost,127.0.0.1},garritas-prometheus,garritas-loki,garritas-keycloak,keycloak,garritas-eureka,garritas-config,host.docker.internal
+      no_proxy: ${no_proxy:-localhost,127.0.0.1},garritas-prometheus,garritas-loki,garritas-keycloak,keycloak,garritas-eureka,garritas-config,host.docker.internal
     volumes:
-      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    - ./grafana/provisioning:/etc/grafana/provisioning:ro
     depends_on:
-      - garritas-prometheus
-      - garritas-loki
+    - garritas-prometheus
+    - garritas-loki
     networks:
-      - garritas-prod-net
-
+    - garritas-prod-net
 networks:
   garritas-prod-net:
     external: true

@@ -1,58 +1,84 @@
 server:
   http_listen_port: 9080
-
 positions:
   filename: /tmp/positions.yaml
-
 clients:
-  - url: http://garritas-loki:3100/loki/api/v1/push
-
+- url: http://garritas-loki:3100/loki/api/v1/push
 scrape_configs:
-  - job_name: garritas-venta-ms
-    static_configs:
-      - targets: [localhost]
-        labels:
-          application: garritas-venta-ms
-          __path__: /var/log/garritas/garritas-venta-ms/logs/*.log
-
-  - job_name: garritas-institucion-ms
-    static_configs:
-      - targets: [localhost]
-        labels:
-          application: garritas-institucion-ms
-          __path__: /var/log/garritas/garritas-institucion-ms/logs/*.log
-
-  - job_name: garritas-envio-ms
-    static_configs:
-      - targets: [localhost]
-        labels:
-          application: garritas-envio-ms
-          __path__: /var/log/garritas/garritas-envio-ms/logs/*.log
-
-  - job_name: garritas-citas-ms
-    static_configs:
-      - targets: [localhost]
-        labels:
-          application: garritas-citas-ms
-          __path__: /var/log/garritas/garritas-citas-ms/logs/*.log
-
-  - job_name: garritas-catalogo-ms
-    static_configs:
-      - targets: [localhost]
-        labels:
-          application: garritas-catalogo-ms
-          __path__: /var/log/garritas/garritas-catalogo-ms/logs/*.log
-
-  - job_name: garritas-usuario-ms
-    static_configs:
-      - targets: [localhost]
-        labels:
-          application: garritas-usuario-ms
-          __path__: /var/log/garritas/garritas-usuario-ms/logs/*.log
-
-  - job_name: garritas-pago-ms
-    static_configs:
-      - targets: [localhost]
-        labels:
-          application: garritas-pago-ms
-          __path__: /var/log/garritas/garritas-pago-ms/logs/*.log
+- job_name: garritas-venta-ms
+  static_configs:
+  - targets:
+    - localhost
+    labels:
+      application: garritas-venta-ms
+      __path__: /var/log/garritas/garritas-venta-ms/venta*.log
+- job_name: garritas-institucion-ms
+  static_configs:
+  - targets:
+    - localhost
+    labels:
+      application: garritas-institucion-ms
+      __path__: /var/log/garritas/garritas-institucion-ms/institucion*.log
+- job_name: garritas-envio-ms
+  static_configs:
+  - targets:
+    - localhost
+    labels:
+      application: garritas-envio-ms
+      __path__: /var/log/garritas/garritas-envio-ms/envio*.log
+- job_name: garritas-citas-ms
+  static_configs:
+  - targets:
+    - localhost
+    labels:
+      application: garritas-citas-ms
+      __path__: /var/log/garritas/garritas-citas-ms/citas*.log
+- job_name: garritas-catalogo-ms
+  static_configs:
+  - targets:
+    - localhost
+    labels:
+      application: garritas-catalogo-ms
+      __path__: /var/log/garritas/garritas-catalogo-ms/catalogo*.log
+- job_name: garritas-usuario-ms
+  static_configs:
+  - targets:
+    - localhost
+    labels:
+      application: garritas-usuario-ms
+      __path__: /var/log/garritas/garritas-usuario-ms/usuario*.log
+- job_name: garritas-pago-ms
+  static_configs:
+  - targets:
+    - localhost
+    labels:
+      application: garritas-pago-ms
+      __path__: /var/log/garritas/garritas-pago-ms/pago*.log
+- job_name: garritas-config
+  static_configs:
+  - targets:
+    - localhost
+    labels:
+      application: garritas-config
+      __path__: /var/log/garritas/garritas-config/config*.log
+- job_name: garritas-eureka
+  static_configs:
+  - targets:
+    - localhost
+    labels:
+      application: garritas-eureka
+      __path__: /var/log/garritas/garritas-eureka/eureka*.log
+- job_name: garritas-gateway
+  static_configs:
+  - targets:
+    - localhost
+    labels:
+      application: garritas-gateway
+      __path__: /var/log/garritas/garritas-gateway/gateway*.log
+- job_name: garritas-bienestar-ms
+  static_configs:
+  - labels:
+      __path__: /var/log/garritas/garritas-bienestar-ms/bienestar*.log
+      application: garritas-bienestar-ms
+    targets:
+    - localhost

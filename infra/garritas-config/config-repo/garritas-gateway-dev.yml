@@ -1,45 +1,59 @@
 server:
   port: 18080
-
 spring:
   cloud:
     gateway:
       server:
         webmvc:
           routes:
-            - id: garritas-venta
-              uri: lb://garritas-venta-ms
-              predicates:
-                - Path=/api/v1/ventas/**
-            - id: garritas-institucion
-              uri: lb://garritas-institucion-ms
-              predicates:
-                - Path=/api/v1/sedes/**
-            - id: garritas-envio
-              uri: lb://garritas-envio-ms
-              predicates:
-                - Path=/api/v1/envios/**
-            - id: garritas-citas
-              uri: lb://garritas-citas-ms
-              predicates:
-                - Path=/api/v1/citas/**
-            - id: garritas-catalogo-categorias
-              uri: lb://garritas-catalogo-ms
-              predicates:
-                - Path=/api/v1/categorias/**
-            - id: garritas-catalogo-productos
-              uri: lb://garritas-catalogo-ms
-              predicates:
-                - Path=/api/v1/productos/**
-            - id: garritas-usuario
-              uri: lb://garritas-usuario-ms
-              predicates:
-                - Path=/api/v1/usuarios/**
-            - id: garritas-pago
-              uri: lb://garritas-pago-ms
-              predicates:
-                - Path=/api/v1/pagos/**
-
+          - id: garritas-venta
+            uri: lb://garritas-venta-ms
+            predicates:
+            - Path=/api/v1/ventas/**
+          - id: garritas-institucion
+            uri: lb://garritas-institucion-ms
+            predicates:
+            - Path=/api/v1/sedes/**
+          - id: garritas-envio
+            uri: lb://garritas-envio-ms
+            predicates:
+            - Path=/api/v1/envios/**
+          - id: garritas-citas
+            uri: lb://garritas-citas-ms
+            predicates:
+            - Path=/api/v1/citas/**
+          - id: garritas-catalogo-categorias
+            uri: lb://garritas-catalogo-ms
+            predicates:
+            - Path=/api/v1/categorias/**
+          - id: garritas-catalogo-productos
+            uri: lb://garritas-catalogo-ms
+            predicates:
+            - Path=/api/v1/productos/**
+          - id: garritas-usuario
+            uri: lb://garritas-usuario-ms
+            predicates:
+            - Path=/api/v1/usuarios/**
+          - id: garritas-pago
+            uri: lb://garritas-pago-ms
+            predicates:
+            - Path=/api/v1/pagos/**
+          - id: garritas-mascotas
+            uri: lb://garritas-usuario-ms
+            predicates:
+            - Path=/api/v1/mascotas/**
+          - id: garritas-bienestar
+            uri: lb://garritas-bienestar-ms
+            predicates:
+            - Path=/api/v1/especialistas/**,/api/v1/especialidades/**
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${OIDC_ISSUER_URI:http://localhost:18180/realms/garritas}
+          jwk-set-uri: ${OIDC_JWK_SET_URI:http://localhost:18180/realms/garritas/protocol/openid-connect/certs}
+          audiences:
+          - garritas-api
 eureka:
   instance:
     hostname: localhost
@@ -47,12 +61,21 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:18761/eureka
-
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
+        include: health,info,metrics,prometheus
   endpoint:
     health:
-      show-details: always
+      show-details: when_authorized
+      probes:
+        enabled: true
+      group:
+        liveness:
+          include: livenessState
+        readiness:
+          include: readinessState
+garritas:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:4200}

@@ -1,17 +1,13 @@
-FROM maven:3.9.9-eclipse-temurin-21 AS build
-WORKDIR /app
-
-COPY pom.xml .
-RUN mvn -q -DskipTests dependency:go-offline
-
-COPY src ./src
-RUN mvn -q clean package -DskipTests
-
+# Build from repository root, using this Dockerfile with -f.
+FROM maven:3.9.16-eclipse-temurin-21 AS build
+WORKDIR /build
+COPY . .
+ARG MODULE=services/garritas-usuario-ms
+RUN test -n "$MODULE" && mvn -B -f uso-rapido/pom.xml -pl "../$MODULE" -am package -DskipTests && cp "$MODULE"/target/*-SNAPSHOT.jar /app.jar
 FROM eclipse-temurin:21-jre
 WORKDIR /app
-
-COPY --from=build /app/target/*.jar app.jar
-
-EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+RUN mkdir -p /app/logs && chown -R 10001:10001 /app
+COPY --from=build --chown=10001:10001 /app.jar /app/app.jar
+COPY --from=build --chown=10001:10001 /build/infra/garritas-config/config-repo /config-repo
+USER 10001
+ENTRYPOINT ["java","-XX:MaxRAMPercentage=70","-jar","/app/app.jar"]
