@@ -3,7 +3,7 @@
 [INFO] --------------------------------[ pom ]---------------------------------
 [INFO] ------------------------------------------------------------------------
 [INFO] Reactor Summary for garritas-store 0.0.1-SNAPSHOT:
-[INFO] 
+[INFO]
 [INFO] garritas-distributed ............................... SUCCESS [  4.826 s]
 [INFO] garritas-config .................................... SUCCESS [  2.053 s]
 [INFO] garritas-eureka .................................... SUCCESS [  1.193 s]

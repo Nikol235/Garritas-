@@ -79,7 +79,7 @@ class Book:
  def save(self):
   doc=ManualDoc(str(OUT/self.name),pagesize=A4,rightMargin=43,leftMargin=43,topMargin=43,bottomMargin=50,title=self.title,author='Garritas Store · documentación del proyecto')
   doc.multiBuild(self.items,onFirstPage=footer,onLaterPages=footer)
-  (SOURCE/(Path(self.name).stem+'.md')).write_text('\n'.join(self.md))
+  (SOURCE/(Path(self.name).stem+'.md')).write_text('\n'.join(line.rstrip() for line in '\n'.join(self.md).splitlines()).rstrip()+'\n')
 
 def diagram(name,body):
  dot='digraph G { graph [bgcolor="white",fontname="DejaVu Sans",pad="0.15",nodesep="0.3",ranksep="0.5"]; node [shape=box,style="rounded,filled",fillcolor="#edf4ee",color="#4d7b64",fontname="DejaVu Sans",fontsize=11]; edge [fontname="DejaVu Sans",fontsize=9,color="#48685a"];'+body+'}'
