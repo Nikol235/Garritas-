@@ -25,7 +25,7 @@ services:
   garritas-citas-ms:
     build:
       context: ../..
-      dockerfile: Dockerfile
+      dockerfile: uso-rapido/docker/Dockerfile
       args:
         MODULE: services/garritas-citas-ms
     restart: unless-stopped

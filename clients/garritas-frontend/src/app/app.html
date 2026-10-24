@@ -1,182 +1,257 @@
-<header>
-  <a class="brand" href="/">🐾 Garritas Store</a>
-  <nav aria-label="Navegación principal">
-    <button
-      [class.selected]="view()==='catalogo'"
-      (click)="view.set('catalogo')"
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="/"
+      >🐾 <span>Garritas<small>STORE · PERÚ</small></span></a
     >
-      Catálogo
-    </button>
-    <button
-      [class.selected]="view()==='nueva-orden'"
-      (click)="view.set('nueva-orden')"
-    >
-      Nueva orden
-    </button>
-    <button
-      [class.selected]="view()==='carrito'"
-      (click)="view.set('carrito')"
-      [attr.aria-label]="'Carrito, '+cart.count()+' unidades'"
-    >
-      🛒 Carrito <span class="cart-count">{{cart.count()}}</span>
-    </button>
-    @if(auth.loggedIn()){<button
-      [class.selected]="view()==='pedidos'"
-      (click)="view.set('pedidos');refreshVentas()"
-    >
-      Mis pedidos</button
-    >} @if(auth.admin()){<button (click)="view.set('categorias')">
-      Categorías</button
-    >}
-  </nav>
-  <div>
-    @if(auth.loggedIn()){<span>{{auth.name()}}</span
-    ><button (click)="auth.logout()">Salir</button>}@else{<button
-      class="primary"
-      (click)="auth.login()"
-    >
-      Iniciar sesión</button
-    >}
-  </div>
-</header>
-<main>
-  @if(error()){
-  <p class="error" role="alert">
-    {{error()}}
-    <button (click)="error.set('')" aria-label="Cerrar mensaje">×</button>
-  </p>
-  } @if(notice()){
-  <div class="notice" role="status">
-    <span>{{notice()}}</span>@if(cart.count()>0){<button
-      (click)="view.set('carrito')"
-    >
-      Ver carrito</button
-    >}<button (click)="notice.set('')" aria-label="Cerrar aviso">×</button>
-  </div>
-  } @if(view()==='catalogo'){
-  <section class="hero">
-    <span>TODO PARA TU MEJOR AMIGO</span>
-    <h1>Cuídalos con amor.<br />Nosotros ponemos lo demás.</h1>
-    <p>Alimentos, higiene, juguetes y accesorios para cada etapa de su vida.</p>
-    <button class="primary" (click)="view.set('nueva-orden')">
-      Crear nueva orden
-    </button>
-  </section>
-  <div class="heading">
-    <h2>Encuentra su próximo favorito</h2>
-    <button (click)="refreshCatalogo()">Actualizar catálogo</button>
-  </div>
-  @if(loading()){
-  <p role="status">Cargando productos…</p>
-  }
-  <app-product-catalog
-    [productos]="productos()"
-    [categorias]="categorias()"
-    [busy]="busy()"
-    (add)="add($event)"
-  />
-  } @if(view()==='nueva-orden'){
-  <div class="heading">
-    <div>
-      <p class="eyebrow">PREPARA SU PRÓXIMA ENTREGA</p>
-      <h1>Nueva orden</h1>
-      <p>
-        Elige lo que necesita tu mascota y revisa tu compra antes de confirmar.
-      </p>
+    <nav aria-label="Navegación principal">
+      <p class="nav-section">TIENDA</p>
+      <button
+        [class.selected]="view()==='catalogo'"
+        (click)="view.set('catalogo')"
+      >
+        Catálogo
+      </button>
+      <button
+        [class.selected]="view()==='nueva-orden'"
+        (click)="view.set('nueva-orden')"
+      >
+        Nueva orden
+      </button>
+      <button
+        [class.selected]="view()==='carrito'"
+        (click)="view.set('carrito')"
+        [attr.aria-label]="'Carrito, '+cart.count()+' unidades'"
+      >
+        Carrito <span class="cart-count">{{cart.count()}}</span>
+      </button>
+      <button [class.selected]="view()==='sedes'" (click)="view.set('sedes')">
+        Sedes
+      </button>
+      <button
+        [class.selected]="view()==='especialistas'"
+        (click)="view.set('especialistas')"
+      >
+        Especialistas
+      </button>
+      @if(auth.loggedIn()){
+      <p class="nav-section">MI ESPACIO</p>
+      <button [class.selected]="view()==='cuenta'" (click)="view.set('cuenta')">
+        Mi cuenta y mascotas
+      </button>
+      <button
+        [class.selected]="view()==='pedidos'"
+        (click)="view.set('pedidos');refreshVentas()"
+      >
+        Mis pedidos
+      </button>
+      <button [class.selected]="view()==='citas'" (click)="view.set('citas')">
+        Citas
+      </button>
+      <button [class.selected]="view()==='envios'" (click)="view.set('envios')">
+        Envíos
+      </button>
+      <button [class.selected]="view()==='pagos'" (click)="view.set('pagos')">
+        Pagos
+      </button>
+      } @if(auth.admin()){
+      <p class="nav-section">ADMINISTRACIÓN</p>
+      <button
+        [class.selected]="view()==='productos'"
+        (click)="view.set('productos')"
+      >
+        Productos
+      </button>
+      <button
+        [class.selected]="view()==='categorias'"
+        (click)="view.set('categorias')"
+      >
+        Categorías
+      </button>
+      <button
+        [class.selected]="view()==='clientes'"
+        (click)="view.set('clientes')"
+      >
+        Clientes
+      </button>
+      }
+    </nav>
+    <div class="sidebar-note">
+      Todo para su bienestar.<br />En cada etapa de su vida.
     </div>
-    <button (click)="refreshCatalogo()">Actualizar catálogo</button>
-  </div>
-  <div class="order-layout">
-    <section aria-label="Productos para tu nueva orden">
+  </aside>
+  <div class="workspace">
+    <header class="topbar">
+      <span class="topbar-title">Bienvenido a Garritas Store</span>
+      <div class="session">
+        @if(auth.loggedIn()){<span class="role-badge"
+          >{{auth.admin()?'Administrador':'Cliente'}}</span
+        ><strong>{{auth.name()}}</strong
+        ><button (click)="auth.logout()">Salir</button>}@else{<button
+          class="primary"
+          (click)="auth.login()"
+        >
+          Iniciar sesión</button
+        >}
+      </div>
+    </header>
+    <main class="main-content">
+      @if(error()){
+      <p class="error" role="alert">
+        {{error()}}
+        <button (click)="error.set('')" aria-label="Cerrar mensaje">×</button>
+      </p>
+      } @if(notice()){
+      <div class="notice" role="status">
+        <span>{{notice()}}</span>@if(cart.count()>0){<button
+          (click)="view.set('carrito')"
+        >
+          Ver carrito</button
+        >}<button (click)="notice.set('')" aria-label="Cerrar aviso">×</button>
+      </div>
+      } @if(view()==='catalogo'){
+      <section class="hero">
+        <span>TODO PARA TU MEJOR AMIGO</span>
+        <h1>Cuídalos con amor.<br />Nosotros ponemos lo demás.</h1>
+        <p>
+          Alimentos, higiene, juguetes y accesorios para cada etapa de su vida.
+        </p>
+        <button class="primary" (click)="view.set('nueva-orden')">
+          Crear nueva orden
+        </button>
+      </section>
+      <div class="heading">
+        <h2>Encuentra su próximo favorito</h2>
+        <button (click)="refreshCatalogo()">Actualizar catálogo</button>
+      </div>
       @if(loading()){
       <p role="status">Cargando productos…</p>
-      }<app-product-catalog
+      }
+      <app-product-catalog
         [productos]="productos()"
         [categorias]="categorias()"
         [busy]="busy()"
         (add)="add($event)"
       />
-    </section>
-    <aside>
-      <app-cart-panel
-        [busy]="busy()"
-        [authenticated]="auth.loggedIn()"
-        (checkout)="checkout()"
-        (login)="auth.login()"
-      />
-    </aside>
+      } @if(view()==='nueva-orden'){
+      <div class="heading">
+        <div>
+          <p class="eyebrow">PREPARA SU PRÓXIMA ENTREGA</p>
+          <h1>Nueva orden</h1>
+          <p>
+            Elige lo que necesita tu mascota y revisa tu compra antes de
+            confirmar.
+          </p>
+        </div>
+        <button (click)="refreshCatalogo()">Actualizar catálogo</button>
+      </div>
+      <div class="order-layout">
+        <section aria-label="Productos para tu nueva orden">
+          @if(loading()){
+          <p role="status">Cargando productos…</p>
+          }<app-product-catalog
+            [productos]="productos()"
+            [categorias]="categorias()"
+            [busy]="busy()"
+            (add)="add($event)"
+          />
+        </section>
+        <aside>
+          <app-cart-panel
+            [busy]="busy()"
+            [authenticated]="auth.loggedIn()"
+            (checkout)="checkout()"
+            (login)="auth.login()"
+          />
+        </aside>
+      </div>
+      } @if(view()==='carrito'){
+      <div class="heading">
+        <h1>Carrito de compras</h1>
+        <button (click)="view.set('nueva-orden')">Seguir comprando</button>
+      </div>
+      <div class="cart-page">
+        <app-cart-panel
+          [busy]="busy()"
+          [authenticated]="auth.loggedIn()"
+          (checkout)="checkout()"
+          (login)="auth.login()"
+        />
+      </div>
+      } @if(view()==='pedidos'){
+      <div class="heading">
+        <h1>Mis pedidos</h1>
+        <button (click)="refreshVentas()">Actualizar</button>
+      </div>
+      <p>
+        Los pedidos pendientes se actualizan automáticamente. El pago aún puede
+        rechazarse.
+      </p>
+      @for(v of ventas();track v.id){
+      <article class="order">
+        <div>
+          <h2>Pedido #{{v.id}}</h2>
+          <p>{{v.fecha|date:'medium'}}</p>
+          <p>{{v.detalles.length}} tipos de producto</p>
+        </div>
+        <strong>{{v.total|currency:'PEN':'S/ '}}</strong
+        ><span class="badge" [class.waiting]="pending(v.estado)"
+          >{{label(v.estado)}}</span
+        ><button (click)="consultarPago(v.id)">Consultar pago</button
+        >@if(pagos()[v.id];as pago){
+        <p>Pago #{{pago.id}} · {{pago.estado}}</p>
+        }
+      </article>
+      }@empty{
+      <div class="empty-state">
+        <h2>Todavía no tienes pedidos</h2>
+        <button class="primary" (click)="view.set('nueva-orden')">
+          Crear nueva orden
+        </button>
+      </div>
+      } } @if(view()==='categorias' && auth.admin()){
+      <h1>Administrar categorías</h1>
+      <form (ngSubmit)="save()">
+        <label
+          >Nombre<input
+            name="nombre"
+            [(ngModel)]="nombre"
+            required
+            maxlength="100" /></label
+        ><label
+          >Descripción<input
+            name="descripcion"
+            [(ngModel)]="descripcion"
+            maxlength="255" /></label
+        ><button class="primary" [disabled]="!nombre.trim()">
+          {{categoriaId?'Actualizar':'Crear'}}
+        </button>
+      </form>
+      <section class="grid">
+        @for(c of categorias();track c.id){
+        <article>
+          <h2>{{c.nombre}}</h2>
+          <p>{{c.descripcion}}</p>
+          <button (click)="edit(c)">Editar</button
+          ><button (click)="remove(c)">Eliminar</button>
+        </article>
+        }
+      </section>
+      } @if(view()==='sedes'){<app-sedes (order)="view.set('nueva-orden')" />}
+      @if(view()==='especialistas'){<app-especialistas
+        (reservar)="openCitas($event)"
+      />} @if(auth.loggedIn()){ @if(view()==='cuenta'){<app-cuenta />}
+      @if(view()==='citas'){<app-citas (cuenta)="view.set('cuenta')" />}
+      @if(view()==='envios'){<app-envios [initialVenta]="shippingSaleId" />}
+      @if(view()==='pagos'){<app-pagos />} } @if(auth.admin()){
+      @if(view()==='productos'){<app-admin-productos />}
+      @if(view()==='clientes'){<app-clientes />} } @if(!auth.loggedIn() &&
+      (view()==='cuenta'||view()==='citas'||view()==='envios'||view()==='pagos'||view()==='pedidos')){
+      <section class="empty-state">
+        <h1>Inicia sesión para continuar</h1>
+        <button class="primary" (click)="auth.login()">Iniciar sesión</button>
+      </section>
+      }
+    </main>
+    <footer>Garritas Store · Cuidado que deja huella · Perú</footer>
   </div>
-  } @if(view()==='carrito'){
-  <div class="heading">
-    <h1>Carrito de compras</h1>
-    <button (click)="view.set('nueva-orden')">Seguir comprando</button>
-  </div>
-  <div class="cart-page">
-    <app-cart-panel
-      [busy]="busy()"
-      [authenticated]="auth.loggedIn()"
-      (checkout)="checkout()"
-      (login)="auth.login()"
-    />
-  </div>
-  } @if(view()==='pedidos'){
-  <div class="heading">
-    <h1>Mis pedidos</h1>
-    <button (click)="refreshVentas()">Actualizar</button>
-  </div>
-  <p>
-    Los pedidos pendientes se actualizan automáticamente. El pago aún puede
-    rechazarse.
-  </p>
-  @for(v of ventas();track v.id){
-  <article class="order">
-    <div>
-      <h2>Pedido #{{v.id}}</h2>
-      <p>{{v.fecha|date:'medium'}}</p>
-      <p>{{v.detalles.length}} tipos de producto</p>
-    </div>
-    <strong>{{v.total|currency:'PEN':'S/ '}}</strong
-    ><span class="badge" [class.waiting]="pending(v.estado)">{{v.estado}}</span
-    ><button (click)="consultarPago(v.id)">Consultar pago</button
-    >@if(pagos()[v.id];as pago){
-    <p>Pago #{{pago.id}} · {{pago.estado}}</p>
-    }
-  </article>
-  }@empty{
-  <div class="empty-state">
-    <h2>Todavía no tienes pedidos</h2>
-    <button class="primary" (click)="view.set('nueva-orden')">
-      Crear nueva orden
-    </button>
-  </div>
-  } } @if(view()==='categorias' && auth.admin()){
-  <h1>Administrar categorías</h1>
-  <form (ngSubmit)="save()">
-    <label
-      >Nombre<input
-        name="nombre"
-        [(ngModel)]="nombre"
-        required
-        maxlength="100" /></label
-    ><label
-      >Descripción<input
-        name="descripcion"
-        [(ngModel)]="descripcion"
-        maxlength="255" /></label
-    ><button class="primary" [disabled]="!nombre.trim()">
-      {{categoriaId?'Actualizar':'Crear'}}
-    </button>
-  </form>
-  <section class="grid">
-    @for(c of categorias();track c.id){
-    <article>
-      <h2>{{c.nombre}}</h2>
-      <p>{{c.descripcion}}</p>
-      <button (click)="edit(c)">Editar</button
-      ><button (click)="remove(c)">Eliminar</button>
-    </article>
-    }
-  </section>
-  }
-</main>
-<footer>Garritas Store · Cuidado que deja huella.</footer>
+</div>

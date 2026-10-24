@@ -1,114 +1,120 @@
 # Garritas Store
 
-Tienda de mascotas con Java 21, Spring Boot 4, Spring Cloud, PostgreSQL/Flyway, Kafka, Keycloak y Angular 22. La arquitectura del proyecto y las decisiones de consistencia están en [el análisis arquitectónico](docs/arquitectura.md).
+Tienda y bienestar para mascotas en el Perú. Microservicios con **Java 21 / Spring Boot 4**, PostgreSQL/Flyway, Config Server, Eureka, Gateway, Kafka, Keycloak y un cliente **Angular 22**.
 
-## Desarrollo local
+La organización sigue el [proyecto de referencia Pagatu](https://github.com/262dist/pagatu): infraestructura, servicios, Kafka, identidad, observabilidad, clientes y casos de uso rápido tienen sus propias carpetas.
 
-Requisitos: JDK 21 completo (`java` y `javac`), Docker Compose, Node 24, Python 3 y Git. Maven se descarga con el wrapper incluido.
+## Estructura
 
-Desde la raíz del repositorio:
-
-```bash
-bash scripts/dev.sh build
-bash scripts/dev.sh all
-bash scripts/dev.sh observability
-bash scripts/dev.sh status --observability
+```text
+Garritas-/
+├── .github/          # CI: compilación Java y pruebas/build de Angular
+├── clients/          # garritas-frontend
+├── docs/             # Arquitectura, ejecución y evidencia de validación
+├── infra/            # Config Server, Eureka, Gateway y soporte técnico común
+├── kafka/            # Broker Kafka y Kafka UI
+├── keycloak/         # Keycloak, su PostgreSQL y el realm de demostración
+├── obs/              # Prometheus, Loki, Promtail y Grafana
+├── overrides/        # Personalización del sitio de documentación
+├── services/         # Ocho microservicios de negocio, cada uno con PostgreSQL propio
+└── uso-rapido/       # Ejemplo Python Kafka, arranque, pruebas y Compose integrado opcional
 ```
 
-`all` inicia Kafka, Kafka UI, Keycloak, siete PostgreSQL, Config Server, Eureka, los siete servicios, Gateway y Angular. Instala las dependencias frontend con `npm ci` si faltan. `observability` añade Grafana, Prometheus, Loki y Promtail; `status --observability` comprueba respuestas HTTP y conexión real con el broker. Comprueba readiness; guarda PIDs, copias estables de los JAR y logs en `.runtime/`. No elimina volúmenes ni datos. `bash scripts/dev.sh stop` detiene las aplicaciones Java y Angular; `down` también baja los contenedores de desarrollo, conservando sus volúmenes.
+Los Compose y Dockerfiles de integración que estaban en la raíz se movieron a `uso-rapido/docker/`. Las herramientas están en `uso-rapido/scripts/`; el soporte común está en `infra/garritas-common/`. Las rutas de compilación y ejecución ya usan esta organización.
 
-En una nube con proxy Maven, `MAVEN_SETTINGS` puede apuntar a un `settings.xml` externo y `MAVEN_USER_HOME` a un directorio escribible. Se mantiene la validación TLS. Cada tarea de nube está aislada: usar el checkout existente, sin crear un worktree salvo petición explícita.
+## Qué se puede hacer en Angular
 
-| Componente DEV | Puerto |
-|---|---|
-| Angular / Gateway | 4200 / 18080 |
-| Config / Eureka | 18888 / 18761 |
-| Venta / Institución / Envío / Citas | 8081 / 8082 / 8083 / 8084 |
-| Catálogo / Usuario / Pago | 8085 / 8086 / 8087 |
-| Keycloak / health y métricas | 18180 / 19000 |
-| Kafka broker / Kafka UI | 19092 / 18085 |
-| Grafana / Prometheus / Loki | 13000 / 19090 / 13100 |
+| Pantalla | Cliente | Administrador |
+|---|---|---|
+| Catálogo, nueva orden y carrito | Buscar, filtrar, seleccionar sede y comprar | Igual; además gestionar productos y categorías |
+| Sedes | Consultar sedes activas del Perú y seleccionar una | Crear, editar, activar y desactivar sedes |
+| Especialistas | Consultar profesionales y sus especialidades; reservar cita | Gestionar profesionales y asignar varias especialidades |
+| Mi cuenta y mascotas | Editar su perfil y gestionar sus propias mascotas | Perfil propio y administración de clientes |
+| Citas | Reservar para sus mascotas, consultar y cancelar las permitidas | Ver todas, confirmar y marcar atención |
+| Envíos | Solicitar envío de sus pedidos pagados y consultar su entrega | Gestionar tránsito y entrega |
+| Pagos y pedidos | Ver únicamente los suyos | Consultar todos |
 
-Fixtures locales: `cliente` / `Cliente123!` (CLIENTE), `admin-store` / `Admin123!` (ADMIN). Consola Keycloak: `admin` / `local-admin-change-me`, configurable con `KEYCLOAK_ADMIN_PASSWORD`. El realm se importa automáticamente **solo si no existe**: editar el JSON no modifica un realm ya creado. No publicar estas cuentas ni los valores de `.env.example` en un servicio accesible por Internet.
+Los permisos se verifican también en el Gateway y los microservicios. Ocultar botones no es la protección: una petición directa de un cliente intentando editar sedes o acceder a datos ajenos se rechaza.
 
-## Compose integrado
+**Bienestar** es el microservicio de relación **muchos a muchos**: un profesional tiene varias especialidades y una especialidad pertenece a varios profesionales. La tabla de asociación tiene clave primaria compuesta y claves foráneas. Citas valida las referencias de mascota, sede y profesional mediante llamadas HTTP con identidad propagada y límites de tiempo.
+
+## Inicio rápido
+
+Requisitos: **JDK 21 completo, Node 24, Docker Compose, Git** y Python 3 para las herramientas Linux/pruebas. Los ejemplos son locales; no se hacen cobros bancarios reales.
+
+### Linux o WSL2
+
+Desde la raíz:
 
 ```bash
-docker compose up -d --build --wait --wait-timeout 300
+bash uso-rapido/scripts/dev.sh build
+bash uso-rapido/scripts/dev.sh all
+bash uso-rapido/scripts/dev.sh status
 ```
 
-El Compose raíz es el punto de entrada para el sistema completo: redes compartidas, dependencias con salud, bases privadas y volúmenes persistentes. Angular se sirve en 4200 con proxy `/api` al Gateway; Gateway se publica en 28080, Config en 28888 y Eureka en 28761. Keycloak mantiene el emisor público de desarrollo `http://localhost:18180/realms/garritas`, mientras los servicios consultan su JWKS por el nombre interno Docker. No ejecutar al mismo tiempo DEV y este stack: comparten los puertos de Keycloak, Kafka y Angular.
-
-Si el builder Docker no puede descargar dependencias, compilar primero en el host:
-
-```bash
-bash scripts/dev.sh build
-(cd clients/garritas-frontend && npm ci && npm run build)
-docker compose -f compose.yml -f compose.prebuilt.yml up -d --build --wait --wait-timeout 300
-```
-
-Esta alternativa usa los mismos JAR y el mismo frontend compilados; conserva las comprobaciones de salud. Los Dockerfile de cada módulo también se construyen desde la **raíz** del repositorio, porque necesitan la librería común. Los Compose por servicio se conservan para trabajo manual con infraestructura externa; no sustituyen al Compose raíz.
+`build` compila todos los servicios e instala el soporte común para permitir también arranques manuales por módulo. `all` inicia Kafka, Keycloak, las ocho bases de negocio, Config Server, Eureka, los ocho servicios, Gateway y Angular. Si faltan dependencias frontend, ejecuta `npm ci` antes de iniciar su servidor.
 
 Observabilidad opcional:
 
 ```bash
-# Aplicaciones ejecutadas en el host
-bash scripts/dev.sh observability
-# Aplicaciones en el Compose integrado
-docker compose -f compose.yml -f compose.observability.yml up -d
+bash uso-rapido/scripts/dev.sh observability
+bash uso-rapido/scripts/dev.sh status --observability
 ```
 
-Prometheus descubre servicios por Eureka; Grafana tiene los dashboards existentes y Loki recibe los logs. El overlay raíz monta los volúmenes reales de logs; DEV lee `.runtime/`. Esta observabilidad no bloquea una compra.
+### Windows con PowerShell
 
-## API de compra y seguridad
+Con Docker Desktop iniciado, JDK 21 y Node 24 en PATH:
 
-Catálogo GET público; modificaciones y dominios secundarios requieren ADMIN. Ventas y pagos se filtran por el `sub` del cliente; ADMIN puede auditar.
-
-```http
-POST /api/v1/ventas
-Authorization: Bearer <access_token de Keycloak>
-Idempotency-Key: <UUID nuevo para cada compra; conservar al reintentar>
-Content-Type: application/json
-
-{"metodoPago":"TARJETA","detalles":[{"idProducto":1,"cantidad":2}]}
+```powershell
+.\uso-rapido\garritas.ps1 -Accion build
+.\uso-rapido\garritas.ps1 -Accion iniciar
+.\uso-rapido\garritas.ps1 -Accion estado
 ```
 
-El servidor determina cliente y precios. La respuesta inicial es pendiente; consultar `GET /api/v1/ventas/{id}` hasta `PAGADA` o `CANCELADA`. `GET /api/v1/pagos/venta/{id}` muestra el pago cuando exista. TRANSFERENCIA simula rechazo y devolución de stock; no hay cobros reales. El catálogo DEV incluye 16 productos para mascotas en cinco categorías. El frontend permite buscar, filtrar, preparar una nueva orden, editar cantidades, quitar artículos y confirmar el carrito. Los precios y el stock de compra siempre se validan en los servicios. El catálogo se gestiona con APIs ADMIN; el frontend permite CRUD de categorías.
-
-## Pruebas
-
-Con el stack DEV iniciado:
-
-```bash
-bash scripts/dev.sh test
-(cd clients/garritas-frontend && npm test && npm run build)
-python3 -m pip install -r scripts/requirements-test.txt
-python3 -m playwright install chromium
-python3 scripts/smoke.py
-python3 scripts/consoles.py
-```
-
-Si ya hay Chromium instalado, se puede ejecutar `CHROMIUM_PATH=/usr/bin/chromium python3 scripts/smoke.py`. El smoke utiliza las cuentas de demostración, crea fixtures identificables y desactiva los productos usados. Conserva ventas, pagos, categorías y reservas como historial. No ejecutar contra datos de producción.
-
-Para probar duplicados y recuperaciones con caída deliberada de Pago y Kafka, ejecutar `python3 scripts/faults.py` únicamente contra el stack DEV desechable. El script detiene procesos propios y recupera el broker; no usar contra producción.
-
-Consulta [la arquitectura](docs/arquitectura.md) para contratos de eventos, manejo de duplicados, recuperación de DLT, cambios incompatibles de API y límites del despliegue local. Los resultados y el bloqueo de disco del Compose completo están en [la evidencia de validación](docs/validacion.md).
+Para detener Java y Angular: `-Accion detener`. Este lanzador conserva los volúmenes y verifica los procesos registrados antes de detenerlos. También se pueden seguir los comandos manuales de cada módulo como en Pagatu; consulta [la guía de ejecución](docs/ejecucion.md).
 
 ## Abrir las aplicaciones
 
-Después de `bash scripts/dev.sh all` y `bash scripts/dev.sh observability`, estas direcciones se usan en el navegador **de la máquina donde ejecutas el proyecto**:
+Las direcciones se abren **en la máquina donde ejecutas el proyecto**; no constituyen una publicación web de GitHub ni una URL externa de la nube.
 
 | Aplicación | Dirección local | Acceso de demostración |
 |---|---|---|
 | Garritas Store | `http://localhost:4200` | `cliente` / `Cliente123!` |
-| Kafka UI | `http://localhost:18085` | Sin login; clúster `garritas` |
+| Kafka UI | `http://localhost:18085` | Clúster `garritas` |
 | Keycloak | `http://localhost:18180/admin/` | `admin` / `local-admin-change-me` |
 | Eureka | `http://localhost:18761` | Sin login |
+| Gateway | `http://localhost:18080` | API con JWT |
 | Grafana | `http://localhost:13000` | `admin` / `local-grafana` |
 | Prometheus | `http://localhost:19090` | Sin login |
 
-Loki tiene una API en el puerto 13100; sus logs se consultan desde Grafana. En una nube, `localhost` corresponde al entorno remoto; estas direcciones no publican una web ni un acceso externo.
+Administrador de la tienda: **`admin-store` / `Admin123!`**. Es distinto del administrador de Keycloak. Loki expone su API en 13100 y se consulta desde Grafana.
 
-En **Nueva orden**, elige productos y revisa el panel **Tu carrito**. También puedes abrir **Carrito** desde la navegación. El carrito se conserva al recargar y durante el login; solo guarda identificadores, cantidades y la clave de reintento, nunca tokens ni precios confiables. Un stock cambiado bloquea la confirmación hasta corregir o quitar la línea. Al registrar el pedido, el carrito se vacía y **Mis pedidos** sigue el pago.
+DEV incluye 16 productos para mascotas, seis sedes ficticias de Lima, Arequipa, Trujillo, Cusco y Huancayo, y profesionales/especialidades de ejemplo. Las migraciones repetibles de `db/demo` no sobrescriben datos existentes. El realm solo se importa cuando aún no existe. No uses estas identidades ni contraseñas de demostración para exponer el sistema en Internet.
 
-El catálogo inicial contiene alimentos para perros, gatos, aves y conejos, arena sanitaria, champú, bolsas de paseo, juguetes, correa, plato, cama, rascador y bebedero. La migración repetible de `db/demo` no modifica precios ni stock de productos existentes. Solo se activa en DEV y en el Compose de integración local; para excluirla de este último, definir `CATALOGO_MIGRATION_LOCATIONS=classpath:db/migration`.
+El carrito conserva identificadores, cantidades, sede y clave de reintento, nunca tokens. El servidor determina precios, identidad y stock. La Saga reserva inventario, procesa un pago simulado y confirma o compensa. **TRANSFERENCIA** simula rechazo; el stock se devuelve antes de cancelar la venta.
+
+## Uso rápido de Kafka
+
+El ejemplo equivalente al de Pagatu está en [`uso-rapido/garritas-eventos-py`](uso-rapido/garritas-eventos-py/README.md). Tiene productor, consumidor, requisitos y Compose. Usa un topic de demostración separado para no crear compras ficticias en la Saga real.
+
+## Pruebas y documentación
+
+Con DEV iniciado:
+
+```bash
+bash uso-rapido/scripts/dev.sh test
+(cd clients/garritas-frontend && npm test && npm run build)
+python3 -m pip install -r uso-rapido/scripts/requirements-test.txt
+CHROMIUM_PATH=/usr/bin/chromium python3 uso-rapido/scripts/domain_smoke.py
+CHROMIUM_PATH=/usr/bin/chromium python3 uso-rapido/scripts/smoke.py
+CHROMIUM_PATH=/usr/bin/chromium python3 uso-rapido/scripts/consoles.py
+```
+
+Si no usas Chromium del sistema, instala el navegador de Playwright con `python3 -m playwright install chromium` y omite `CHROMIUM_PATH`. `domain_smoke.py` prueba todos los dominios con ADMIN y dos CLIENTE: propiedad, permisos, asociación muchos a muchos, cita, compra y entrega. Los registros de prueba se identifican como tales; los historiales de ventas y citas se conservan.
+
+- [Guía de ejecución y diagnóstico](docs/ejecucion.md)
+- [Arquitectura y decisiones](docs/arquitectura.md)
+- [Resultados y límites de validación](docs/validacion.md)
+- [Compose integrado opcional](uso-rapido/docker/README.md)
+
+La documentación puede construirse con `pip install -r docs/requirements.txt` y `mkdocs build --strict`.

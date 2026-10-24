@@ -9,3 +9,10 @@ playwright-report/
 test-results/
 **/__pycache__/
 **/*.pyc
+
+**/hs_err_pid*.log
+**/*.log
+**/*.hprof
+site/
+
+**/.venv/

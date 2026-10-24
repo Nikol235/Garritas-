@@ -1,0 +1,140 @@
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">CUIDADO Y ACOMPAÑAMIENTO</p>
+    <h1>Citas</h1>
+    <p>Reserva una atención para tu mascota y consulta su estado.</p>
+  </div>
+  <button (click)="load()">Actualizar citas</button>
+</div>
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+@if (message()) {
+  <p class="notice">{{ message() }}</p>
+}
+@if (needsProfile()) {
+  <div class="panel">
+    <p>Primero completa tu perfil y registra una mascota.</p>
+    <button class="primary" (click)="cuenta.emit()">Completar mi cuenta</button>
+  </div>
+} @else {
+  <section class="panel">
+    <h2>Reservar cita</h2>
+    <form #f="ngForm" (ngSubmit)="save()">
+      <div class="field-grid">
+        <label
+          >Mascota para la cita<select
+            name="mascota"
+            [(ngModel)]="model.idMascota"
+            required
+          >
+            <option [ngValue]="0">Selecciona tu mascota</option>
+            @for (p of mascotas(); track p.id) {
+              <option [ngValue]="p.id">{{ p.nombre }}</option>
+            }
+          </select></label
+        ><label
+          >Sede para la cita<select
+            name="sede"
+            [(ngModel)]="model.idSede"
+            (ngModelChange)="model.profesionalId = 0"
+            required
+          >
+            <option [ngValue]="0">Selecciona una sede</option>
+            @for (s of sedes(); track s.id) {
+              <option [ngValue]="s.id">{{ s.nombre }}</option>
+            }
+          </select></label
+        ><label
+          >Profesional<select
+            name="profesional"
+            [(ngModel)]="model.profesionalId"
+            required
+          >
+            <option [ngValue]="0">Selecciona un profesional</option>
+            @for (p of available(); track p.id) {
+              <option [ngValue]="p.id">{{ p.nombre }}</option>
+            }
+          </select></label
+        ><label
+          >Fecha y hora de la cita<input
+            name="fecha"
+            type="datetime-local"
+            step="1800"
+            [(ngModel)]="model.fechaHora"
+            required
+        /></label>
+      </div>
+      <p class="muted">
+        Hora local de tu navegador. Elige una fecha futura a las :00 o :30; cada
+        cita ocupa 30 minutos.
+      </p>
+      <label
+        >Motivo de la cita<input
+          name="motivo"
+          [(ngModel)]="model.motivo"
+          required
+          maxlength="255" /></label
+      ><button
+        class="primary"
+        [disabled]="
+          f.invalid ||
+          !model.idSede ||
+          !model.idMascota ||
+          !model.profesionalId ||
+          busy()
+        "
+      >
+        Reservar cita
+      </button>
+    </form>
+  </section>
+}
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Cita</th>
+        <th>Mascota y profesional</th>
+        <th>Sede</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (c of citas(); track c.id) {
+        <tr>
+          <td>#{{ c.id }}<br />{{ c.motivo }}</td>
+          <td>
+            {{ c.nombreMascota || c.idMascota }}<br /><small>{{
+              c.nombreProfesional
+            }}</small>
+          </td>
+          <td>{{ c.nombreSede || c.idSede }}</td>
+          <td>{{ c.fechaHora | date: "short" }}</td>
+          <td>
+            <span class="badge">{{ label(c.estado) }}</span>
+          </td>
+          <td>
+            <div class="actions">
+              @if (auth.admin() && c.estado === "PROGRAMADA") {
+                <button (click)="action(c, 'confirmar')">Confirmar</button>
+              }
+              @if (auth.admin() && c.estado === "CONFIRMADA") {
+                <button (click)="action(c, 'atender')">Marcar atendida</button>
+              }
+              @if (c.estado === "PROGRAMADA" || c.estado === "CONFIRMADA") {
+                <button (click)="action(c, 'cancelar')">Cancelar cita</button>
+              }
+            </div>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="6">No hay citas registradas.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -3,7 +3,21 @@
     <h2 id="cart-title">Tu carrito</h2>
     <span class="badge">{{cart.count()}} unidades</span>
   </div>
-  @if(message()){
+  <label
+    >Sede de la compra<select
+      [ngModel]="cart.sedeId()"
+      (ngModelChange)="cart.selectSede(+$event)"
+      [disabled]="busy()"
+    >
+      <option [ngValue]="0">Selecciona una sede</option>
+      @for(s of cart.sedes();track s.id){@if(s.activo){
+      <option [ngValue]="s.id">{{s.nombre}} · {{s.ciudad}}</option>
+      }}
+    </select></label
+  >
+  @if(!cart.sedeId()){
+  <p class="muted">Selecciona una sede para confirmar tu compra.</p>
+  } @if(message()){
   <p class="error" role="alert">{{message()}}</p>
   } @for(line of cart.lines();track line.id){
   <article class="cart-line" [class.unavailable]="!line.disponible">

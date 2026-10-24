@@ -3,7 +3,7 @@ services:
   garritas-config:
     build:
       context: ..
-      dockerfile: Dockerfile
+      dockerfile: uso-rapido/docker/Dockerfile
       args:
         MODULE: infra/garritas-config
     container_name: garritas-config
@@ -20,7 +20,7 @@ services:
   garritas-eureka:
     build:
       context: ..
-      dockerfile: Dockerfile
+      dockerfile: uso-rapido/docker/Dockerfile
       args:
         MODULE: infra/garritas-eureka
     container_name: garritas-eureka
@@ -38,7 +38,7 @@ services:
   garritas-gateway:
     build:
       context: ..
-      dockerfile: Dockerfile
+      dockerfile: uso-rapido/docker/Dockerfile
       args:
         MODULE: infra/garritas-gateway
     container_name: garritas-gateway

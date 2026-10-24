@@ -1,0 +1,110 @@
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">ADMINISTRACIÓN</p>
+    <h1>Productos</h1>
+    <p>Gestiona el catálogo y la disponibilidad de la tienda.</p>
+  </div>
+  <button (click)="load()">Actualizar productos</button>
+</div>
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+@if (message()) {
+  <p class="notice">{{ message() }}</p>
+}
+<section class="panel">
+  <h2>{{ id ? "Editar producto" : "Nuevo producto" }}</h2>
+  <form #f="ngForm" (ngSubmit)="save()">
+    <div class="field-grid">
+      <label
+        >Nombre del producto<input
+          name="nombre"
+          [(ngModel)]="model.nombre"
+          required
+          maxlength="100" /></label
+      ><label
+        >Categoría del producto<select
+          name="categoria"
+          [(ngModel)]="model.categoriaId"
+          required
+        >
+          <option [ngValue]="0">Selecciona categoría</option>
+          @for (c of categorias(); track c.id) {
+            <option [ngValue]="c.id">{{ c.nombre }}</option>
+          }
+        </select></label
+      ><label
+        >Precio en soles<input
+          name="precio"
+          type="number"
+          min="0.01"
+          step="0.01"
+          [(ngModel)]="model.precio"
+          required /></label
+      ><label
+        >Stock disponible<input
+          name="stock"
+          type="number"
+          min="0"
+          step="1"
+          [(ngModel)]="model.stock"
+          required
+      /></label>
+    </div>
+    <label
+      >Descripción del producto<input
+        name="descripcion"
+        [(ngModel)]="model.descripcion"
+        maxlength="255" /></label
+    ><label class="check"
+      ><input
+        type="checkbox"
+        name="activo"
+        [(ngModel)]="model.activo"
+      />Producto activo</label
+    >
+    <div class="actions">
+      <button
+        class="primary"
+        [disabled]="f.invalid || !model.categoriaId || busy()"
+      >
+        Guardar producto</button
+      ><button type="button" (click)="reset()">Cancelar edición</button>
+    </div>
+  </form>
+</section>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Categoría</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Activo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (p of productos(); track p.id) {
+        <tr>
+          <td>{{ p.nombre }}</td>
+          <td>{{ p.categoria.nombre }}</td>
+          <td>{{ p.precio | currency: "PEN" : "S/ " }}</td>
+          <td>{{ p.stock }}</td>
+          <td>{{ p.activo ? "Sí" : "No" }}</td>
+          <td>
+            <button
+              (click)="edit(p)"
+              [attr.aria-label]="'Editar producto ' + p.nombre"
+            >
+              Editar</button
+            ><button [disabled]="!p.activo" (click)="deactivate(p)">
+              Desactivar
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

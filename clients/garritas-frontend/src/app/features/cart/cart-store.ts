@@ -1,4 +1,5 @@
 import { Injectable, computed, signal } from "@angular/core";
+import { Sede } from "../../core/domain-api";
 import { Producto } from "../../core/api";
 
 export interface CartEntry {
@@ -19,6 +20,9 @@ export class CartStore {
   private readonly catalog = signal<Producto[]>([]);
   private readonly loaded = signal(false);
   private readonly payment = signal("TARJETA");
+  readonly sedes = signal<Sede[]>([]);
+  private readonly selectedSede = signal(0);
+  readonly sedeId = this.selectedSede.asReadonly();
   private request: { key: string; signature: string } | undefined;
   readonly metodo = this.payment.asReadonly();
   readonly entries = this.items.asReadonly();
@@ -52,6 +56,7 @@ export class CartStore {
   readonly valid = computed(
     () =>
       this.loaded() &&
+      this.sedes().some((s) => s.id === this.sedeId() && s.activo) &&
       this.lines().length > 0 &&
       this.total() > 0 &&
       this.lines().every((l) => l.disponible),
@@ -64,6 +69,14 @@ export class CartStore {
   reconcile(productos: Producto[]) {
     this.catalog.set(productos);
     this.loaded.set(true);
+  }
+
+  setSedes(sedes: Sede[]) {
+    this.sedes.set(sedes);
+  }
+  selectSede(id: number) {
+    this.selectedSede.set(id);
+    this.persist();
   }
 
   add(producto: Producto): boolean {
@@ -111,6 +124,7 @@ export class CartStore {
 
   payload() {
     return {
+      sedeId: this.sedeId(),
       metodoPago: this.metodo(),
       detalles: this.items()
         .map((i) => ({ idProducto: i.id, cantidad: i.cantidad }))
@@ -143,6 +157,7 @@ export class CartStore {
         JSON.stringify({
           version: 1,
           items: this.items(),
+          sedeId: this.sedeId(),
           metodo: this.metodo(),
           request: this.request,
         }),
@@ -171,6 +186,8 @@ export class CartStore {
           entries.push({ id: item.id, cantidad: item.cantidad });
       }
       this.items.set(entries);
+      if (Number.isSafeInteger(saved.sedeId) && saved.sedeId > 0)
+        this.selectedSede.set(saved.sedeId);
       if (METHODS.includes(saved.metodo)) this.payment.set(saved.metodo);
       if (
         typeof saved.request?.key === "string" &&

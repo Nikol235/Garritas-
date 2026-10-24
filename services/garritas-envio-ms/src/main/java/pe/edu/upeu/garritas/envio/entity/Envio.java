@@ -1,9 +1,8 @@
 package pe.edu.upeu.garritas.envio.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.Instant;
+import lombok.*;
 
 @Entity
 @Table(name = "envios")
@@ -14,26 +13,29 @@ import java.time.Instant;
 @AllArgsConstructor
 public class Envio {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Column(name = "id_cliente", length = 100)
+  private String idCliente;
 
-    @Column(name = "id_venta", nullable = false)
-    private Long idVenta;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(name = "direccion_entrega", nullable = false, length = 255)
-    private String direccionEntrega;
+  @Column(name = "id_venta", nullable = false)
+  private Long idVenta;
 
-    @Column(name = "transportista", length = 100)
-    private String transportista;
+  @Column(name = "direccion_entrega", nullable = false, length = 255)
+  private String direccionEntrega;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "estado", nullable = false, length = 20)
-    private EstadoEnvio estado;
+  @Column(name = "transportista", length = 100)
+  private String transportista;
 
-    @Column(name = "fecha_envio")
-    private Instant fechaEnvio;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "estado", nullable = false, length = 20)
+  private EstadoEnvio estado;
 
-    @Column(name = "fecha_entrega_estimada")
-    private Instant fechaEntregaEstimada;
+  @Column(name = "fecha_envio")
+  private Instant fechaEnvio;
+
+  @Column(name = "fecha_entrega_estimada")
+  private Instant fechaEntregaEstimada;
 }

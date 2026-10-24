@@ -17,6 +17,7 @@ import pe.edu.upeu.garritas.venta.entity.EstadoVenta;
 @AllArgsConstructor
 public class VentaResponse {
   private Long id;
+  private Long sedeId;
   private String idCliente;
   private Instant fecha;
   private EstadoVenta estado;

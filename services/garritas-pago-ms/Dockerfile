@@ -3,7 +3,7 @@ FROM maven:3.9.16-eclipse-temurin-21 AS build
 WORKDIR /build
 COPY . .
 ARG MODULE=services/garritas-pago-ms
-RUN test -n "$MODULE" && mvn -B -pl "$MODULE" -am package -DskipTests && cp "$MODULE"/target/*-SNAPSHOT.jar /app.jar
+RUN test -n "$MODULE" && mvn -B -f uso-rapido/pom.xml -pl "../$MODULE" -am package -DskipTests && cp "$MODULE"/target/*-SNAPSHOT.jar /app.jar
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 RUN mkdir -p /app/logs && chown -R 10001:10001 /app

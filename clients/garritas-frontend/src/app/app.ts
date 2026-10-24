@@ -1,4 +1,13 @@
-import { Component, DestroyRef, inject, signal } from "@angular/core";
+import { DomainApi, Sede, stateLabel } from "./core/domain-api";
+import { SedesComponent } from "./features/sedes/sedes.component";
+import { EspecialistasComponent } from "./features/bienestar/especialistas.component";
+import { CuentaComponent } from "./features/cuenta/cuenta.component";
+import { CitasComponent } from "./features/citas/citas.component";
+import { EnviosComponent } from "./features/envios/envios.component";
+import { PagosComponent } from "./features/pagos/pagos.component";
+import { ProductosComponent } from "./features/admin/productos.component";
+import { ClientesComponent } from "./features/admin/clientes.component";
+import { Component, DestroyRef, inject, signal, effect } from "@angular/core";
 import { CurrencyPipe, DatePipe } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -12,13 +21,30 @@ import { ProductCatalog } from "./features/catalogo/product-catalog";
 
 @Component({
   selector: "app-root",
-  imports: [FormsModule, CurrencyPipe, DatePipe, CartPanel, ProductCatalog],
+  imports: [
+    FormsModule,
+    CurrencyPipe,
+    DatePipe,
+    CartPanel,
+    ProductCatalog,
+    SedesComponent,
+    EspecialistasComponent,
+    CuentaComponent,
+    CitasComponent,
+    EnviosComponent,
+    PagosComponent,
+    ProductosComponent,
+    ClientesComponent,
+  ],
   templateUrl: "./app.html",
 })
 export class App {
   readonly auth = inject(Auth);
   readonly cart = inject(CartStore);
   private readonly api = inject(Api);
+  private readonly domain = inject(DomainApi);
+  readonly label = stateLabel;
+  shippingSaleId = 0;
   private readonly destroy = inject(DestroyRef);
   readonly productos = signal<Producto[]>([]);
   readonly categorias = signal<Categoria[]>([]);
@@ -28,14 +54,20 @@ export class App {
   readonly notice = signal("");
   readonly busy = signal(false);
   readonly loading = signal(true);
-  readonly view = signal(this.cart.count() > 0 ? "nueva-orden" : "catalogo");
+  readonly view = signal(
+    sessionStorage.getItem("garritas-view") ||
+      (this.cart.count() > 0 ? "nueva-orden" : "catalogo"),
+  );
   readonly pending = pending;
   nombre = "";
   descripcion = "";
   categoriaId: number | undefined;
 
   constructor() {
+    if(!this.auth.admin() && ["productos","categorias","clientes"].includes(this.view())) this.view.set("catalogo");
     this.refreshCatalogo();
+    this.refreshSedes();
+    effect(() => sessionStorage.setItem("garritas-view", this.view()));
     if (this.auth.loggedIn()) this.refreshVentas();
     timer(3000, 3000)
       .pipe(
@@ -60,6 +92,24 @@ export class App {
       });
   }
 
+  refreshSedes() {
+    this.domain
+      .get<Sede[]>("/sedes")
+      .subscribe({
+        next: (s) => this.cart.setSedes(s),
+        error: (e) => this.fail(e),
+      });
+  }
+  openCitas(id: number) {
+    sessionStorage.setItem("garritas-profesional", String(id));
+    sessionStorage.setItem("garritas-view", "citas");
+    this.view.set("citas");
+    if (!this.auth.loggedIn()) this.auth.login();
+  }
+  shipping(id: number) {
+    this.shippingSaleId = id;
+    this.view.set("envios");
+  }
   refreshCatalogo() {
     this.loading.set(true);
     this.api.productos().subscribe({
@@ -73,20 +123,16 @@ export class App {
         this.fail(e);
       },
     });
-    this.api
-      .categorias()
-      .subscribe({
-        next: (c) => this.categorias.set(c),
-        error: (e) => this.fail(e),
-      });
+    this.api.categorias().subscribe({
+      next: (c) => this.categorias.set(c),
+      error: (e) => this.fail(e),
+    });
   }
   refreshVentas() {
-    this.api
-      .ventas()
-      .subscribe({
-        next: (v) => this.ventas.set(v),
-        error: (e) => this.fail(e),
-      });
+    this.api.ventas().subscribe({
+      next: (v) => this.ventas.set(v),
+      error: (e) => this.fail(e),
+    });
   }
   add(producto: Producto) {
     if (this.busy()) return;
@@ -130,17 +176,18 @@ export class App {
         error: (e) => {
           this.busy.set(false);
           this.fail(e);
-          if (e.status === 409) this.refreshCatalogo();
+          if (e.status === 409) {
+            this.refreshCatalogo();
+            this.refreshSedes();
+          }
         },
       });
   }
   consultarPago(id: number) {
-    this.api
-      .pago(id)
-      .subscribe({
-        next: (p) => this.pagos.update((all) => ({ ...all, [id]: p })),
-        error: (e) => this.fail(e),
-      });
+    this.api.pago(id).subscribe({
+      next: (p) => this.pagos.update((all) => ({ ...all, [id]: p })),
+      error: (e) => this.fail(e),
+    });
   }
   edit(c: Categoria) {
     this.categoriaId = c.id;
@@ -165,12 +212,10 @@ export class App {
   }
   remove(c: Categoria) {
     if (confirm("¿Eliminar categoría " + c.nombre + "?"))
-      this.api
-        .borrarCategoria(c.id)
-        .subscribe({
-          next: () => this.refreshCatalogo(),
-          error: (e) => this.fail(e),
-        });
+      this.api.borrarCategoria(c.id).subscribe({
+        next: () => this.refreshCatalogo(),
+        error: (e) => this.fail(e),
+      });
   }
   private fail(e: HttpErrorResponse) {
     this.error.set(

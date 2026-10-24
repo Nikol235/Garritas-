@@ -1,58 +1,83 @@
 package pe.edu.upeu.garritas.envio.service;
 
-import java.util.List;
+import java.util.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import pe.edu.upeu.garritas.envio.dto.EnvioRequest;
-import pe.edu.upeu.garritas.envio.dto.EnvioResponse;
-import pe.edu.upeu.garritas.envio.entity.Envio;
-import pe.edu.upeu.garritas.envio.entity.EstadoEnvio;
-import pe.edu.upeu.garritas.envio.exception.ResourceNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+import pe.edu.upeu.garritas.common.*;
+import pe.edu.upeu.garritas.envio.dto.*;
+import pe.edu.upeu.garritas.envio.entity.*;
 import pe.edu.upeu.garritas.envio.mapper.EnvioMapper;
 import pe.edu.upeu.garritas.envio.repository.EnvioRepository;
 
-@org.springframework.transaction.annotation.Transactional
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class EnvioService {
-
-  private final EnvioRepository envioRepository;
-  private final EnvioMapper envioMapper;
+  private final EnvioRepository repository;
+  private final EnvioMapper mapper;
+  private final ServiceClient services;
 
   public List<EnvioResponse> listar() {
-    return envioRepository.findAll().stream().map(envioMapper::toResponse).toList();
+    return (CurrentUser.admin()
+            ? repository.findAll()
+            : repository.findByIdCliente(CurrentUser.subject()))
+        .stream().map(mapper::toResponse).toList();
   }
 
   public EnvioResponse obtener(Long id) {
-    return envioMapper.toResponse(buscarOFallar(id));
+    return mapper.toResponse(owned(id));
   }
 
-  public EnvioResponse crear(EnvioRequest request) {
-    Envio envio = envioMapper.toEntity(request);
-    return envioMapper.toResponse(envioRepository.save(envio));
+  public EnvioResponse crear(EnvioRequest r) {
+    Reference venta =
+        services.get("garritas-venta-ms", "/api/v1/ventas/" + r.getIdVenta(), Reference.class);
+    if (!"PAGADA".equals(venta.estado()))
+      throw new ResponseStatusException(
+          HttpStatus.CONFLICT, "Solo se puede solicitar envío para una venta pagada");
+    CurrentUser.requireOwner(venta.idCliente());
+    Envio e = mapper.toEntity(r);
+    e.setIdCliente(venta.idCliente());
+    if (!CurrentUser.admin()) e.setTransportista("Por asignar");
+    e.setFechaEnvio(null);
+    return mapper.toResponse(repository.saveAndFlush(e));
   }
 
   public EnvioResponse marcarEnTransito(Long id) {
-    Envio envio = buscarOFallar(id);
-    envio.setEstado(EstadoEnvio.EN_TRANSITO);
-    return envioMapper.toResponse(envioRepository.save(envio));
+    Envio e = owned(id);
+    if (e.getEstado() != EstadoEnvio.PENDIENTE)
+      throw new ResponseStatusException(HttpStatus.CONFLICT, "El envío no está pendiente");
+    e.setEstado(EstadoEnvio.EN_TRANSITO);
+    e.setFechaEnvio(java.time.Instant.now());
+    return mapper.toResponse(repository.save(e));
   }
 
   public EnvioResponse marcarEntregado(Long id) {
-    Envio envio = buscarOFallar(id);
-    envio.setEstado(EstadoEnvio.ENTREGADO);
-    return envioMapper.toResponse(envioRepository.save(envio));
+    Envio e = owned(id);
+    if (e.getEstado() != EstadoEnvio.EN_TRANSITO)
+      throw new ResponseStatusException(HttpStatus.CONFLICT, "El envío no está en tránsito");
+    e.setEstado(EstadoEnvio.ENTREGADO);
+    return mapper.toResponse(repository.save(e));
   }
 
   public EnvioResponse cancelar(Long id) {
-    Envio envio = buscarOFallar(id);
-    envio.setEstado(EstadoEnvio.CANCELADO);
-    return envioMapper.toResponse(envioRepository.save(envio));
+    Envio e = owned(id);
+    if (e.getEstado() == EstadoEnvio.ENTREGADO
+        || (!CurrentUser.admin() && e.getEstado() == EstadoEnvio.EN_TRANSITO))
+      throw new ResponseStatusException(HttpStatus.CONFLICT, "Este envío ya no se puede cancelar");
+    e.setEstado(EstadoEnvio.CANCELADO);
+    return mapper.toResponse(repository.save(e));
   }
 
-  private Envio buscarOFallar(Long id) {
-    return envioRepository
-        .findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Envio no encontrado: " + id));
+  private Envio owned(Long id) {
+    Envio e =
+        repository
+            .findById(id)
+            .orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Envío no encontrado"));
+    CurrentUser.requireOwner(e.getIdCliente());
+    return e;
   }
 }

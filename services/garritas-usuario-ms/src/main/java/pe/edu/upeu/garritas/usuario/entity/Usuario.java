@@ -1,10 +1,9 @@
 package pe.edu.upeu.garritas.usuario.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.*;
 
 @Entity
 @Table(name = "usuarios")
@@ -15,23 +14,30 @@ import java.util.List;
 @AllArgsConstructor
 public class Usuario {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Column(name = "subject", unique = true, length = 100)
+  private String subject;
 
-    @Column(name = "nombre", nullable = false, length = 100)
-    private String nombre;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(name = "email", nullable = false, length = 150, unique = true)
-    private String email;
+  @Column(name = "nombre", nullable = false, length = 100)
+  private String nombre;
 
-    @Column(name = "telefono", length = 20)
-    private String telefono;
+  @Column(name = "email", nullable = false, length = 150, unique = true)
+  private String email;
 
-    @Column(name = "direccion", length = 255)
-    private String direccion;
+  @Column(name = "telefono", length = 20)
+  private String telefono;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Mascota> mascotas = new ArrayList<>();
+  @Column(name = "direccion", length = 255)
+  private String direccion;
+
+  @Builder.Default
+  @OneToMany(
+      mappedBy = "usuario",
+      cascade = CascadeType.ALL,
+      orphanRemoval = true,
+      fetch = FetchType.LAZY)
+  private List<Mascota> mascotas = new ArrayList<>();
 }

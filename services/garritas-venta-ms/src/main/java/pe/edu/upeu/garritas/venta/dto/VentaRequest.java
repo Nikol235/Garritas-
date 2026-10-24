@@ -9,6 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class VentaRequest {
+  @NotNull @Positive private Long sedeId;
+
   @NotNull
   @Pattern(regexp = "TARJETA|YAPE|PLIN|TRANSFERENCIA")
   private String metodoPago;

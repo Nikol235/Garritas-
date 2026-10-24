@@ -33,6 +33,9 @@ public class Venta {
   @Column(name = "total", nullable = false, precision = 10, scale = 2)
   private BigDecimal total;
 
+  @Column(name = "id_sede")
+  private Long sedeId;
+
   @Column(name = "metodo_pago", nullable = false)
   private String metodoPago;
 

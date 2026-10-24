@@ -19,11 +19,19 @@ public class SedeService {
   private final SedeMapper sedeMapper;
 
   public List<SedeResponse> listar() {
-    return sedeRepository.findAll().stream().map(sedeMapper::toResponse).toList();
+    return sedeRepository.findAll().stream()
+        .filter(s -> pe.edu.upeu.garritas.common.CurrentUser.admin() || s.getActivo())
+        .sorted(java.util.Comparator.comparing(Sede::getCiudad).thenComparing(Sede::getNombre))
+        .map(sedeMapper::toResponse)
+        .toList();
   }
 
   public SedeResponse obtener(Long id) {
-    return sedeMapper.toResponse(buscarOFallar(id));
+    Sede sede = buscarOFallar(id);
+    if (!sede.getActivo() && !pe.edu.upeu.garritas.common.CurrentUser.admin())
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.NOT_FOUND, "Sede no disponible");
+    return sedeMapper.toResponse(sede);
   }
 
   public SedeResponse crear(SedeRequest request) {
@@ -42,7 +50,9 @@ public class SedeService {
   }
 
   public void eliminar(Long id) {
-    sedeRepository.delete(buscarOFallar(id));
+    Sede sede = buscarOFallar(id);
+    sede.setActivo(false);
+    sedeRepository.save(sede);
   }
 
   private Sede buscarOFallar(Long id) {

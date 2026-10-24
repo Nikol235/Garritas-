@@ -14,6 +14,7 @@ public class VentaMapper {
   public VentaResponse toResponse(Venta venta) {
     return VentaResponse.builder()
         .id(venta.getId())
+        .sedeId(venta.getSedeId())
         .idCliente(venta.getIdCliente())
         .fecha(venta.getFecha())
         .estado(venta.getEstado())

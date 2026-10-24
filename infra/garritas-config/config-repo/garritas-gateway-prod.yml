@@ -42,6 +42,10 @@ spring:
             uri: lb://garritas-usuario-ms
             predicates:
             - Path=/api/v1/mascotas/**
+          - id: garritas-bienestar
+            uri: lb://garritas-bienestar-ms
+            predicates:
+            - Path=/api/v1/especialistas/**,/api/v1/especialidades/**
   security:
     oauth2:
       resourceserver:

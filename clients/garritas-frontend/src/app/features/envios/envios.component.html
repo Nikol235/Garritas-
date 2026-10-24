@@ -1,0 +1,86 @@
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">HASTA TU PUERTA</p>
+    <h1>Envíos</h1>
+    <p>Solicita el envío de tus compras pagadas y sigue su entrega.</p>
+  </div>
+  <button (click)="load()">Actualizar envíos</button>
+</div>
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+@if (message()) {
+  <p class="notice">{{ message() }}</p>
+}
+<section class="panel">
+  <h2>Solicitar envío</h2>
+  <form #f="ngForm" (ngSubmit)="save()">
+    <div class="field-grid">
+      <label
+        >Pedido pagado<select name="venta" [(ngModel)]="model.idVenta" required>
+          <option [ngValue]="0">Selecciona un pedido</option>
+          @for (v of available(); track v.id) {
+            <option [ngValue]="v.id">
+              Pedido #{{ v.id }} · S/ {{ v.total }}
+            </option>
+          }
+        </select></label
+      ><label
+        >Dirección de entrega<input
+          name="direccion"
+          [(ngModel)]="model.direccionEntrega"
+          required
+          maxlength="255"
+      /></label>
+      @if (auth.admin()) {
+        <label
+          >Transportista<input
+            name="transportista"
+            [(ngModel)]="model.transportista"
+            maxlength="100"
+        /></label>
+      }
+    </div>
+    <p class="muted">
+      Cada pedido admite un único envío. Los pedidos sin pago confirmado aún no
+      se pueden enviar.
+    </p>
+    <button class="primary" [disabled]="f.invalid || !model.idVenta || busy()">
+      Solicitar envío
+    </button>
+  </form>
+</section>
+<div class="grid">
+  @for (e of envios(); track e.id) {
+    <article>
+      <h2>Envío #{{ e.id }}</h2>
+      <p>Pedido #{{ e.idVenta }}</p>
+      <p>{{ e.direccionEntrega }}</p>
+      <p>{{ e.transportista || "Por asignar" }}</p>
+      <span class="badge">{{ label(e.estado) }}</span>
+      @if (e.fechaEnvio) {
+        <p>Despacho: {{ e.fechaEnvio | date: "short" }}</p>
+      }
+      <div class="actions">
+        @if (auth.admin() && e.estado === "PENDIENTE") {
+          <button class="primary" (click)="action(e, 'en-transito')">
+            Marcar en tránsito
+          </button>
+        }
+        @if (auth.admin() && e.estado === "EN_TRANSITO") {
+          <button class="primary" (click)="action(e, 'entregado')">
+            Marcar entregado
+          </button>
+        }
+        @if (
+          e.estado === "PENDIENTE" ||
+          (auth.admin() && e.estado === "EN_TRANSITO")
+        ) {
+          <button (click)="action(e, 'cancelar')">Cancelar envío</button>
+        }
+      </div>
+    </article>
+  } @empty {
+    <p>No hay envíos registrados.</p>
+  }
+</div>

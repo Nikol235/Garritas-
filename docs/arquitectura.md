@@ -23,7 +23,7 @@ Fuentes del manual: [S6](https://github.com/262dist/pagatu/blob/0eac74ce274b3de9
 
 ## Límites de dominio y dependencias
 
-Cada servicio conserva su propia base PostgreSQL. No existen claves foráneas, consultas SQL ni transacciones que atraviesen bases de distintos servicios. La librería `libs/garritas-distributed` contiene únicamente el contrato de eventos, inbox/outbox y política de seguridad común: no contiene entidades compartidas de negocio.
+Cada servicio conserva su propia base PostgreSQL. No existen claves foráneas, consultas SQL ni transacciones que atraviesen bases de distintos servicios. La librería `infra/garritas-common` contiene únicamente el contrato de eventos, inbox/outbox y política de seguridad común: no contiene entidades compartidas de negocio.
 
 ```mermaid
 flowchart LR
@@ -42,7 +42,7 @@ flowchart LR
   K --> V
 ```
 
-Usuario, Institución, Envío y Citas se conservan, compilan, arrancan y quedan protegidos como operaciones ADMIN. No se inventan relaciones automáticas de esos dominios con la Saga de compra: no forman parte del flujo de compra de referencia. El perfil Usuario sigue siendo una entidad de negocio separada de la identidad de Keycloak.
+Usuario, Institución, Envío, Citas y Bienestar tienen pantallas Angular y permisos de negocio propios. Las sedes son consultables por clientes; su edición requiere ADMIN. El perfil Usuario se vincula al `sub` de Keycloak; mascotas, citas, ventas y envíos verifican propiedad. Bienestar utiliza una relación muchos a muchos real entre profesionales y especialidades. El envío se solicita para una venta pagada y las citas verifican referencias remotas antes de reservar.
 
 ## Consistencia y concurrencia
 
@@ -63,7 +63,7 @@ Los productos se desactivan al eliminarlos: no se borra inventario mientras una 
 ## Seguridad
 
 - Keycloak verifica credenciales; Angular usa su SDK con PKCE S256, `state` y tokens en memoria, con renovación. El cliente es público, sin secreto y sin password grant.
-- Gateway **y cada microservicio** validan firma, emisor y audiencia del JWT. Los endpoints de catálogo GET son públicos; su escritura y los dominios secundarios requieren ADMIN.
+- Gateway **y cada microservicio** validan firma, emisor y audiencia del JWT. Los endpoints de catálogo GET son públicos; su escritura requiere ADMIN. Sedes y especialistas tienen consulta pública; mascotas, citas y envíos permiten operaciones del propietario. Los cambios operativos y la administración requieren ADMIN.
 - Ventas y consultas de pagos requieren CLIENTE o ADMIN. La lista se filtra por propietario y la consulta individual verifica propiedad; un ADMIN puede auditar todas.
 - CORS se configura en Gateway con orígenes concretos y permite `Authorization`, `X-Trace-ID` e `Idempotency-Key`.
 - Las cuentas del realm importable y las contraseñas de Compose son fixtures locales explícitos. El stack usa HTTP y Kafka sin TLS y **no constituye un despliegue público de producción**. Antes de exponerlo se requieren TLS, configuración de emisor y red, credenciales propias y políticas operativas.
@@ -71,7 +71,7 @@ Los productos se desactivan al eliminarlos: no se borra inventario mientras una 
 
 ## Diferencias de API que debe conocer un cliente previo
 
-`POST /api/v1/ventas` ahora recibe `metodoPago` y `detalles[{idProducto,cantidad}]`, con cabecera `Idempotency-Key`. Ya no recibe un identificador de cliente numérico ni precios. La migración V2 conserva los identificadores históricos como texto; esos valores no se reasignan automáticamente a nuevos usuarios OIDC.
+`POST /api/v1/ventas` ahora recibe `sedeId`, `metodoPago` y `detalles[{idProducto,cantidad}]`, con cabecera `Idempotency-Key`. Ya no recibe un identificador de cliente numérico ni precios. La migración V2 conserva los identificadores históricos como texto; esos valores no se reasignan automáticamente a nuevos usuarios OIDC.
 
 Se retiran las operaciones manuales `confirmar`, `cancelar`, borrar ventas y crear/reembolsar pagos. El pago es una consecuencia del evento de inventario reservado. `GET /api/v1/pagos/venta/{id}` permite conocer su resultado; 404 puede significar que el pago todavía no existe. Una cancelación posterior a una compra pagada y un reembolso real necesitan otra Saga; no se simulan con una asignación de estado.
 
@@ -83,11 +83,17 @@ Se retiran las operaciones manuales `confirmar`, `cancelar`, borrar ventas y cre
 - Un evento en DLT puede dejar una Saga pendiente: requiere intervención; no hay compensación automática por tiempo ni una falsa confirmación en frontend. Se conservan inbox y outbox sin purga automática; una política de retención debe respetar los periodos de reenvío.
 - La pasarela es una **simulación**: por defecto TRANSFERENCIA rechaza y el resto aprueba. No procesa dinero, tarjetas ni reembolsos. `app.pagos.metodo-rechazado` permite variar el fallo didáctico.
 - Kafka es de un solo nodo, réplica 1; PostgreSQL y Keycloak también tienen una instancia. La tolerancia a caídas de proceso verificada no equivale a alta disponibilidad del despliegue.
-- La interfaz cubre catálogo, categorías, nueva orden, carrito persistente y pedidos/pagos. La administración visual de productos y de los cuatro dominios adicionales queda fuera del cliente web; sus APIs siguen disponibles según roles.
+- La interfaz cubre los ocho dominios: catálogo y administración de productos, categorías, carrito por sede, pedidos, pagos, sedes, perfil/mascotas, citas, envíos, profesionales y especialidades. Las operaciones de administración tienen protección también en cada backend.
 - La referencia usa Promtail; se mantiene la compatibilidad del stack existente. Para una plataforma pública nueva se debe evaluar su sustitución por un agente mantenido y asegurar Loki/Grafana.
 
 ## Validación reproducible
 
-`bash scripts/dev.sh test` ejecuta los contextos reales contra las bases locales y las pruebas del contrato y propiedad. No registra los contextos de prueba en Eureka ni arranca sus consumidores Kafka: el test no desplaza a instancias activas. La prueba funcional de Kafka está en `scripts/smoke.py`, que realiza el login PKCE en Chromium, compra desde Angular y comprueba pago, compensación, stock, roles, idempotencia y CORS.
+`bash uso-rapido/scripts/dev.sh test` ejecuta los contextos reales contra las bases locales y las pruebas del contrato y propiedad. No registra los contextos de prueba en Eureka ni arranca sus consumidores Kafka: el test no desplaza a instancias activas. La prueba funcional de Kafka está en `uso-rapido/scripts/smoke.py`, que realiza el login PKCE en Chromium, compra desde Angular y comprueba pago, compensación, stock, roles, idempotencia y CORS.
 
 El proceso DEV ejecuta una copia estable del JAR bajo `.runtime/` para que una compilación posterior no sustituya el archivo que lee una JVM activa. Después de cambiar código, compilar y ejecutar `stop` y `up` para cargar la nueva versión. No ejecutar dos compilaciones Maven sobre los mismos directorios simultáneamente.
+
+## Organización alineada con Pagatu
+
+Kafka y Keycloak tienen Compose propios en `kafka/` y `keycloak/`. Los ejemplos de publicación/consumo Python están en `uso-rapido/garritas-eventos-py/`; el agregador, los lanzadores y las pruebas auxiliares se agrupan en `uso-rapido/`. Los Dockerfiles y Compose integrados opcionales ya no ocupan la raíz. `overrides/` personaliza la documentación MkDocs y `.github/` valida compilación y frontend.
+
+Bienestar guarda `profesionales`, `especialidades` y `profesional_especialidad` en su propia base. La clave compuesta impide asociaciones duplicadas. El backend valida las especialidades antes de sustituir un conjunto de asociaciones y bloquea eliminar una especialidad todavía utilizada. Citas consume esa información por HTTP, comprueba propiedad de la mascota y reserva bloques de 30 minutos mediante un índice único condicionado a citas activas.

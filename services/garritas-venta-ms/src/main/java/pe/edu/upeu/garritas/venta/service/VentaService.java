@@ -25,6 +25,7 @@ public class VentaService {
   private final CatalogoConsulta catalogo;
   private final Outbox outbox;
   private final JdbcTemplate jdbc;
+  private final ServiceClient services;
 
   @Transactional(readOnly = true)
   public List<VentaResponse> listar() {
@@ -59,11 +60,18 @@ public class VentaService {
       request
           .getDetalles()
           .forEach(d -> incoming.merge(d.getIdProducto(), d.getCantidad(), Integer::sum));
-      if (!old.getMetodoPago().equals(request.getMetodoPago()) || !original.equals(incoming))
+      if (!Objects.equals(old.getSedeId(), request.getSedeId())
+          || !old.getMetodoPago().equals(request.getMetodoPago())
+          || !original.equals(incoming))
         throw new ResponseStatusException(
             HttpStatus.CONFLICT, "Idempotency-Key ya utilizado con otros datos");
       return mapper.toResponse(old);
     }
+    Reference sede =
+        services.get(
+            "garritas-institucion-ms", "/api/v1/sedes/" + request.getSedeId(), Reference.class);
+    if (!Boolean.TRUE.equals(sede.activo()))
+      throw new ResponseStatusException(HttpStatus.CONFLICT, "La sede no está disponible");
     var quantities = new TreeMap<Long, Integer>();
     request
         .getDetalles()
@@ -71,6 +79,7 @@ public class VentaService {
     Venta venta =
         Venta.builder()
             .idCliente(owner)
+            .sedeId(request.getSedeId())
             .idempotencyKey(key)
             .metodoPago(request.getMetodoPago())
             .fecha(Instant.now())

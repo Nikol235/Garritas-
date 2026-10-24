@@ -13,12 +13,27 @@ const food: Producto = {
 };
 const toy: Producto = { ...food, id: 2, nombre: "Pelota", precio: 20.2 };
 const catalog = [food, toy];
+const sedes = [
+  {
+    id: 1,
+    nombre: "Miraflores",
+    direccion: "Dirección de ejemplo",
+    ciudad: "Lima",
+    telefono: "999100001",
+    activo: true,
+  },
+];
+function ready(cart: CartStore) {
+  cart.setSedes(sedes);
+  cart.selectSede(1);
+  return cart;
+}
 
 describe("Carrito de compras", () => {
   beforeEach(() => localStorage.clear());
 
   it("agrupa productos iguales y calcula totales monetarios sin errores de coma flotante", () => {
-    const cart = new CartStore();
+    const cart = ready(new CartStore());
     cart.reconcile(catalog);
     cart.add(food);
     cart.add(food);
@@ -30,7 +45,7 @@ describe("Carrito de compras", () => {
   });
 
   it("rechaza cantidades fraccionarias, no numéricas, negativas y superiores al stock", () => {
-    const cart = new CartStore();
+    const cart = ready(new CartStore());
     cart.reconcile(catalog);
     cart.add(food);
     for (const value of [0, -1, 1.5, 4, NaN, Infinity])
@@ -42,7 +57,7 @@ describe("Carrito de compras", () => {
   });
 
   it("quita productos y vacía el pedido actualizando cantidades y total", () => {
-    const cart = new CartStore();
+    const cart = ready(new CartStore());
     cart.reconcile(catalog);
     cart.add(food);
     cart.add(toy);
@@ -55,17 +70,19 @@ describe("Carrito de compras", () => {
   });
 
   it("conserva el carrito al recargar, pero usa los precios actuales de la API", () => {
-    const cart = new CartStore();
+    const cart = ready(new CartStore());
     cart.reconcile(catalog);
     cart.add(food);
     cart.setPayment("YAPE");
     const restored = new CartStore();
+    restored.setSedes(sedes);
     expect(restored.count()).toBe(1);
     expect(restored.valid()).toBe(false);
     restored.reconcile([{ ...food, precio: 15.5 }]);
     expect(restored.total()).toBe(15.5);
     expect(restored.metodo()).toBe("YAPE");
     expect(restored.payload()).toEqual({
+      sedeId: 1,
       metodoPago: "YAPE",
       detalles: [{ idProducto: 1, cantidad: 1 }],
     });
@@ -73,7 +90,7 @@ describe("Carrito de compras", () => {
   });
 
   it("bloquea la compra si el stock baja o el producto deja de estar disponible", () => {
-    const cart = new CartStore();
+    const cart = ready(new CartStore());
     cart.reconcile(catalog);
     cart.add(food);
     cart.setQuantity(1, 3);
@@ -89,12 +106,13 @@ describe("Carrito de compras", () => {
   });
 
   it("mantiene la clave al reintentar incluso tras recargar y la cambia al editar el pedido", () => {
-    const cart = new CartStore();
+    const cart = ready(new CartStore());
     cart.reconcile(catalog);
     cart.add(food);
     const key = cart.checkoutKey();
     expect(cart.checkoutKey()).toBe(key);
     const restored = new CartStore();
+    restored.setSedes(sedes);
     restored.reconcile(catalog);
     expect(restored.checkoutKey()).toBe(key);
     restored.setQuantity(1, 2);
@@ -120,8 +138,23 @@ describe("Carrito de compras", () => {
         metodo: "INVALIDO",
       }),
     );
-    const cart = new CartStore();
+    const cart = ready(new CartStore());
     expect(cart.count()).toBe(2);
     expect(cart.metodo()).toBe("TARJETA");
   });
+});
+
+it("no confirma una compra sin sede activa y cambia la clave cuando cambia la sede", () => {
+  localStorage.clear();
+  const cart = new CartStore();
+  cart.reconcile(catalog);
+  cart.add(food);
+  expect(cart.valid()).toBe(false);
+  cart.setSedes(sedes);
+  cart.selectSede(1);
+  expect(cart.valid()).toBe(true);
+  const key = cart.checkoutKey();
+  cart.selectSede(2);
+  expect(cart.valid()).toBe(false);
+  expect(cart.checkoutKey()).not.toBe(key);
 });

@@ -75,3 +75,10 @@ scrape_configs:
     labels:
       application: garritas-gateway
       __path__: /var/log/garritas/garritas-gateway/gateway*.log
+- job_name: garritas-bienestar-ms
+  static_configs:
+  - labels:
+      __path__: /var/log/garritas/garritas-bienestar-ms/bienestar*.log
+      application: garritas-bienestar-ms
+    targets:
+    - localhost

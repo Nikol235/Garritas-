@@ -1,0 +1,13 @@
+site_name: Garritas Store
+docs_dir: docs
+theme:
+  name: material
+  custom_dir: overrides
+nav:
+  - Inicio: index.md
+  - Arquitectura: arquitectura.md
+  - Validación: validacion.md
+  - Guía de ejecución: ejecucion.md
+markdown_extensions:
+  - tables
+  - fenced_code

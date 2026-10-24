@@ -1,0 +1,117 @@
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">TU FAMILIA, TUS MASCOTAS</p>
+    <h1>Mi cuenta y mascotas</h1>
+    <p>Completa tus datos para reservar citas para tus mascotas.</p>
+  </div>
+</div>
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+@if (message()) {
+  <p class="notice" role="status">{{ message() }}</p>
+}
+<section class="panel">
+  <h2>Mi perfil</h2>
+  <form #f="ngForm" (ngSubmit)="save()">
+    <div class="field-grid">
+      <label
+        >Nombre completo<input
+          name="nombre"
+          [(ngModel)]="model.nombre"
+          required
+          maxlength="100" /></label
+      ><label
+        >Correo de contacto<input
+          name="email"
+          type="email"
+          [(ngModel)]="model.email"
+          required
+          email
+          maxlength="150" /></label
+      ><label
+        >Teléfono de contacto<input
+          name="telefono"
+          [(ngModel)]="model.telefono"
+          maxlength="20" /></label
+      ><label
+        >Dirección de contacto<input
+          name="direccion"
+          [(ngModel)]="model.direccion"
+          maxlength="255"
+      /></label>
+    </div>
+    <button class="primary" [disabled]="f.invalid || busy()">
+      Guardar perfil
+    </button>
+  </form>
+</section>
+@if (perfil()) {
+  <div class="page-heading"><h2>Mis mascotas</h2></div>
+  <div class="grid">
+    @for (p of mascotas(); track p.id) {
+      <article>
+        <span class="location-icon">🐾</span>
+        <h3>{{ p.nombre }}</h3>
+        <p>
+          {{ p.especie }} · {{ p.raza || "Sin raza indicada" }} ·
+          {{ p.edad ?? 0 }} años
+        </p>
+        <div class="actions">
+          <button
+            (click)="edit(p)"
+            [attr.aria-label]="'Editar mascota ' + p.nombre"
+          >
+            Editar</button
+          ><button
+            (click)="remove(p)"
+            [attr.aria-label]="'Eliminar mascota ' + p.nombre"
+          >
+            Eliminar
+          </button>
+        </div>
+      </article>
+    } @empty {
+      <p>Todavía no has registrado mascotas.</p>
+    }
+  </div>
+  <section class="panel">
+    <h2>{{ petId ? "Editar mascota" : "Registrar mascota" }}</h2>
+    <form #pf="ngForm" (ngSubmit)="savePet()">
+      <div class="field-grid">
+        <label
+          >Nombre de mascota<input
+            name="nombreMascota"
+            [(ngModel)]="pet.nombre"
+            required
+            maxlength="100" /></label
+        ><label
+          >Especie<select name="especie" [(ngModel)]="pet.especie">
+            <option>Perro</option>
+            <option>Gato</option>
+            <option>Ave</option>
+            <option>Conejo</option>
+            <option>Otro</option>
+          </select></label
+        ><label
+          >Raza<input
+            name="raza"
+            [(ngModel)]="pet.raza"
+            maxlength="100" /></label
+        ><label
+          >Edad en años<input
+            name="edad"
+            type="number"
+            min="0"
+            step="1"
+            [(ngModel)]="pet.edad"
+        /></label>
+      </div>
+      <button class="primary" [disabled]="pf.invalid || busy()">
+        Guardar mascota
+      </button>
+    </form>
+  </section>
+} @else {
+  <p class="empty-state">Guarda tu perfil para añadir tus mascotas.</p>
+}

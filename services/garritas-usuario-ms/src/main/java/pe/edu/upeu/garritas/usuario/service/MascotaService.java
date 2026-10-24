@@ -20,6 +20,7 @@ public class MascotaService {
   private final UsuarioService usuarioService;
 
   public List<MascotaResponse> listarPorUsuario(Long usuarioId) {
+    usuarioService.buscarOFallar(usuarioId);
     return mascotaRepository.findByUsuarioId(usuarioId).stream()
         .map(mascotaMapper::toResponse)
         .toList();
@@ -44,9 +45,24 @@ public class MascotaService {
     mascotaRepository.delete(buscarOFallar(id));
   }
 
+  public MascotaResponse obtener(Long id) {
+    return mascotaMapper.toResponse(buscarOFallar(id));
+  }
+
+  public void verificarUsuario(Long usuarioId, Long mascotaId) {
+    Mascota mascota = buscarOFallar(mascotaId);
+    if (!mascota.getUsuario().getId().equals(usuarioId))
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.NOT_FOUND,
+          "La mascota no pertenece al perfil indicado");
+  }
+
   private Mascota buscarOFallar(Long id) {
-    return mascotaRepository
-        .findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Mascota no encontrada: " + id));
+    Mascota mascota =
+        mascotaRepository
+            .findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Mascota no encontrada: " + id));
+    pe.edu.upeu.garritas.common.CurrentUser.requireOwner(mascota.getUsuario().getSubject());
+    return mascota;
   }
 }

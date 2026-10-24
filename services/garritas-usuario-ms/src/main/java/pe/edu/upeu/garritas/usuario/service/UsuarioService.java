@@ -44,9 +44,38 @@ public class UsuarioService {
     usuarioRepository.delete(buscarOFallar(id));
   }
 
-  Usuario buscarOFallar(Long id) {
+  public UsuarioResponse me() {
+    return usuarioMapper.toResponse(miUsuario());
+  }
+
+  public UsuarioResponse guardarMe(UsuarioRequest request) {
+    Usuario usuario =
+        usuarioRepository
+            .findBySubject(pe.edu.upeu.garritas.common.CurrentUser.subject())
+            .orElseGet(() -> usuarioMapper.toEntity(request));
+    usuario.setSubject(pe.edu.upeu.garritas.common.CurrentUser.subject());
+    usuario.setNombre(request.getNombre());
+    usuario.setEmail(request.getEmail());
+    usuario.setTelefono(request.getTelefono());
+    usuario.setDireccion(request.getDireccion());
+    return usuarioMapper.toResponse(usuarioRepository.saveAndFlush(usuario));
+  }
+
+  public Usuario miUsuario() {
     return usuarioRepository
-        .findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado: " + id));
+        .findBySubject(pe.edu.upeu.garritas.common.CurrentUser.subject())
+        .orElseThrow(
+            () ->
+                new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.NOT_FOUND, "Primero completa tu perfil"));
+  }
+
+  Usuario buscarOFallar(Long id) {
+    Usuario usuario =
+        usuarioRepository
+            .findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado: " + id));
+    pe.edu.upeu.garritas.common.CurrentUser.requireOwner(usuario.getSubject());
+    return usuario;
   }
 }
