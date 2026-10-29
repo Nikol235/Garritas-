@@ -20,8 +20,12 @@ for p in sorted(OUT.glob('*.pdf')):
  assert not reader.is_encrypted,p
  pages=[page.extract_text() for page in reader.pages]
  assert all(len(t.strip())>20 for t in pages),'Página vacía en '+p.name
- assert reader.outline,'Falta índice de marcadores'
- assert 'Índice' in pages[1]
+ if not p.name.startswith('04-'):
+  assert reader.outline,'Falta índice de marcadores'
+  assert 'Índice' in pages[1]
+ else:
+  for command in ['git clone --branch feat/garritas-store https://github.com/Nikol235/Garritas-.git', r'.\uso-rapido\garritas.ps1 -Accion build', r'.\uso-rapido\garritas.ps1 -Accion iniciar']:
+   assert command in '\n'.join(pages), 'Comando cortado: '+command
  assert not any('Placeholder for table of contents' in t for t in pages)
  texts[p.name]=re.sub(r'\s+','', ''.join(pages))
  summary.append({'archivo':p.name,'paginas':len(pages),'bytes':p.stat().st_size})

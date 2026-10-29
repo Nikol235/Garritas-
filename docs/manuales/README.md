@@ -10,6 +10,10 @@ Edición revisada el **24 de octubre de 2026**, basada en el código `ceaf408` d
 
 Los PDF tienen texto seleccionable, índice con páginas y marcadores de navegación. Los ocho diagramas se incluyen también como SVG/PNG y su fuente DOT en `diagramas/`.
 
+## Guía rápida para compartir con compañeras
+
+[Descargar PDF Windows de 7 páginas](04-Guia-rapida-Windows-companeras.pdf) y [comandos copiables en TXT](04-Comandos-Windows-copiables.txt). Incluye clonación, permisos de PowerShell, compilación, arranque, ventanas de consola, estado, cuentas, puertos y diagnóstico. Los comandos del PDF son texto seleccionable sin saltos visuales dentro de cada línea.
+
 ## Código para practicar
 
 [Descargar código base ZIP](Garritas-Store-codigo-base.zip). Contiene **436 archivos**, sin `.git`, `target`, `node_modules`, logs, bases ni `.env` personales. Incluye los wrappers y el `package-lock.json` completos. El [manifiesto SHA-256](MANIFIESTO-CODIGO.json) identifica cada archivo.
