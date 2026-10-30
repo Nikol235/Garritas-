@@ -1,0 +1,18 @@
+{
+  "commit_codigo": "ed74c90d288a8bc68a55b699a76314967c73c870",
+  "pdfs": [
+    {
+      "archivo": "Guia-de-sustentacion-Garritas.pdf",
+      "paginas": 28,
+      "enlaces": 119
+    },
+    {
+      "archivo": "Resumen-para-exponer.pdf",
+      "paginas": 2,
+      "enlaces": 3
+    }
+  ],
+  "referencias_verificadas": 119,
+  "diagramas": 11,
+  "fuentes_iguales_al_commit": true
+}

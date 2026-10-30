@@ -1,0 +1,5 @@
+digraph G {graph [fontname="DejaVu Sans",bgcolor="white",pad="0.15",ranksep="0.35"];node [fontname="DejaVu Sans",fontsize=11,shape=box,style="rounded,filled",fillcolor="#edf4ee",color="#47735e"];edge [fontname="DejaVu Sans",fontsize=9,color="#48685a"];rankdir=TB;a[label="Angular genera verifier y challenge S256"];k[label="Redirige a Keycloak
+usuario se autentica allí"];b[label="Keycloak devuelve código
+Angular intercambia código + verifier"];m[label="keycloak-js mantiene tokens en memoria"];i[label="Interceptor pide token vigente
+y adjunta Bearer a API propia"];g[label="Gateway → servicio validan JWT
+Angular refleja pendiente / pagada / cancelada"];a->k->b->m->i->g;}

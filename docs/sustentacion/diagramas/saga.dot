@@ -1,0 +1,10 @@
+digraph G {graph [fontname="DejaVu Sans",bgcolor="white",pad="0.15",ranksep="0.35"];node [fontname="DejaVu Sans",fontsize=11,shape=box,style="rounded,filled",fillcolor="#edf4ee",color="#47735e"];edge [fontname="DejaVu Sans",fontsize=9,color="#48685a"];rankdir=TB;a[label="Angular → POST /ventas
+JWT + Idempotency-Key"];v[label="Venta valida sede/precios
+Tx: venta PENDIENTE_STOCK + outbox"];c[label="Kafka: venta.creada
+Catálogo reserva todo el stock"];p[label="inventario.reservado
+Venta: PENDIENTE_PAGO
+Pago procesa simulación"];ok[label="pago.validado
+Venta: PAGADA"];fail[label="pago.fallido
+Venta: COMPENSANDO"];restore[label="Catálogo restaura reserva una vez
+inventario.liberado"];cancel[label="Venta: CANCELADA"];no[label="inventario.rechazado
+Venta: CANCELADA"];a->v->c;c->p[label="stock válido"];c->no[label="sin stock / precio distinto"];p->ok[label="aprobado"];p->fail[label="rechazado"];fail->restore->cancel;}

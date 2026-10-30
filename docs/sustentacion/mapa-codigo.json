@@ -1,0 +1,957 @@
+{
+  "commit": "ed74c90d288a8bc68a55b699a76314967c73c870",
+  "referencias": [
+    {
+      "seccion": "2. Quién se conecta con quién",
+      "ruta": "infra/garritas-config/config-repo/garritas-gateway-dev.yml",
+      "linea": 8,
+      "simbolo": "routes:",
+      "explicacion": "Rutas Path y destinos lb://",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-gateway-dev.yml#L8"
+    },
+    {
+      "seccion": "2. Quién se conecta con quién",
+      "ruta": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/ServiceClient.java",
+      "linea": 24,
+      "simbolo": "public <T> T get",
+      "explicacion": "Selección de instancia, JWT y correlación",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/ServiceClient.java#L24"
+    },
+    {
+      "seccion": "4. Dónde demostrar los muchos a muchos",
+      "ruta": "services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/entity/SedePrestacion.java",
+      "linea": 17,
+      "simbolo": "@ManyToOne",
+      "explicacion": "Tu N:M: observa los dos @ManyToOne",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/entity/SedePrestacion.java#L17"
+    },
+    {
+      "seccion": "4. Dónde demostrar los muchos a muchos",
+      "ruta": "services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/entity/Cobertura.java",
+      "linea": 17,
+      "simbolo": "@ManyToOne",
+      "explicacion": "N:M de tu compañera: transportista y zona",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/entity/Cobertura.java#L17"
+    },
+    {
+      "seccion": "4. Dónde demostrar los muchos a muchos",
+      "ruta": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Suscripcion.java",
+      "linea": 18,
+      "simbolo": "@ManyToOne",
+      "explicacion": "N:M de Fio: usuario y plan; además sus períodos",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Suscripcion.java#L18"
+    },
+    {
+      "seccion": "4. Dónde demostrar los muchos a muchos",
+      "ruta": "services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/entity/Profesional.java",
+      "linea": 32,
+      "simbolo": "@ManyToMany",
+      "explicacion": "Ejemplo adicional con @ManyToMany literal",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/entity/Profesional.java#L32"
+    },
+    {
+      "seccion": "5. Venta · compra y despacho",
+      "ruta": "services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/controller/VentaController.java",
+      "linea": 12,
+      "simbolo": "@RequestMapping",
+      "explicacion": "Entrada HTTP de la compra y clave de reintento",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/controller/VentaController.java#L12"
+    },
+    {
+      "seccion": "5. Venta · compra y despacho",
+      "ruta": "services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/service/VentaService.java",
+      "linea": 48,
+      "simbolo": "public VentaResponse crear",
+      "explicacion": "Reglas, precios, propietario e idempotencia",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/service/VentaService.java#L48"
+    },
+    {
+      "seccion": "5. Venta · compra y despacho",
+      "ruta": "services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/repository/VentaRepository.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Persistencia de cabecera y consulta por propietario/clave",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/repository/VentaRepository.java#L1"
+    },
+    {
+      "seccion": "5. Venta · compra y despacho",
+      "ruta": "services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/entity/Venta.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Cabecera y relación con DetalleVenta",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/entity/Venta.java#L1"
+    },
+    {
+      "seccion": "5. Venta · compra y despacho",
+      "ruta": "services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/messaging/VentaEvents.java",
+      "linea": 22,
+      "simbolo": "public void consume",
+      "explicacion": "Consumo y transiciones protegidas por estado previo",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/messaging/VentaEvents.java#L22"
+    },
+    {
+      "seccion": "5. Venta · compra y despacho",
+      "ruta": "services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/despacho/controller/DespachoController.java",
+      "linea": 13,
+      "simbolo": "@RequestMapping",
+      "explicacion": "API de entrega; /envios es alias de /despachos",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/despacho/controller/DespachoController.java#L13"
+    },
+    {
+      "seccion": "5. Venta · compra y despacho",
+      "ruta": "services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/despacho/service/DespachoService.java",
+      "linea": 35,
+      "simbolo": "public DespachoResponse crear",
+      "explicacion": "Venta pagada, propietario y cobertura logística",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/despacho/service/DespachoService.java#L35"
+    },
+    {
+      "seccion": "5. Venta · compra y despacho",
+      "ruta": "infra/garritas-config/config-repo/garritas-venta-ms-dev.yml",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Conexión JDBC, puerto, Eureka y emisor JWT del servicio",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-venta-ms-dev.yml#L1"
+    },
+    {
+      "seccion": "5. Venta · compra y despacho",
+      "ruta": "clients/garritas-frontend/src/app/app.ts",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Angular: vista y llamadas API relacionadas",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/app.ts#L1"
+    },
+    {
+      "seccion": "5. Venta · compra y despacho",
+      "ruta": "clients/garritas-frontend/src/app/features/envios/envios.component.ts",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Angular: vista y llamadas API relacionadas",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/envios/envios.component.ts#L1"
+    },
+    {
+      "seccion": "6. Institución · sedes y prestaciones",
+      "ruta": "services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/controller/SedeController.java",
+      "linea": 14,
+      "simbolo": "@RequestMapping",
+      "explicacion": "CRUD de sedes: GET/POST/PUT/DELETE",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/controller/SedeController.java#L14"
+    },
+    {
+      "seccion": "6. Institución · sedes y prestaciones",
+      "ruta": "services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/service/SedeService.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Filtro de activas, validación y baja lógica",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/service/SedeService.java#L1"
+    },
+    {
+      "seccion": "6. Institución · sedes y prestaciones",
+      "ruta": "services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/controller/PrestacionController.java",
+      "linea": 12,
+      "simbolo": "@RequestMapping",
+      "explicacion": "CRUD de prestaciones y asignación por sede",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/controller/PrestacionController.java#L12"
+    },
+    {
+      "seccion": "6. Institución · sedes y prestaciones",
+      "ruta": "services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/service/PrestacionService.java",
+      "linea": 56,
+      "simbolo": "guardarOferta(",
+      "explicacion": "guardarOferta y precio/duración por asociación",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/service/PrestacionService.java#L56"
+    },
+    {
+      "seccion": "6. Institución · sedes y prestaciones",
+      "ruta": "services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/entity/SedePrestacion.java",
+      "linea": 17,
+      "simbolo": "@ManyToOne",
+      "explicacion": "N:M real: sede + prestación + atributos",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/entity/SedePrestacion.java#L17"
+    },
+    {
+      "seccion": "6. Institución · sedes y prestaciones",
+      "ruta": "services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/repository/SedePrestacionRepository.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Buscar/reutilizar la pareja, evitando duplicados",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/repository/SedePrestacionRepository.java#L1"
+    },
+    {
+      "seccion": "6. Institución · sedes y prestaciones",
+      "ruta": "infra/garritas-config/config-repo/garritas-institucion-ms-dev.yml",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Conexión JDBC, puerto, Eureka y emisor JWT del servicio",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-institucion-ms-dev.yml#L1"
+    },
+    {
+      "seccion": "6. Institución · sedes y prestaciones",
+      "ruta": "clients/garritas-frontend/src/app/features/sedes/sedes.component.ts",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Angular: vista y llamadas API relacionadas",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/sedes/sedes.component.ts#L1"
+    },
+    {
+      "seccion": "6. Institución · sedes y prestaciones",
+      "ruta": "clients/garritas-frontend/src/app/features/prestaciones/prestaciones.component.ts",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Angular: vista y llamadas API relacionadas",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/prestaciones/prestaciones.component.ts#L1"
+    },
+    {
+      "seccion": "6. Institución · sedes y prestaciones",
+      "ruta": "services/garritas-institucion-ms/src/main/resources/db/migration/V2__prestaciones_sede.sql",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Migración real: tablas y restricciones",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-institucion-ms/src/main/resources/db/migration/V2__prestaciones_sede.sql#L1"
+    },
+    {
+      "seccion": "7. Envío · maestro logístico",
+      "ruta": "services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/controller/LogisticaController.java",
+      "linea": 13,
+      "simbolo": "@RequestMapping",
+      "explicacion": "Todos los endpoints de los maestros",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/controller/LogisticaController.java#L13"
+    },
+    {
+      "seccion": "7. Envío · maestro logístico",
+      "ruta": "services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/service/LogisticaService.java",
+      "linea": 79,
+      "simbolo": "guardarCobertura(",
+      "explicacion": "Reglas de actividad y mantenimiento de coberturas",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/service/LogisticaService.java#L79"
+    },
+    {
+      "seccion": "7. Envío · maestro logístico",
+      "ruta": "services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/entity/Cobertura.java",
+      "linea": 17,
+      "simbolo": "@ManyToOne",
+      "explicacion": "N:M: transportista ↔ zona con tarifa y plazo",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/entity/Cobertura.java#L17"
+    },
+    {
+      "seccion": "7. Envío · maestro logístico",
+      "ruta": "services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/entity/Transportista.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Maestro transportista",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/entity/Transportista.java#L1"
+    },
+    {
+      "seccion": "7. Envío · maestro logístico",
+      "ruta": "services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/entity/Zona.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Maestro zona",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/entity/Zona.java#L1"
+    },
+    {
+      "seccion": "7. Envío · maestro logístico",
+      "ruta": "services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/repository/CoberturaRepository.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Lectura de una pareja transportista/zona",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/repository/CoberturaRepository.java#L1"
+    },
+    {
+      "seccion": "7. Envío · maestro logístico",
+      "ruta": "infra/garritas-config/config-repo/garritas-envio-ms-dev.yml",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Conexión JDBC, puerto, Eureka y emisor JWT del servicio",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-envio-ms-dev.yml#L1"
+    },
+    {
+      "seccion": "7. Envío · maestro logístico",
+      "ruta": "clients/garritas-frontend/src/app/features/logistica/logistica.component.ts",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Angular: vista y llamadas API relacionadas",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/logistica/logistica.component.ts#L1"
+    },
+    {
+      "seccion": "7. Envío · maestro logístico",
+      "ruta": "services/garritas-envio-ms/src/main/resources/db/migration/V3__maestros_logisticos.sql",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Migración real: tablas y restricciones",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-envio-ms/src/main/resources/db/migration/V3__maestros_logisticos.sql#L1"
+    },
+    {
+      "seccion": "8. Citas · reserva con cabecera y detalle",
+      "ruta": "services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/controller/CitaController.java",
+      "linea": 14,
+      "simbolo": "@RequestMapping",
+      "explicacion": "Entrada y acciones de estado",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/controller/CitaController.java#L14"
+    },
+    {
+      "seccion": "8. Citas · reserva con cabecera y detalle",
+      "ruta": "services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/service/CitaService.java",
+      "linea": 38,
+      "simbolo": "public CitaResponse crear",
+      "explicacion": "Validaciones remotas, total y detección de cruces",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/service/CitaService.java#L38"
+    },
+    {
+      "seccion": "8. Citas · reserva con cabecera y detalle",
+      "ruta": "services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/entity/Cita.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Cabecera: dueño, mascota, sede, profesional y estado",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/entity/Cita.java#L1"
+    },
+    {
+      "seccion": "8. Citas · reserva con cabecera y detalle",
+      "ruta": "services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/entity/DetalleCita.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Detalle: snapshot de prestación/precio/duración",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/entity/DetalleCita.java#L1"
+    },
+    {
+      "seccion": "8. Citas · reserva con cabecera y detalle",
+      "ruta": "services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/mapper/CitaMapper.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Identidad del JWT y proyección del detalle",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/mapper/CitaMapper.java#L1"
+    },
+    {
+      "seccion": "8. Citas · reserva con cabecera y detalle",
+      "ruta": "services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/repository/CitaRepository.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Lecturas por cliente y persistencia",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/repository/CitaRepository.java#L1"
+    },
+    {
+      "seccion": "8. Citas · reserva con cabecera y detalle",
+      "ruta": "infra/garritas-config/config-repo/garritas-citas-ms-dev.yml",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Conexión JDBC, puerto, Eureka y emisor JWT del servicio",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-citas-ms-dev.yml#L1"
+    },
+    {
+      "seccion": "8. Citas · reserva con cabecera y detalle",
+      "ruta": "clients/garritas-frontend/src/app/features/citas/citas.component.ts",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Angular: vista y llamadas API relacionadas",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/citas/citas.component.ts#L1"
+    },
+    {
+      "seccion": "8. Citas · reserva con cabecera y detalle",
+      "ruta": "services/garritas-citas-ms/src/main/resources/db/migration/V3__cita_cabecera_detalle.sql",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Migración real: tablas y restricciones",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-citas-ms/src/main/resources/db/migration/V3__cita_cabecera_detalle.sql#L1"
+    },
+    {
+      "seccion": "9. Catálogo · productos, categorías e inventario",
+      "ruta": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/ProductoController.java",
+      "linea": 14,
+      "simbolo": "@RequestMapping",
+      "explicacion": "CRUD HTTP de productos",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/ProductoController.java#L14"
+    },
+    {
+      "seccion": "9. Catálogo · productos, categorías e inventario",
+      "ruta": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/CategoriaController.java",
+      "linea": 14,
+      "simbolo": "@RequestMapping",
+      "explicacion": "CRUD HTTP de categorías",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/CategoriaController.java#L14"
+    },
+    {
+      "seccion": "9. Catálogo · productos, categorías e inventario",
+      "ruta": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Reglas de producto y métricas de negocio",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java#L1"
+    },
+    {
+      "seccion": "9. Catálogo · productos, categorías e inventario",
+      "ruta": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/repository/ProductoRepository.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Persistencia y relación con categoría",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/repository/ProductoRepository.java#L1"
+    },
+    {
+      "seccion": "9. Catálogo · productos, categorías e inventario",
+      "ruta": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/entity/Producto.java",
+      "linea": 16,
+      "simbolo": "@Version",
+      "explicacion": "Entidad y versión para detectar edición obsoleta",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/entity/Producto.java#L16"
+    },
+    {
+      "seccion": "9. Catálogo · productos, categorías e inventario",
+      "ruta": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java",
+      "linea": 37,
+      "simbolo": "private void reservar",
+      "explicacion": "Reservar/liberar; Inbox y reserva única por venta",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L37"
+    },
+    {
+      "seccion": "9. Catálogo · productos, categorías e inventario",
+      "ruta": "infra/garritas-config/config-repo/garritas-catalogo-ms-dev.yml",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Conexión JDBC, puerto, Eureka y emisor JWT del servicio",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-catalogo-ms-dev.yml#L1"
+    },
+    {
+      "seccion": "9. Catálogo · productos, categorías e inventario",
+      "ruta": "clients/garritas-frontend/src/app/features/admin/productos.component.ts",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Angular: vista y llamadas API relacionadas",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/admin/productos.component.ts#L1"
+    },
+    {
+      "seccion": "10. Usuario · perfil, mascotas y suscripciones",
+      "ruta": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/UsuarioController.java",
+      "linea": 14,
+      "simbolo": "@RequestMapping",
+      "explicacion": "CRUD administrativo de perfiles",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/UsuarioController.java#L14"
+    },
+    {
+      "seccion": "10. Usuario · perfil, mascotas y suscripciones",
+      "ruta": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MiCuentaController.java",
+      "linea": 12,
+      "simbolo": "@RequestMapping",
+      "explicacion": "Perfil propio y CRUD de mascotas propias",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MiCuentaController.java#L12"
+    },
+    {
+      "seccion": "10. Usuario · perfil, mascotas y suscripciones",
+      "ruta": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/UsuarioService.java",
+      "linea": 57,
+      "simbolo": "guardarMe(",
+      "explicacion": "Guardar mi perfil, vínculo sub y conflictos de correo",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/UsuarioService.java#L57"
+    },
+    {
+      "seccion": "10. Usuario · perfil, mascotas y suscripciones",
+      "ruta": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/SuscripcionController.java",
+      "linea": 12,
+      "simbolo": "@RequestMapping",
+      "explicacion": "CRUD de planes y operaciones de suscripción",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/SuscripcionController.java#L12"
+    },
+    {
+      "seccion": "10. Usuario · perfil, mascotas y suscripciones",
+      "ruta": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java",
+      "linea": 64,
+      "simbolo": "contratar(",
+      "explicacion": "Idempotencia y reglas de contratación/renovación",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java#L64"
+    },
+    {
+      "seccion": "10. Usuario · perfil, mascotas y suscripciones",
+      "ruta": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Suscripcion.java",
+      "linea": 18,
+      "simbolo": "@ManyToOne",
+      "explicacion": "N:M cliente ↔ plan; cabecera con períodos",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Suscripcion.java#L18"
+    },
+    {
+      "seccion": "10. Usuario · perfil, mascotas y suscripciones",
+      "ruta": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/PeriodoSuscripcion.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Detalle con precio, fechas y clave por operación",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/PeriodoSuscripcion.java#L1"
+    },
+    {
+      "seccion": "10. Usuario · perfil, mascotas y suscripciones",
+      "ruta": "infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Conexión JDBC, puerto, Eureka y emisor JWT del servicio",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml#L1"
+    },
+    {
+      "seccion": "10. Usuario · perfil, mascotas y suscripciones",
+      "ruta": "clients/garritas-frontend/src/app/features/cuenta/cuenta.component.ts",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Angular: vista y llamadas API relacionadas",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/cuenta/cuenta.component.ts#L1"
+    },
+    {
+      "seccion": "10. Usuario · perfil, mascotas y suscripciones",
+      "ruta": "clients/garritas-frontend/src/app/features/planes/planes.component.ts",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Angular: vista y llamadas API relacionadas",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/planes/planes.component.ts#L1"
+    },
+    {
+      "seccion": "10. Usuario · perfil, mascotas y suscripciones",
+      "ruta": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/dto/MascotaRequest.java",
+      "linea": 34,
+      "simbolo": "private java.math.BigDecimal edad;",
+      "explicacion": "Validación de edad entera antes de convertirla",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/dto/MascotaRequest.java#L34"
+    },
+    {
+      "seccion": "10. Usuario · perfil, mascotas y suscripciones",
+      "ruta": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/UnidadEdad.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Unidades admitidas: DIAS y MESES",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/UnidadEdad.java#L1"
+    },
+    {
+      "seccion": "10. Usuario · perfil, mascotas y suscripciones",
+      "ruta": "services/garritas-usuario-ms/src/main/resources/db/migration/V4__suscripciones_periodos.sql",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Migración real: tablas y restricciones",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/resources/db/migration/V4__suscripciones_periodos.sql#L1"
+    },
+    {
+      "seccion": "11. Pago · resultado simulado de la compra",
+      "ruta": "services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/controller/PagoController.java",
+      "linea": 10,
+      "simbolo": "@RequestMapping",
+      "explicacion": "API de lectura de pagos",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/controller/PagoController.java#L10"
+    },
+    {
+      "seccion": "11. Pago · resultado simulado de la compra",
+      "ruta": "services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/service/PagoService.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Filtrado por sub y comprobación de propietario",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/service/PagoService.java#L1"
+    },
+    {
+      "seccion": "11. Pago · resultado simulado de la compra",
+      "ruta": "services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/messaging/PagoEvents.java",
+      "linea": 28,
+      "simbolo": "public void consume",
+      "explicacion": "Consumir inventario.reservado y emitir resultado",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/messaging/PagoEvents.java#L28"
+    },
+    {
+      "seccion": "11. Pago · resultado simulado de la compra",
+      "ruta": "services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/entity/Pago.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Registro del pago simulado",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/entity/Pago.java#L1"
+    },
+    {
+      "seccion": "11. Pago · resultado simulado de la compra",
+      "ruta": "services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/repository/PagoRepository.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Consulta por venta/cliente",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/repository/PagoRepository.java#L1"
+    },
+    {
+      "seccion": "11. Pago · resultado simulado de la compra",
+      "ruta": "infra/garritas-config/config-repo/garritas-pago-ms-dev.yml",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Conexión JDBC, puerto, Eureka y emisor JWT del servicio",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-pago-ms-dev.yml#L1"
+    },
+    {
+      "seccion": "11. Pago · resultado simulado de la compra",
+      "ruta": "clients/garritas-frontend/src/app/features/pagos/pagos.component.ts",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Angular: vista y llamadas API relacionadas",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/pagos/pagos.component.ts#L1"
+    },
+    {
+      "seccion": "12. Bienestar · profesionales y especialidades",
+      "ruta": "services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/controller/BienestarController.java",
+      "linea": 13,
+      "simbolo": "@RequestMapping",
+      "explicacion": "CRUD de ambos recursos",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/controller/BienestarController.java#L13"
+    },
+    {
+      "seccion": "12. Bienestar · profesionales y especialidades",
+      "ruta": "services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/service/BienestarService.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Validación, asignación y bloqueo de borrado vinculado",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/service/BienestarService.java#L1"
+    },
+    {
+      "seccion": "12. Bienestar · profesionales y especialidades",
+      "ruta": "services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/entity/Profesional.java",
+      "linea": 32,
+      "simbolo": "@ManyToMany",
+      "explicacion": "@ManyToMany y @JoinTable profesional_especialidad",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/entity/Profesional.java#L32"
+    },
+    {
+      "seccion": "12. Bienestar · profesionales y especialidades",
+      "ruta": "services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/entity/Especialidad.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Extremo compartido de la asociación",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/entity/Especialidad.java#L1"
+    },
+    {
+      "seccion": "12. Bienestar · profesionales y especialidades",
+      "ruta": "services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/repository/ProfesionalRepository.java",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Lectura de profesionales y sus especialidades",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/repository/ProfesionalRepository.java#L1"
+    },
+    {
+      "seccion": "12. Bienestar · profesionales y especialidades",
+      "ruta": "infra/garritas-config/config-repo/garritas-bienestar-ms-dev.yml",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Conexión JDBC, puerto, Eureka y emisor JWT del servicio",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-bienestar-ms-dev.yml#L1"
+    },
+    {
+      "seccion": "12. Bienestar · profesionales y especialidades",
+      "ruta": "clients/garritas-frontend/src/app/features/bienestar/especialistas.component.ts",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Angular: vista y llamadas API relacionadas",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/bienestar/especialistas.component.ts#L1"
+    },
+    {
+      "seccion": "13. S6 · comunicación síncrona resiliente",
+      "ruta": "services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/ProductoClient.java",
+      "linea": 7,
+      "simbolo": "@FeignClient",
+      "explicacion": "Declaración Feign por nombre Eureka",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/ProductoClient.java#L7"
+    },
+    {
+      "seccion": "13. S6 · comunicación síncrona resiliente",
+      "ruta": "services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/CatalogoConsulta.java",
+      "linea": 16,
+      "simbolo": "public ProductoClient.Producto obtener",
+      "explicacion": "Breaker y fallback reales",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/CatalogoConsulta.java#L16"
+    },
+    {
+      "seccion": "13. S6 · comunicación síncrona resiliente",
+      "ruta": "infra/garritas-config/config-repo/garritas-venta-ms-dev.yml",
+      "linea": 56,
+      "simbolo": "openfeign:",
+      "explicacion": "Timeouts Feign y ajustes Resilience4j",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-venta-ms-dev.yml#L56"
+    },
+    {
+      "seccion": "13. S6 · comunicación síncrona resiliente",
+      "ruta": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/HttpServices.java",
+      "linea": 14,
+      "simbolo": "ServiceClient serviceClient",
+      "explicacion": "Otras referencias HTTP: conexión 2 s y lectura 3 s",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/HttpServices.java#L14"
+    },
+    {
+      "seccion": "14. S7 / S07b · identidad y autorización",
+      "ruta": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SecurityConfiguration.java",
+      "linea": 18,
+      "simbolo": "SecurityFilterChain security",
+      "explicacion": "Cadena de filtros, rutas y roles en Gateway/servicios",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SecurityConfiguration.java#L18"
+    },
+    {
+      "seccion": "14. S7 / S07b · identidad y autorización",
+      "ruta": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/CurrentUser.java",
+      "linea": 18,
+      "simbolo": "public static void requireOwner",
+      "explicacion": "sub, rol ADMIN y comprobación de dueño",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/CurrentUser.java#L18"
+    },
+    {
+      "seccion": "14. S7 / S07b · identidad y autorización",
+      "ruta": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/GarritasUsuarioMsApplication.java",
+      "linea": 6,
+      "simbolo": "@org.springframework.context.annotation.Import",
+      "explicacion": "Importación de la seguridad común en un backend",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/GarritasUsuarioMsApplication.java#L6"
+    },
+    {
+      "seccion": "14. S7 / S07b · identidad y autorización",
+      "ruta": "infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml",
+      "linea": 29,
+      "simbolo": "issuer-uri:",
+      "explicacion": "issuer-uri, JWK Set y audiencia garritas-api",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml#L29"
+    },
+    {
+      "seccion": "14. S7 / S07b · identidad y autorización",
+      "ruta": "keycloak/garritas-realm.json",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Realm, roles y cliente público de demostración",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/keycloak/garritas-realm.json#L1"
+    },
+    {
+      "seccion": "14. S7 / S07b · identidad y autorización",
+      "ruta": "services/garritas-venta-ms/src/main/resources/db/migration/V2__saga_identity.sql",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Cambio de propietario y unicidad de reintento",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/resources/db/migration/V2__saga_identity.sql#L1"
+    },
+    {
+      "seccion": "15. S8 · comunicación por eventos",
+      "ruta": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SagaEvent.java",
+      "linea": 9,
+      "simbolo": "public record SagaEvent",
+      "explicacion": "Contrato compartido y versionado",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SagaEvent.java#L9"
+    },
+    {
+      "seccion": "15. S8 · comunicación por eventos",
+      "ruta": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java",
+      "linea": 48,
+      "simbolo": "public void publish",
+      "explicacion": "Publicador Kafka y confirmación de envío",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java#L48"
+    },
+    {
+      "seccion": "15. S8 · comunicación por eventos",
+      "ruta": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/MessagingConfiguration.java",
+      "linea": 31,
+      "simbolo": "NewTopic sagaTopic",
+      "explicacion": "Topics, DLT y error handler",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/MessagingConfiguration.java#L31"
+    },
+    {
+      "seccion": "15. S8 · comunicación por eventos",
+      "ruta": "services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/messaging/PagoEvents.java",
+      "linea": 26,
+      "simbolo": "@KafkaListener",
+      "explicacion": "Listener que escucha el topic y filtra su tipo",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/messaging/PagoEvents.java#L26"
+    },
+    {
+      "seccion": "15. S8 · comunicación por eventos",
+      "ruta": "infra/garritas-config/config-repo/garritas-pago-ms-dev.yml",
+      "linea": 45,
+      "simbolo": "group-id:",
+      "explicacion": "group-id propio del consumidor",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-pago-ms-dev.yml#L45"
+    },
+    {
+      "seccion": "16. S9 · consistencia e idempotencia",
+      "ruta": "services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/service/VentaService.java",
+      "linea": 48,
+      "simbolo": "public VentaResponse crear",
+      "explicacion": "Bloqueo por clave y comparación del payload",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/service/VentaService.java#L48"
+    },
+    {
+      "seccion": "16. S9 · consistencia e idempotencia",
+      "ruta": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Inbox.java",
+      "linea": 13,
+      "simbolo": "public boolean claim",
+      "explicacion": "Evento y efecto se confirman juntos",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Inbox.java#L13"
+    },
+    {
+      "seccion": "16. S9 · consistencia e idempotencia",
+      "ruta": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java",
+      "linea": 35,
+      "simbolo": "public void append",
+      "explicacion": "Negocio y evento pendiente se guardan juntos",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java#L35"
+    },
+    {
+      "seccion": "16. S9 · consistencia e idempotencia",
+      "ruta": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java",
+      "linea": 76,
+      "simbolo": "private void liberar",
+      "explicacion": "Devolución desde reserva original y guardia RESERVADA",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L76"
+    },
+    {
+      "seccion": "16. S9 · consistencia e idempotencia",
+      "ruta": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java",
+      "linea": 95,
+      "simbolo": "public SuscripcionResponse renovar",
+      "explicacion": "Alta/renovación idempotente e historial de precios",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java#L95"
+    },
+    {
+      "seccion": "17. S10 · observar y diagnosticar",
+      "ruta": "infra/garritas-config/config-repo/garritas-venta-ms-dev.yml",
+      "linea": 75,
+      "simbolo": "management:",
+      "explicacion": "Grupos liveness/readiness y exposición de métricas",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-venta-ms-dev.yml#L75"
+    },
+    {
+      "seccion": "17. S10 · observar y diagnosticar",
+      "ruta": "services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/filter/CorrelationIdFilter.java",
+      "linea": 25,
+      "simbolo": "protected void doFilterInternal",
+      "explicacion": "Lee/genera X-Trace-ID y lo pone en MDC",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/filter/CorrelationIdFilter.java#L25"
+    },
+    {
+      "seccion": "17. S10 · observar y diagnosticar",
+      "ruta": "services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/FeignConfiguration.java",
+      "linea": 10,
+      "simbolo": "RequestInterceptor traceInterceptor",
+      "explicacion": "Propaga el identificador en Feign",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/FeignConfiguration.java#L10"
+    },
+    {
+      "seccion": "17. S10 · observar y diagnosticar",
+      "ruta": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/ServiceClient.java",
+      "linea": 35,
+      "simbolo": "String trace =",
+      "explicacion": "Propaga JWT y X-Trace-ID en otras referencias",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/ServiceClient.java#L35"
+    },
+    {
+      "seccion": "17. S10 · observar y diagnosticar",
+      "ruta": "obs/prometheus/prometheus-dev.yml",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Descubrimiento de servicios y target Keycloak",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/obs/prometheus/prometheus-dev.yml#L1"
+    },
+    {
+      "seccion": "17. S10 · observar y diagnosticar",
+      "ruta": "obs/promtail/promtail-config-dev.yml",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Lectura de logs por application",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/obs/promtail/promtail-config-dev.yml#L1"
+    },
+    {
+      "seccion": "17. S10 · observar y diagnosticar",
+      "ruta": "obs/grafana/provisioning/dashboards/garritas-infraestructura.json",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Panel real: instancias, HTTP, PostgreSQL, Gateway y logs de Catálogo",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/obs/grafana/provisioning/dashboards/garritas-infraestructura.json#L1"
+    },
+    {
+      "seccion": "18. S11 · Angular, Gateway y PKCE",
+      "ruta": "clients/garritas-frontend/src/app/app.config.ts",
+      "linea": 4,
+      "simbolo": "provideAppInitializer",
+      "explicacion": "Inicializa Auth y registra interceptor HTTP",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/app.config.ts#L4"
+    },
+    {
+      "seccion": "18. S11 · Angular, Gateway y PKCE",
+      "ruta": "clients/garritas-frontend/src/app/core/auth.ts",
+      "linea": 27,
+      "simbolo": "pkceMethod:",
+      "explicacion": "Login, PKCE S256, renovación y roles reales",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/core/auth.ts#L27"
+    },
+    {
+      "seccion": "18. S11 · Angular, Gateway y PKCE",
+      "ruta": "clients/garritas-frontend/src/app/core/interceptor.ts",
+      "linea": 6,
+      "simbolo": "export const authInterceptor",
+      "explicacion": "Bearer solo para la URL de API propia",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/core/interceptor.ts#L6"
+    },
+    {
+      "seccion": "18. S11 · Angular, Gateway y PKCE",
+      "ruta": "clients/garritas-frontend/src/app/core/config.ts",
+      "linea": 11,
+      "simbolo": "async load",
+      "explicacion": "Carga URLs runtime antes de autenticar",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/core/config.ts#L11"
+    },
+    {
+      "seccion": "18. S11 · Angular, Gateway y PKCE",
+      "ruta": "clients/garritas-frontend/public/config.dev.json",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "En DEV apiUrl apunta a Gateway, no a :8081–8088",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/public/config.dev.json#L1"
+    },
+    {
+      "seccion": "18. S11 · Angular, Gateway y PKCE",
+      "ruta": "clients/garritas-frontend/src/app/app.ts",
+      "linea": 82,
+      "simbolo": "timer(3000",
+      "explicacion": "Polling con timer/exhaustMap y estados pendientes",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/app.ts#L82"
+    },
+    {
+      "seccion": "18. S11 · Angular, Gateway y PKCE",
+      "ruta": "clients/garritas-frontend/src/app/features/cart/cart-store.ts",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Persistencia del carrito; no de tokens",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/cart/cart-store.ts#L1"
+    },
+    {
+      "seccion": "22. Guion de demo por integrante y lista de apertura",
+      "ruta": "uso-rapido/scripts/domain_smoke.py",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Recorrido de todos los dominios con roles/propiedad",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/uso-rapido/scripts/domain_smoke.py#L1"
+    },
+    {
+      "seccion": "22. Guion de demo por integrante y lista de apertura",
+      "ruta": "uso-rapido/scripts/academic_smoke.py",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Demos de las tres parejas y sus N:M",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/uso-rapido/scripts/academic_smoke.py#L1"
+    },
+    {
+      "seccion": "22. Guion de demo por integrante y lista de apertura",
+      "ruta": "uso-rapido/scripts/frontend_review.py",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Perfil, unidades de edad y revisión móvil",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/uso-rapido/scripts/frontend_review.py#L1"
+    },
+    {
+      "seccion": "22. Guion de demo por integrante y lista de apertura",
+      "ruta": "uso-rapido/scripts/faults.py",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Fallas controladas en DEV: detiene procesos/broker",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/uso-rapido/scripts/faults.py#L1"
+    },
+    {
+      "seccion": "22. Guion de demo por integrante y lista de apertura",
+      "ruta": "uso-rapido/scripts/scaling.py",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Dos instancias y retiro de la secundaria en DEV",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/uso-rapido/scripts/scaling.py#L1"
+    },
+    {
+      "seccion": "22. Guion de demo por integrante y lista de apertura",
+      "ruta": "docs/evidencias-actualizacion/resultado.json",
+      "linea": 1,
+      "simbolo": null,
+      "explicacion": "Resultados previos publicados: 24 Java y 13 Angular",
+      "url": "https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/docs/evidencias-actualizacion/resultado.json#L1"
+    }
+  ]
+}

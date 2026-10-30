@@ -10,6 +10,9 @@ nav:
   - Guía de ejecución: ejecucion.md
   - Asignación y sustentación: asignacion-y-sustentacion.md
   - Alineación con Pagatu: alineacion-pagatu.md
+  - Guía de sustentación: sustentacion/README.md
+  - Explicación y preguntas: sustentacion/Guia-de-sustentacion-Garritas.md
+  - Resumen oral: sustentacion/Resumen-para-exponer.md
   - Manuales PDF: manuales/README.md
 markdown_extensions:
   - tables
