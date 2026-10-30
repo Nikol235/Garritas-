@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: garritas-usuario-ms
+  cloud:
+    config:
+      enabled: false
+  config:
+    import: ""
+  datasource:
+    url: jdbc:postgresql://localhost:15446/garritas_usuario_db
+    username: garritas
+    password: garritas
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  jpa:
+    hibernate:
+      ddl-auto: validate
+eureka:
+  client:
+    enabled: false
+    register-with-eureka: false
+    fetch-registry: false
+
