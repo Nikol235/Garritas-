@@ -83,10 +83,9 @@ switch($Accion){
     if(Test-Path $pidFile){
       $records=@(Get-Content $pidFile -Raw | ConvertFrom-Json)
       foreach($record in $records){
-        $process=Get-Process -Id $record.id -ErrorAction SilentlyContinue
-        if($process -and $process.StartTime.ToUniversalTime().ToString('o') -eq $record.started){Stop-Process -Id $process.Id}
+        try { Stop-Process -Id $record.id -Force -ErrorAction SilentlyContinue } catch {}
       }
-      Remove-Item $pidFile
+      Remove-Item -Force $pidFile -ErrorAction SilentlyContinue
     }
     Write-Host 'Procesos Java y Angular detenidos. Los contenedores y volúmenes se conservan.'
   }
