@@ -23,7 +23,7 @@ $ports=[ordered]@{'garritas-config'=18888;'garritas-eureka'=18761;'garritas-cata
 switch($Accion){
   'build' {
     Invoke-Checked {& $wrapper -f $pom -B -pl ':garritas-distributed' -am install -DskipTests}
-    Invoke-Checked {& $wrapper -f $pom -B package -DskipTests}
+    Invoke-Checked {& $wrapper -f $pom -B clean package -DskipTests}
     Push-Location (Join-Path $root 'clients/garritas-frontend')
     try {Invoke-Checked {npm.cmd ci};Invoke-Checked {npm.cmd run build}} finally {Pop-Location}
   }
@@ -31,7 +31,15 @@ switch($Accion){
     Invoke-Checked {& $wrapper -f $pom -B verify '-Deureka.client.register-with-eureka=false' '-Deureka.client.fetch-registry=false' '-Dspring.kafka.listener.auto-startup=false'}
   }
   'iniciar' {
-    if(Test-Path $pidFile){throw 'Ya existe un arranque registrado. Usa -Accion estado o -Accion detener antes de reiniciar.'}
+    if(Test-Path $pidFile){
+      $alive=@(Get-Content $pidFile -Raw | ConvertFrom-Json | ForEach-Object {
+        $process=Get-Process -Id $_.id -ErrorAction SilentlyContinue
+        if($process -and $process.StartTime.ToUniversalTime().ToString('o') -eq $_.started){$process}
+      })
+      if($alive.Count -gt 0){throw 'Hay procesos de este arranque todavía activos. Usa -Accion estado; para reiniciar, -Accion detener primero. No ejecutes iniciar dos veces.'}
+      Remove-Item $pidFile
+      Write-Host 'Se retiró un registro de procesos ya finalizados. Se iniciará una sesión nueva.'
+    }
     Invoke-Checked {docker compose -f kafka/compose-dev.yml up -d --wait --wait-timeout 240}
     Invoke-Checked {docker compose -f keycloak/compose-dev.yml up -d --wait --wait-timeout 240}
     Get-ChildItem (Join-Path $root 'services') -Directory | ForEach-Object {
@@ -54,17 +62,18 @@ switch($Accion){
         $env:SPRING_PROFILES_ACTIVE=if($name -eq 'garritas-config'){'native'}else{'dev'}
         $env:LOG_PATH=$logs;$env:LOGGING_FILE_NAME=Join-Path $logs 'application.log'
         $env:LOGGING_CONFIG=$null;$env:JAVA_TOOL_OPTIONS='-Xms64m -Xmx384m'
-        $process=Start-Process -FilePath $java -ArgumentList @('-jar',"`"$copy`"") -WorkingDirectory $module -PassThru -RedirectStandardOutput (Join-Path $logs 'console.log') -RedirectStandardError (Join-Path $logs 'error.log')
+        $process=Start-Process -WindowStyle Hidden -FilePath $java -ArgumentList @('-jar',"`"$copy`"") -WorkingDirectory $module -PassThru -RedirectStandardOutput (Join-Path $logs 'console.log') -RedirectStandardError (Join-Path $logs 'error.log')
         $records+=@{id=$process.Id;started=$process.StartTime.ToUniversalTime().ToString('o')}
         ConvertTo-Json -InputObject @($records) | Set-Content $pidFile
         Wait-Ready "http://localhost:$($entry.Value)/actuator/health/readiness"
         Write-Host "$name disponible"
       }
       Wait-Ready 'http://localhost:18080/api/v1/productos'
+      & (Join-Path $PSScriptRoot 'scripts/migrar-despachos.ps1')
       $frontend=Join-Path $root 'clients/garritas-frontend'
       if(!(Test-Path (Join-Path $frontend 'node_modules'))){Push-Location $frontend;try{Invoke-Checked {npm.cmd ci}}finally{Pop-Location}}
       $node=(Get-Command node.exe).Source;$cli=Join-Path $frontend 'node_modules/@angular/cli/bin/ng.js'
-      $process=Start-Process -FilePath $node -ArgumentList @("`"$cli`"",'serve','--host','127.0.0.1') -WorkingDirectory $frontend -PassThru -RedirectStandardOutput (Join-Path $runtime 'frontend.log') -RedirectStandardError (Join-Path $runtime 'frontend-error.log')
+      $process=Start-Process -WindowStyle Hidden -FilePath $node -ArgumentList @("`"$cli`"",'serve','--host','127.0.0.1') -WorkingDirectory $frontend -PassThru -RedirectStandardOutput (Join-Path $runtime 'frontend.log') -RedirectStandardError (Join-Path $runtime 'frontend-error.log')
       $records+=@{id=$process.Id;started=$process.StartTime.ToUniversalTime().ToString('o')}
       ConvertTo-Json -InputObject @($records) | Set-Content $pidFile
       Wait-Ready 'http://localhost:4200'

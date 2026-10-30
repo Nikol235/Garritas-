@@ -1,0 +1,21 @@
+
+> garritas-frontend@0.0.0 build
+> ng build
+
+❯ Building...
+✔ Building...
+Initial chunk files | Names         |  Raw size | Estimated transfer size
+main-GX6LST7N.js    | main          | 325.85 kB |                83.70 kB
+styles-5PHZPXPF.css | styles        |   8.50 kB |                 2.22 kB
+
+                    | Initial total | 334.36 kB |                85.92 kB
+
+Application bundle generation complete. [6.733 seconds] - 2026-10-24T06:10:25.268Z
+
+Output location: /tmp/garritas-reconstruccion/Garritas-Store/clients/garritas-frontend/dist/garritas-frontend
+
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

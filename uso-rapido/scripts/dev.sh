@@ -32,7 +32,7 @@ for path in pathlib.Path(sys.argv[1]).glob('*.pid'):
     path.unlink(missing_ok=True)
 PY
 }
-build() { "${maven[@]}" -pl :garritas-distributed -am install -DskipTests; "${maven[@]}" package -DskipTests; }
+build() { "${maven[@]}" -pl :garritas-distributed -am install -DskipTests; "${maven[@]}" clean package -DskipTests; }
 start_app() {
   local short=$1 port=$2 name="garritas-$1" base=infra
   if [[ -d "$root/services/$name-ms" ]]; then name+="-ms";base=services;fi
@@ -116,6 +116,7 @@ PYFRONTEND
   start_app citas 8084
   start_app gateway 18080
   wait_url http://localhost:18080/api/v1/productos
+  python3 "$root/uso-rapido/scripts/migrar_despachos.py"
   echo 'Garritas DEV iniciado. Angular: cd clients/garritas-frontend && npm start. Ejecutar npm ci solo con el frontend detenido.'
   ;;
  test) "${maven[@]}" verify -Deureka.client.register-with-eureka=false -Deureka.client.fetch-registry=false -Dspring.kafka.listener.auto-startup=false ;;

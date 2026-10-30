@@ -12,9 +12,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MascotaResponse {
-    private Long id;
-    private String nombre;
-    private String especie;
-    private String raza;
-    private Integer edad;
+  private Long id;
+  private String nombre;
+  private String especie;
+  private String raza;
+  private Integer edad;
+  private pe.edu.upeu.garritas.usuario.entity.UnidadEdad edadUnidad;
 }

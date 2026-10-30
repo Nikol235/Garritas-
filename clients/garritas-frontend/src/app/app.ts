@@ -1,3 +1,6 @@
+import { PrestacionesComponent } from "./features/prestaciones/prestaciones.component";
+import { LogisticaComponent } from "./features/logistica/logistica.component";
+import { PlanesComponent } from "./features/planes/planes.component";
 import { DomainApi, Sede, stateLabel } from "./core/domain-api";
 import { SedesComponent } from "./features/sedes/sedes.component";
 import { EspecialistasComponent } from "./features/bienestar/especialistas.component";
@@ -27,6 +30,9 @@ import { ProductCatalog } from "./features/catalogo/product-catalog";
     DatePipe,
     CartPanel,
     ProductCatalog,
+    PrestacionesComponent,
+    LogisticaComponent,
+    PlanesComponent,
     SedesComponent,
     EspecialistasComponent,
     CuentaComponent,
@@ -64,7 +70,11 @@ export class App {
   categoriaId: number | undefined;
 
   constructor() {
-    if(!this.auth.admin() && ["productos","categorias","clientes"].includes(this.view())) this.view.set("catalogo");
+    if (
+      !this.auth.admin() &&
+      ["productos", "categorias", "clientes", "logistica"].includes(this.view())
+    )
+      this.view.set("catalogo");
     this.refreshCatalogo();
     this.refreshSedes();
     effect(() => sessionStorage.setItem("garritas-view", this.view()));
@@ -93,12 +103,18 @@ export class App {
   }
 
   refreshSedes() {
-    this.domain
-      .get<Sede[]>("/sedes")
-      .subscribe({
-        next: (s) => this.cart.setSedes(s),
-        error: (e) => this.fail(e),
-      });
+    this.domain.get<Sede[]>("/sedes").subscribe({
+      next: (s) => this.cart.setSedes(s),
+      error: (e) => this.fail(e),
+    });
+  }
+  openPrestacion(event: { sedeId: number; prestacionId: number }) {
+    sessionStorage.setItem("garritas-cita-sede", String(event.sedeId));
+    sessionStorage.setItem(
+      "garritas-cita-prestacion",
+      String(event.prestacionId),
+    );
+    this.view.set("citas");
   }
   openCitas(id: number) {
     sessionStorage.setItem("garritas-profesional", String(id));

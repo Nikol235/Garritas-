@@ -32,20 +32,48 @@
           required
           maxlength="255"
       /></label>
-      @if (auth.admin()) {
-        <label
-          >Transportista<input
-            name="transportista"
-            [(ngModel)]="model.transportista"
-            maxlength="100"
-        /></label>
-      }
+      <label
+        >Zona de entrega<select
+          name="zona"
+          [(ngModel)]="model.zonaId"
+          (ngModelChange)="model.transportistaId = 0"
+          required
+        >
+          <option [ngValue]="0">Selecciona una zona</option>
+          @for (z of zonas(); track z.id) {
+            <option [ngValue]="z.id">{{ z.nombre }}</option>
+          }
+        </select></label
+      >
+      <label
+        >Transportista de entrega<select
+          name="transportista"
+          [(ngModel)]="model.transportistaId"
+          required
+        >
+          <option [ngValue]="0">Selecciona un transportista</option>
+          @for (c of carriers(); track c.transportistaId) {
+            <option [ngValue]="c.transportistaId">
+              {{ c.transportista }} · S/ {{ c.tarifa }}
+            </option>
+          }
+        </select></label
+      >
     </div>
+    @if (cobertura(); as c) {
+      <p class="muted">
+        Tarifa informativa: S/ {{ c.tarifa }} · {{ c.diasEstimados }} días. No
+        está incluida en el pago original de productos.
+      </p>
+    }
     <p class="muted">
       Cada pedido admite un único envío. Los pedidos sin pago confirmado aún no
       se pueden enviar.
     </p>
-    <button class="primary" [disabled]="f.invalid || !model.idVenta || busy()">
+    <button
+      class="primary"
+      [disabled]="f.invalid || !model.idVenta || !cobertura() || busy()"
+    >
       Solicitar envío
     </button>
   </form>
@@ -56,7 +84,10 @@
       <h2>Envío #{{ e.id }}</h2>
       <p>Pedido #{{ e.idVenta }}</p>
       <p>{{ e.direccionEntrega }}</p>
-      <p>{{ e.transportista || "Por asignar" }}</p>
+      <p>{{ e.transportista || "Histórico: por asignar" }}</p>
+      @if (e.tarifa !== null) {
+        <p>Tarifa registrada: S/ {{ e.tarifa }}</p>
+      }
       <span class="badge">{{ label(e.estado) }}</span>
       @if (e.fechaEnvio) {
         <p>Despacho: {{ e.fechaEnvio | date: "short" }}</p>

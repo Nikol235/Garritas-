@@ -24,6 +24,18 @@ public class CitaMapper {
   public CitaResponse toResponse(Cita cita) {
     return CitaResponse.builder()
         .id(cita.getId())
+        .total(cita.getTotal())
+        .duracionMinutos(cita.getDuracionMinutos())
+        .detalles(
+            cita.getDetalles().stream()
+                .map(
+                    d ->
+                        new pe.edu.upeu.garritas.citas.dto.DetalleCitaResponse(
+                            d.getPrestacionId(),
+                            d.getNombre(),
+                            d.getPrecio(),
+                            d.getDuracionMinutos()))
+                .toList())
         .profesionalId(cita.getProfesionalId())
         .nombreMascota(cita.getNombreMascota())
         .nombreSede(cita.getNombreSede())

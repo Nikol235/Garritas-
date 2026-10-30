@@ -10,17 +10,26 @@ import lombok.Setter;
 @Setter
 public class MascotaRequest {
 
-    @NotBlank
-    @Size(max = 100)
-    private String nombre;
+  @NotBlank
+  @Size(max = 100)
+  private String nombre;
 
-    @NotBlank
-    @Size(max = 50)
-    private String especie;
+  @NotBlank
+  @Size(max = 50)
+  private String especie;
 
-    @Size(max = 100)
-    private String raza;
+  @Size(max = 100)
+  private String raza;
 
-    @Min(0)
-    private Integer edad;
+  @jakarta.validation.constraints.NotNull
+  private pe.edu.upeu.garritas.usuario.entity.UnidadEdad edadUnidad;
+
+  @jakarta.validation.constraints.NotNull
+  @jakarta.validation.constraints.Max(36500)
+  @Min(0)
+  @jakarta.validation.constraints.Digits(
+      integer = 5,
+      fraction = 0,
+      message = "La edad debe ser un número entero de días o meses")
+  private java.math.BigDecimal edad;
 }

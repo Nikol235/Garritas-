@@ -1,0 +1,164 @@
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">ATENCIÓN CERCA DE TI</p>
+    <h1>Servicios por sede</h1>
+    <p>Consulta precios y duración de las prestaciones disponibles.</p>
+  </div>
+  <button (click)="load()">Actualizar servicios</button>
+</div>
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+@if (message()) {
+  <p class="notice" role="status">{{ message() }}</p>
+}
+<label
+  >Sede de atención<select [(ngModel)]="sedeId" (ngModelChange)="loadOfertas()">
+    @for (s of sedes(); track s.id) {
+      <option [ngValue]="s.id">
+        {{ s.nombre }} · {{ s.ciudad }}{{ s.activo ? "" : " (inactiva)" }}
+      </option>
+    }
+  </select></label
+>
+<div class="grid">
+  @for (o of ofertas(); track o.id) {
+    <article>
+      <h2>{{ o.nombre }}</h2>
+      <p>
+        {{ o.precio | currency: "PEN" : "S/ " }} ·
+        {{ o.duracionMinutos }} minutos
+      </p>
+      <span class="badge">{{ o.activo ? "Disponible" : "No disponible" }}</span>
+      <div class="actions">
+        @if (auth.loggedIn() && o.activo) {
+          <button
+            class="primary"
+            (click)="
+              reservar.emit({ sedeId: sedeId, prestacionId: o.prestacionId })
+            "
+          >
+            Reservar {{ o.nombre }}
+          </button>
+        }
+        @if (auth.admin()) {
+          <button (click)="editOferta(o)">Editar oferta {{ o.nombre }}</button>
+        }
+      </div>
+    </article>
+  } @empty {
+    <p>No hay prestaciones disponibles en esta sede.</p>
+  }
+</div>
+@if (auth.admin()) {
+  <section class="panel">
+    <h2>Oferta de la sede seleccionada</h2>
+    <form #o="ngForm" (ngSubmit)="saveOferta()">
+      <div class="field-grid">
+        <label
+          >Prestación para la sede<select
+            name="prestacion"
+            [(ngModel)]="oferta.prestacionId"
+            required
+          >
+            <option [ngValue]="0">Selecciona una prestación</option>
+            @for (p of prestaciones(); track p.id) {
+              <option [ngValue]="p.id">{{ p.nombre }}</option>
+            }
+          </select></label
+        ><label
+          >Precio de la prestación<input
+            name="precio"
+            type="number"
+            min="0"
+            max="99999999.99"
+            step="0.01"
+            [(ngModel)]="oferta.precio"
+            required /></label
+        ><label
+          >Duración en minutos<input
+            name="duracion"
+            type="number"
+            min="30"
+            max="240"
+            step="30"
+            [(ngModel)]="oferta.duracionMinutos"
+            required /></label
+        ><label class="check"
+          ><input
+            name="ofertaActiva"
+            type="checkbox"
+            [(ngModel)]="oferta.activo"
+          />Oferta activa</label
+        >
+      </div>
+      <button
+        class="primary"
+        [disabled]="
+          o.invalid ||
+          !oferta.prestacionId ||
+          !sedeId ||
+          oferta.duracionMinutos % 30 !== 0 ||
+          busy()
+        "
+      >
+        Guardar oferta
+      </button>
+    </form>
+  </section>
+  <section class="panel">
+    <h2>{{ id ? "Editar prestación" : "Nueva prestación" }}</h2>
+    <form #p="ngForm" (ngSubmit)="save()">
+      <div class="field-grid">
+        <label
+          >Nombre de prestación<input
+            name="nombre"
+            [(ngModel)]="model.nombre"
+            maxlength="100"
+            required /></label
+        ><label
+          >Descripción de prestación<input
+            name="descripcion"
+            [(ngModel)]="model.descripcion"
+            maxlength="255" /></label
+        ><label class="check"
+          ><input
+            name="activa"
+            type="checkbox"
+            [(ngModel)]="model.activo"
+          />Prestación activa</label
+        >
+      </div>
+      <div class="actions">
+        <button class="primary" [disabled]="p.invalid || busy()">
+          Guardar prestación</button
+        ><button type="button" (click)="reset()">Limpiar prestación</button>
+      </div>
+    </form>
+  </section>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Prestación</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of prestaciones(); track p.id) {
+          <tr>
+            <td>{{ p.nombre }}</td>
+            <td>{{ p.activo ? "Activa" : "Inactiva" }}</td>
+            <td>
+              <button (click)="edit(p)">Editar prestación {{ p.nombre }}</button
+              ><button (click)="remove(p)">
+                Desactivar prestación {{ p.nombre }}
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

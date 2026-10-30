@@ -1,0 +1,2 @@
+PASS: dos instancias en Eureka; Gateway alterna X-Service-Instance 8082 y 18082
+PASS: instancia secundaria detenida; Gateway continúa sirviendo la instancia principal

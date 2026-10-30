@@ -42,7 +42,7 @@ flowchart LR
   K --> V
 ```
 
-Usuario, Institución, Envío, Citas y Bienestar tienen pantallas Angular y permisos de negocio propios. Las sedes son consultables por clientes; su edición requiere ADMIN. El perfil Usuario se vincula al `sub` de Keycloak; mascotas, citas, ventas y envíos verifican propiedad. Bienestar utiliza una relación muchos a muchos real entre profesionales y especialidades. El envío se solicita para una venta pagada y las citas verifican referencias remotas antes de reservar.
+Usuario, Institución, Envío, Citas y Bienestar tienen pantallas Angular y permisos de negocio propios. Las sedes son consultables por clientes; su edición requiere ADMIN. El perfil Usuario se vincula al `sub` de Keycloak; mascotas, citas, ventas y envíos verifican propiedad. Bienestar utiliza una relación muchos a muchos real entre profesionales y especialidades. El despacho se solicita para una venta pagada y pertenece a Venta; Envío administra transportistas/zonas/coberturas. Las citas verifican referencias remotas antes de reservar y guardan sus prestaciones como detalle. Usuario incorpora suscripciones y períodos históricos. Consulta la [asignación actual](asignacion-y-sustentacion.md).
 
 ## Consistencia y concurrencia
 
@@ -96,4 +96,4 @@ El proceso DEV ejecuta una copia estable del JAR bajo `.runtime/` para que una c
 
 Kafka y Keycloak tienen Compose propios en `kafka/` y `keycloak/`. Los ejemplos de publicación/consumo Python están en `uso-rapido/garritas-eventos-py/`; el agregador, los lanzadores y las pruebas auxiliares se agrupan en `uso-rapido/`. Los Dockerfiles y Compose integrados opcionales ya no ocupan la raíz. `overrides/` personaliza la documentación MkDocs y `.github/` valida compilación y frontend.
 
-Bienestar guarda `profesionales`, `especialidades` y `profesional_especialidad` en su propia base. La clave compuesta impide asociaciones duplicadas. El backend valida las especialidades antes de sustituir un conjunto de asociaciones y bloquea eliminar una especialidad todavía utilizada. Citas consume esa información por HTTP, comprueba propiedad de la mascota y reserva bloques de 30 minutos mediante un índice único condicionado a citas activas.
+Bienestar guarda `profesionales`, `especialidades` y `profesional_especialidad` en su propia base. La clave compuesta impide asociaciones duplicadas. El backend valida las especialidades antes de sustituir un conjunto de asociaciones y bloquea eliminar una especialidad todavía utilizada. Citas consume esa información por HTTP, comprueba propiedad de la mascota y reserva prestaciones con inicio en bloques de 30 minutos; combina el índice único de citas activas con un bloqueo por profesional y una consulta de cruces sobre la duración total.

@@ -1,0 +1,11 @@
+digraph G { graph [bgcolor="white",fontname="DejaVu Sans",pad="0.15",nodesep="0.3",ranksep="0.5"]; node [shape=box,style="rounded,filled",fillcolor="#edf4ee",color="#4d7b64",fontname="DejaVu Sans",fontsize=11]; edge [fontname="DejaVu Sans",fontsize=9,color="#48685a"];rankdir=LR; pro[label="profesionales
+id PK
+nombre / email único
+id_sede (referencia remota)
+activo"];join[label="profesional_especialidad
+id_profesional PK, FK
+id_especialidad PK, FK"];esp[label="especialidades
+id PK
+nombre único
+descripcion / activo"];pro->join[label="1 a N"];join->esp[label="N a 1"];sede[label="Institución: sedes
+Otra base; validación HTTP"];pro->sede[style=dashed,label="sin FK entre bases"];}

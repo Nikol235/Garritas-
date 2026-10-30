@@ -412,6 +412,7 @@ services:
       DB_USER: garritas
       DB_PASS: ${DB_PASSWORD:-local-garritas-db}
       SERVER_PORT: 8083
+      SPRING_FLYWAY_LOCATIONS: ${DEMO_MIGRATION_LOCATIONS:-classpath:db/migration,classpath:db/demo}
       SPRING_CONFIG_IMPORT: configserver:http://garritas-config:8888
     restart: on-failure
     volumes:
@@ -550,6 +551,7 @@ services:
       DB_USER: garritas
       DB_PASS: ${DB_PASSWORD:-local-garritas-db}
       SERVER_PORT: 8086
+      SPRING_FLYWAY_LOCATIONS: ${DEMO_MIGRATION_LOCATIONS:-classpath:db/migration,classpath:db/demo}
       SPRING_CONFIG_IMPORT: configserver:http://garritas-config:8888
     restart: on-failure
     volumes:

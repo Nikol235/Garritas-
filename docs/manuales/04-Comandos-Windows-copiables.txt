@@ -1,0 +1,75 @@
+GARRITAS STORE - COMANDOS PARA POWERSHELL
+
+Ejecuta por etapas; no pegues este archivo completo. Lee el PDF para requisitos, preguntas y errores.
+
+1. Comprobar requisitos
+git --version
+java -version
+javac -version
+node --version
+npm.cmd --version
+docker compose version
+docker info
+
+2. Clonar por primera vez
+cd $HOME
+New-Item -ItemType Directory -Force proyectos
+cd proyectos
+git clone --branch feat/garritas-store https://github.com/Nikol235/Garritas-.git
+cd Garritas-
+git branch --show-current
+
+3. Permitir script en esta ventana
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned -Force
+
+4. Compilar (esperar hasta el final)
+.\uso-rapido\garritas.ps1 -Accion build
+
+5. Iniciar (Docker Desktop abierto)
+.\uso-rapido\garritas.ps1 -Accion iniciar
+
+6. Consultar estado en una ventana nueva
+cd "$HOME\proyectos\Garritas-"
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned -Force
+.\uso-rapido\garritas.ps1 -Accion estado
+
+7. Monitorizacion opcional
+docker compose -f obs/compose-dev.yml up -d
+
+8. Detener Java y Angular
+.\uso-rapido\garritas.ps1 -Accion detener
+
+9. Volver a iniciar otra sesion
+cd "$HOME\proyectos\Garritas-"
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned -Force
+.\uso-rapido\garritas.ps1 -Accion iniciar
+
+10. Revisar antes de actualizar
+cd "$HOME\proyectos\Garritas-"
+git status
+git branch --show-current
+
+11. Actualizar solo sin cambios locales; ejecutar uno por uno
+git pull --ff-only origin feat/garritas-store
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned -Force
+.\uso-rapido\garritas.ps1 -Accion build
+.\uso-rapido\garritas.ps1 -Accion iniciar
+
+12. Diagnostico WSL; Ubuntu debe existir
+wsl --status
+wsl --list --verbose
+wsl -d Ubuntu -- uname -r
+
+13. Reiniciar WSL solo si Docker no arranca
+wsl --shutdown
+# Ahora abre Docker Desktop desde Inicio; espera y ejecuta:
+docker info
+
+14. Leer logs de Catalogo si falla
+Get-Content .runtime\garritas-catalogo-ms\error.log -Tail 60
+Get-Content .runtime\garritas-catalogo-ms\console.log -Tail 60
+
+15. Leer estado/logs de contenedores
+docker ps -a
+docker compose -f kafka/compose-dev.yml logs --tail 60
+docker compose -f keycloak/compose-dev.yml logs --tail 60

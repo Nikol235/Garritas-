@@ -1,0 +1,1 @@
+INSERT INTO planes(nombre,descripcion,precio,duracion_dias,activo) VALUES ('Cuidado básico','Plan de acompañamiento de cuidado; contratación de demostración sin cobro bancario',29.90,30,true),('Bienestar integral','Plan de seguimiento para familias con mascotas; contratación de demostración',59.90,30,true) ON CONFLICT(nombre) DO NOTHING;

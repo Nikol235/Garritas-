@@ -1,0 +1,4 @@
+digraph G { graph [bgcolor="white",fontname="DejaVu Sans",pad="0.15",nodesep="0.3",ranksep="0.5"]; node [shape=box,style="rounded,filled",fillcolor="#edf4ee",color="#4d7b64",fontname="DejaVu Sans",fontsize=11]; edge [fontname="DejaVu Sans",fontsize=9,color="#48685a"];rankdir=TB;host[label="Equipo local: Windows / Linux / WSL2"];java[label="JDK 21: Config, Eureka, Gateway
+y 8 servicios Java"];js[label="Node 24: Angular dev server"];docker[label="Docker Compose DEV"];shared[label="Kafka + Kafka UI
+Keycloak + su PostgreSQL"];db[label="8 PostgreSQL de negocio
+Volúmenes persistentes"];obs[label="Grafana / Loki / Promtail / Prometheus"];host->java;host->js;host->docker;docker->shared;docker->db;docker->obs;java->db;java->shared;js->java;}

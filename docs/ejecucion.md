@@ -73,3 +73,11 @@ Las sedes tienen baja lógica: desactivarlas impide nuevas selecciones sin borra
 Los envíos se crean solo para ventas pagadas y pertenecen al mismo cliente de la venta; hay un envío por pedido. Solo ADMIN puede marcar tránsito/entrega. Un cliente no puede cancelar un envío en tránsito o ya entregado.
 
 Una especialidad utilizada no se elimina: primero se desasigna de sus profesionales. Cambiar las asociaciones se confirma en una única transacción de la base de Bienestar.
+
+## Actualización académica y recuperación de arranque
+
+[Asignación y migraciones](asignacion-y-sustentacion.md) explica el traslado de despachos a Venta, las nuevas relaciones y las edades en días/meses. Los puertos no cambian. `build` utiliza `clean package` para evitar que un JAR conserve una copia anterior de la librería común.
+
+En Windows las consolas nuevas se ocultan y los logs se conservan en `.runtime`. No ejecutes dos arranques simultáneamente ni alternes copias en C: y D: que comparten puertos y contenedores. `detener` comprueba id y hora del proceso antes de detenerlo. Un registro sin procesos vivos se retira al iniciar.
+
+Swagger de cada servicio está en `http://localhost:PUERTO/swagger-ui/index.html`; la documentación es consultable y las operaciones protegidas requieren un JWT Bearer mediante Authorize. No se incluyen tokens en esta documentación.

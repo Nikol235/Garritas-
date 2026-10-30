@@ -30,13 +30,28 @@ Los Compose y Dockerfiles de integración que estaban en la raíz se movieron a 
 | Sedes | Consultar sedes activas del Perú y seleccionar una | Crear, editar, activar y desactivar sedes |
 | Especialistas | Consultar profesionales y sus especialidades; reservar cita | Gestionar profesionales y asignar varias especialidades |
 | Mi cuenta y mascotas | Editar su perfil y gestionar sus propias mascotas | Perfil propio y administración de clientes |
-| Citas | Reservar para sus mascotas, consultar y cancelar las permitidas | Ver todas, confirmar y marcar atención |
-| Envíos | Solicitar envío de sus pedidos pagados y consultar su entrega | Gestionar tránsito y entrega |
+| Citas | Reservar una o varias prestaciones para sus mascotas | Ver todas, confirmar y marcar atención; revisar detalle, total y duración |
+| Envíos de pedidos (Venta) | Seleccionar cobertura y solicitar entrega de un pedido pagado | Gestionar tránsito y entrega |
+| Servicios por sede (Institución) | Consultar prestaciones, precios y duración | Gestionar prestaciones y ofertas por sede |
+| Logística (Envío) | Consultar coberturas durante una solicitud de entrega | Gestionar transportistas, zonas y coberturas |
+| Planes y suscripciones (Usuario) | Contratar, renovar, cancelar y consultar períodos propios | Administrar planes y auditar suscripciones |
 | Pagos y pedidos | Ver únicamente los suyos | Consultar todos |
 
 Los permisos se verifican también en el Gateway y los microservicios. Ocultar botones no es la protección: una petición directa de un cliente intentando editar sedes o acceder a datos ajenos se rechaza.
 
-**Bienestar** es el microservicio de relación **muchos a muchos**: un profesional tiene varias especialidades y una especialidad pertenece a varios profesionales. La tabla de asociación tiene clave primaria compuesta y claves foráneas. Citas valida las referencias de mascota, sede y profesional mediante llamadas HTTP con identidad propagada y límites de tiempo.
+**Bienestar** conserva otra relación **muchos a muchos**: un profesional tiene varias especialidades y una especialidad pertenece a varios profesionales. La tabla de asociación tiene clave primaria compuesta y claves foráneas. Citas valida las referencias de mascota, sede y profesional mediante llamadas HTTP con identidad propagada y límites de tiempo.
+
+## Parejas para la sustentación
+
+| Pareja original | Transaccional (cabecera/detalle) | Maestro | N:M |
+|---|---|---|---|
+| Venta–Institución | Venta / DetalleVenta | Institución | Sedes ↔ prestaciones |
+| Envío–Citas | Cita / DetalleCita | Envío: logística | Transportistas ↔ zonas |
+| Catálogo–Usuario (Fio) | Suscripcion / PeriodoSuscripcion en Usuario | Catálogo | Clientes ↔ planes |
+
+[Asignación, reglas, migración y demo por integrante](docs/asignacion-y-sustentacion.md). [Contraste con las sesiones 1–11 del ingeniero](docs/alineacion-pagatu.md).
+
+El perfil confirma su guardado leyendo nuevamente la API. La edad de mascotas se registra en **días o meses**, con unidad explícita; las edades históricas en años se convierten a meses mediante migración. El despacho operativo pasa a Venta; el archivo histórico de Envío se conserva y el lanzador DEV lo migra sin duplicar ventas. Las N:M con atributos se implementan con entidades de asociación y claves foráneas locales.
 
 ## Inicio rápido
 
@@ -52,7 +67,7 @@ bash uso-rapido/scripts/dev.sh all
 bash uso-rapido/scripts/dev.sh status
 ```
 
-`build` compila todos los servicios e instala el soporte común para permitir también arranques manuales por módulo. `all` inicia Kafka, Keycloak, las ocho bases de negocio, Config Server, Eureka, los ocho servicios, Gateway y Angular. Si faltan dependencias frontend, ejecuta `npm ci` antes de iniciar su servidor.
+`build` hace una compilación limpia para empaquetar también los cambios del soporte común; compila todos los servicios e instala el soporte común para permitir también arranques manuales por módulo. `all` inicia Kafka, Keycloak, las ocho bases de negocio, Config Server, Eureka, los ocho servicios, Gateway y Angular. Si faltan dependencias frontend, ejecuta `npm ci` antes de iniciar su servidor.
 
 Observabilidad opcional:
 
@@ -71,7 +86,7 @@ Con Docker Desktop iniciado, JDK 21 y Node 24 en PATH:
 .\uso-rapido\garritas.ps1 -Accion estado
 ```
 
-Para detener Java y Angular: `-Accion detener`. Este lanzador conserva los volúmenes y verifica los procesos registrados antes de detenerlos. También se pueden seguir los comandos manuales de cada módulo como en Pagatu; consulta [la guía de ejecución](docs/ejecucion.md).
+Las nuevas consolas Java/Node se ejecutan ocultas y sus logs quedan en `.runtime/`. Un registro de procesos ya finalizados se recupera automáticamente; si siguen activos, usa `estado` o `detener` antes de reiniciar. Para detener Java y Angular: `-Accion detener`. Este lanzador conserva los volúmenes y verifica los procesos registrados antes de detenerlos. También se pueden seguir los comandos manuales de cada módulo como en Pagatu; consulta [la guía de ejecución](docs/ejecucion.md).
 
 ## Abrir las aplicaciones
 
@@ -106,6 +121,7 @@ bash uso-rapido/scripts/dev.sh test
 (cd clients/garritas-frontend && npm test && npm run build)
 python3 -m pip install -r uso-rapido/scripts/requirements-test.txt
 CHROMIUM_PATH=/usr/bin/chromium python3 uso-rapido/scripts/domain_smoke.py
+CHROMIUM_PATH=/usr/bin/chromium python3 uso-rapido/scripts/academic_smoke.py
 CHROMIUM_PATH=/usr/bin/chromium python3 uso-rapido/scripts/smoke.py
 CHROMIUM_PATH=/usr/bin/chromium python3 uso-rapido/scripts/consoles.py
 ```
@@ -118,3 +134,11 @@ Si no usas Chromium del sistema, instala el navegador de Playwright con `python3
 - [Compose integrado opcional](uso-rapido/docker/README.md)
 
 La documentación puede construirse con `pip install -r docs/requirements.txt` y `mkdocs build --strict`.
+
+## Manuales en PDF
+
+1. [Ejecutar Garritas: instalación, puertos y diagnóstico](docs/manuales/01-Ejecucion-y-puertos.pdf).
+2. [Construir desde cero: pasos, rutas y código completo](docs/manuales/02-Construccion-desde-cero-con-codigo.pdf).
+3. [Entender arquitectura, clases, tecnologías y conexiones](docs/manuales/03-Arquitectura-clases-y-conexiones.pdf).
+
+[Índice y evidencias de los manuales](docs/manuales/README.md). Se incluye un ZIP de fuentes sin dependencias/binarios, con manifiesto SHA-256; fue extraído y compilado en una carpeta nueva.

@@ -12,6 +12,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 public class CorrelationIdFilter extends OncePerRequestFilter {
+  @org.springframework.beans.factory.annotation.Value("${spring.application.name}")
+  private String application;
+
+  @org.springframework.beans.factory.annotation.Value("${server.port}")
+  private int port;
 
   public static final String TRACE_ID_HEADER = "X-Trace-ID";
   public static final String MDC_KEY = "traceId";
@@ -27,6 +32,7 @@ public class CorrelationIdFilter extends OncePerRequestFilter {
     try {
       MDC.put(MDC_KEY, traceId);
       response.setHeader(TRACE_ID_HEADER, traceId);
+      response.setHeader("X-Service-Instance", application + ":" + port);
       filterChain.doFilter(request, response);
     } finally {
       MDC.remove(MDC_KEY);

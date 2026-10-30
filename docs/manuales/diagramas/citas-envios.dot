@@ -1,0 +1,5 @@
+digraph G { graph [bgcolor="white",fontname="DejaVu Sans",pad="0.15",nodesep="0.3",ranksep="0.5"]; node [shape=box,style="rounded,filled",fillcolor="#edf4ee",color="#4d7b64",fontname="DejaVu Sans",fontsize=11]; edge [fontname="DejaVu Sans",fontsize=9,color="#48685a"];rankdir=TB; a[label="Angular: nueva cita"];b[label="Citas"];c[label="Usuario: mascota propia"];d[label="Institución: sede activa"];e[label="Bienestar: profesional activo
+y sede compatible"];f[label="PostgreSQL Citas
+Índice único profesional + hora activa"];a->b;b->c;b->d;b->e;b->f;g[label="Angular: solicitar envío"];h[label="Envío"];i[label="Venta: pedido PAGADA
+y mismo propietario"];j[label="PostgreSQL Envío
+Un envío por id_venta"];g->h;h->i;h->j;}

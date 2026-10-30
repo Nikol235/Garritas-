@@ -1,0 +1,3 @@
+PASS: perfil confirmado tras recarga, correo ajeno rechazado sin cambios, edad días/meses y valores inválidos rechazados
+PASS: despacho ajeno rechazado antes de revelar su estado; pedido propio no pagado tampoco admite despacho
+PASS: seis pantallas revisadas en escritorio y móvil sin desbordamiento horizontal; seis sedes peruanas activas

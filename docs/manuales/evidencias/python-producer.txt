@@ -1,0 +1,3 @@
+{"status": "published", "topic": "garritas.demo.v1", "partition": 0, "offset": 3}
+{"status": "published", "topic": "garritas.demo.v1", "partition": 0, "offset": 4}
+{"status": "published", "topic": "garritas.demo.v1", "partition": 0, "offset": 5}

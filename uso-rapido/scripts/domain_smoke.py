@@ -49,7 +49,7 @@ def submit(page, label, method, suffix, expected=200):
     data=request(suffix,TOKENS[page])
     if not isinstance(data,list):return data
     body=response.request.post_data_json
-    fields=[k for k in ['nombre','idVenta','motivo'] if k in body]
+    fields=[k for k in ['nombre','idVenta','motivo','prestacionId','transportistaId','zonaId','planId'] if k in body]
     matches=[row for row in data if all(row.get(k)==body[k] for k in fields)]
     assert len(matches)==1,(suffix,len(matches))
     return matches[0]
@@ -100,11 +100,17 @@ def main():
         for label, value in [('Nombre completo','Cliente prueba'),('Correo de contacto','cliente-'+key+'@example.test'),('Teléfono de contacto','999300002'),('Dirección de contacto','Av. Arequipa 100, Lima')]:
             page.get_by_label(label, exact=True).fill(value)
         profile = submit(page, 'Guardar perfil', 'PUT', '/usuarios/me')
+        assert profile['email'] == 'cliente-'+key+'@example.test', 'El perfil no persistió el correo introducido'
         page.get_by_label('Nombre de mascota', exact=True).fill('Luna '+key)
         page.get_by_role('combobox', name='Especie', exact=True).select_option(label='Gato')
         page.get_by_label('Raza', exact=True).fill('Criolla')
-        page.get_by_label('Edad en años', exact=True).fill('3')
+        page.get_by_label('Edad de la mascota', exact=True).fill('45')
+        page.get_by_role('combobox',name='Unidad de edad',exact=True).select_option('DIAS')
         pet = submit(page, 'Guardar mascota', 'POST', '/usuarios/me/mascotas', 201)
+        assert pet['edad']==45 and pet['edadUnidad']=='DIAS'
+        page.reload()
+        expect(page.get_by_label('Correo de contacto',exact=True)).to_have_value('cliente-'+key+'@example.test')
+        expect(page.locator('article').filter(has_text='Luna '+key)).to_contain_text('45 días')
         request('/usuarios/me/mascotas/'+str(pet['id']), other, expected=403)
         request('/usuarios/'+str(profile['id'])+'/mascotas', other, expected=403)
         print('PASS: perfil y mascotas persistidos; un segundo cliente no puede acceder a ellas', flush=True)
@@ -127,15 +133,18 @@ def main():
         request('/especialidades/'+str(specialty['id']), admin, 'DELETE', expected=409)
         print('PASS: Bienestar muchos a muchos real, especialidades compartidas y asociación sin duplicados', flush=True)
 
+        prestacion=request('/prestaciones')[0]
+        request('/sedes/'+str(sede['id'])+'/prestaciones',admin,'PUT',{'prestacionId':prestacion['id'],'precio':60,'duracionMinutos':30,'activo':True})
         page.get_by_role('button', name='Citas', exact=True).click()
         choose_id(page,'Mascota para la cita',pet['id'])
         choose_id(page,'Sede para la cita',sede['id'])
         choose_id(page,'Profesional',professional['id'])
         date = (datetime.now(timezone.utc)+timedelta(days=2)).replace(hour=15, minute=0, second=0, microsecond=0)
         page.get_by_label('Fecha y hora de la cita', exact=True).fill(date.strftime('%Y-%m-%dT%H:%M'))
+        page.get_by_role('checkbox',name=re.compile(re.escape(prestacion['nombre']))).check()
         page.get_by_label('Motivo de la cita', exact=True).fill('Revisión de Luna '+key)
         cita = submit(page, 'Reservar cita', 'POST', '/citas', 201)
-        request('/citas', cliente, 'POST', {'idMascota':pet['id'],'idSede':sede['id'],'profesionalId':professional['id'],'fechaHora':date.isoformat(),'motivo':'Duplicada'}, expected=409)
+        request('/citas', cliente, 'POST', {'idMascota':pet['id'],'idSede':sede['id'],'profesionalId':professional['id'],'fechaHora':date.isoformat(),'motivo':'Duplicada','prestacionIds':[prestacion['id']]}, expected=409)
         request('/citas/'+str(cita['id']), other, expected=403)
         request('/citas/'+str(cita['id'])+'/confirmar', cliente, 'POST', expected=403)
         admin_page.get_by_role('button', name='Citas', exact=True).click()
@@ -171,10 +180,13 @@ def main():
         page.get_by_role('button', name='Envíos', exact=True).click()
         choose_id(page,'Pedido pagado',venta['id'])
         page.get_by_label('Dirección de entrega', exact=True).fill('Av. de ejemplo 456, Miraflores, Lima')
+        cobertura=request('/coberturas')[0]
+        choose_id(page,'Zona de entrega',cobertura['zonaId'])
+        choose_id(page,'Transportista de entrega',cobertura['transportistaId'])
         envio = submit(page, 'Solicitar envío', 'POST', '/envios', 201)
         request('/envios/'+str(envio['id']), other, expected=403)
         request('/envios/'+str(envio['id'])+'/en-transito', cliente, 'POST', expected=403)
-        request('/envios', cliente, 'POST', {'idVenta':venta['id'],'direccionEntrega':'Duplicado'}, expected=409)
+        request('/envios', cliente, 'POST', {'idVenta':venta['id'],'direccionEntrega':'Duplicado','zonaId':cobertura['zonaId'],'transportistaId':cobertura['transportistaId']}, expected=409)
         admin_page.get_by_role('button', name='Envíos', exact=True).click()
         shipping = admin_page.locator('article').filter(has=admin_page.get_by_role('heading', name='Envío #'+str(envio['id']), exact=True))
         with admin_page.expect_response(lambda r: r.request.method=='POST' and r.url.endswith('/envios/'+str(envio['id'])+'/en-transito')) as res:

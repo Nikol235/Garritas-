@@ -37,7 +37,7 @@
           >Sede para la cita<select
             name="sede"
             [(ngModel)]="model.idSede"
-            (ngModelChange)="model.profesionalId = 0"
+            (ngModelChange)="changeSede()"
             required
           >
             <option [ngValue]="0">Selecciona una sede</option>
@@ -67,8 +67,28 @@
       </div>
       <p class="muted">
         Hora local de tu navegador. Elige una fecha futura a las :00 o :30; cada
-        cita ocupa 30 minutos.
+        prestación tiene su propia duración y no puede cruzarse con otra cita.
       </p>
+      <fieldset class="panel">
+        <legend>Prestaciones de la cita</legend>
+        @for (o of ofertas(); track o.id) {
+          <label class="check"
+            ><input
+              type="checkbox"
+              [checked]="model.prestacionIds.includes(o.prestacionId)"
+              (change)="toggle(o.prestacionId)"
+            />{{ o.nombre }} · S/ {{ o.precio }} ·
+            {{ o.duracionMinutos }} min</label
+          >
+        }
+        @if (!ofertas().length) {
+          <p>Selecciona una sede con prestaciones disponibles.</p>
+        }
+        <p>
+          Total referencial: S/ {{ total().toFixed(2) }} · Duración:
+          {{ duration() }} minutos. No se cobra desde esta reserva.
+        </p>
+      </fieldset>
       <label
         >Motivo de la cita<input
           name="motivo"
@@ -82,6 +102,8 @@
           !model.idSede ||
           !model.idMascota ||
           !model.profesionalId ||
+          !model.prestacionIds.length ||
+          duration() > 480 ||
           busy()
         "
       >
@@ -105,7 +127,15 @@
     <tbody>
       @for (c of citas(); track c.id) {
         <tr>
-          <td>#{{ c.id }}<br />{{ c.motivo }}</td>
+          <td>
+            #{{ c.id }}<br />{{ c.motivo }}
+            <ul>
+              @for (d of c.detalles; track d.prestacionId) {
+                <li>{{ d.nombre }} · S/ {{ d.precio }}</li>
+              }
+            </ul>
+            <small>S/ {{ c.total }} · {{ c.duracionMinutos }} min</small>
+          </td>
           <td>
             {{ c.nombreMascota || c.idMascota }}<br /><small>{{
               c.nombreProfesional

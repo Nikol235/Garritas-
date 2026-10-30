@@ -1,0 +1,74 @@
+{
+  "fecha": "2026-10-24T01:08:38.873167-05:00",
+  "commit_codigo": "ceaf408d39dcfa834904ed4d7bb8a7ce31bacd21",
+  "checks": [
+    {
+      "prueba": "Compilación Maven",
+      "resultado": "13 módulos SUCCESS; común, 3 infra y 8 dominios"
+    },
+    {
+      "prueba": "Pruebas Java",
+      "resultado": "15 pruebas; 0 fallos, errores u omitidas"
+    },
+    {
+      "prueba": "Angular tests",
+      "resultado": "11 pruebas aprobadas, incluidas 2 de regresión del perfil"
+    },
+    {
+      "prueba": "Angular producción",
+      "resultado": "npm run build correcto"
+    },
+    {
+      "prueba": "Arranque DEV Linux",
+      "resultado": "11 JVM, Angular, 8 PostgreSQL, Kafka y Keycloak disponibles"
+    },
+    {
+      "prueba": "Recorrido de dominios",
+      "resultado": "PASS: sedes, propiedad, M:N, citas, compra, pagos y entrega en Angular"
+    },
+    {
+      "prueba": "Carrito y compra",
+      "resultado": "PASS: persistencia, PKCE, stock, rechazo/compensación, idempotencia y CORS"
+    },
+    {
+      "prueba": "Consolas",
+      "resultado": "PASS: Kafka UI, Keycloak, Eureka, Grafana, targets Prometheus y logs Loki"
+    },
+    {
+      "prueba": "Compose",
+      "resultado": "Sintaxis de DEV, integrado y overlay prebuilt correcta"
+    },
+    {
+      "prueba": "Corrección detectada",
+      "resultado": "Carga de perfil finalizada antes de permitir edición; regresión y flujo real aprobados"
+    },
+    {
+      "prueba": "Recuperación y duplicados",
+      "resultado": "PASS: replay Kafka sin doble compensación; Pago detenido/recuperado; broker detenido/outbox y pago tras recuperación"
+    },
+    {
+      "prueba": "Reconstrucción desde ZIP limpio",
+      "resultado": "Extracción fuera del checkout; Maven package de 13 módulos, npm ci y producción Angular correctos; sin targets/node_modules originales."
+    },
+    {
+      "prueba": "Ejemplo Python Kafka",
+      "resultado": "Productor publica 3 y consumidor lee 3 mensajes en garritas.demo.v1."
+    }
+  ],
+  "limites": [
+    "Validación funcional de DEV en Linux/nube, no despliegue público.",
+    "PowerShell no ejecutado en Windows.",
+    "Arranque simultáneo Docker integral no validado; antecedente de falta de espacio VFS.",
+    "Pagos simulados; no se efectúan cobros bancarios."
+  ],
+  "incidencias": [
+    {
+      "problema": "Seis fuentes comunes ausentes del disco al restaurar entorno.",
+      "resolucion": "Recuperadas byte a byte del commit ya publicado; sin cambios a esas fuentes."
+    },
+    {
+      "problema": "Respuesta de carga tardía podía sobrescribir campos del perfil.",
+      "resolucion": "Formulario espera carga; dos pruebas controlan respuesta tardía y perfil no existente; dominio real repetido con éxito."
+    }
+  ]
+}

@@ -37,7 +37,8 @@ public class MascotaService {
     mascota.setNombre(request.getNombre());
     mascota.setEspecie(request.getEspecie());
     mascota.setRaza(request.getRaza());
-    mascota.setEdad(request.getEdad());
+    mascota.setEdad(request.getEdad().intValueExact());
+    mascota.setEdadUnidad(request.getEdadUnidad());
     return mascotaMapper.toResponse(mascotaRepository.save(mascota));
   }
 

@@ -1,0 +1,8 @@
+digraph G { graph [bgcolor="white",fontname="DejaVu Sans",pad="0.15",nodesep="0.3",ranksep="0.5"]; node [shape=box,style="rounded,filled",fillcolor="#edf4ee",color="#4d7b64",fontname="DejaVu Sans",fontsize=11]; edge [fontname="DejaVu Sans",fontsize=9,color="#48685a"];rankdir=TB;ctrl[label="ProductoController
+GET/POST/PUT/DELETE /productos"];svc[label="ProductoService
+Reglas + transacción"];repo[label="ProductoRepository
+JpaRepository<Producto,Long>"];entity[label="Producto
+@Entity + @Version"];dto[label="ProductoRequest / Response
+Validación / contrato JSON"];mapper[label="ProductoMapper
+DTO ↔ entidad"];cat[label="Categoria
+@Entity"];ctrl->svc[label="inyección"];ctrl->dto;svc->repo;svc->mapper;mapper->dto;mapper->entity;repo->entity;entity->cat[label="muchos a uno"];}
