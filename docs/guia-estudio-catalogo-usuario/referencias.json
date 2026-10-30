@@ -1,0 +1,502 @@
+{
+  "commit": "cf3cedec51da578248ce840fe03c4600bb7af593",
+  "references": {
+    "prod_controller": {
+      "path": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/ProductoController.java",
+      "line": 16,
+      "needle": "public class ProductoController",
+      "label": "ProductoController: endpoints de productos",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/ProductoController.java#L16"
+    },
+    "prod_create": {
+      "path": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java",
+      "line": 45,
+      "needle": "public ProductoResponse crear",
+      "label": "ProductoService.crear(): alta de productos",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java#L45"
+    },
+    "prod_update": {
+      "path": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java",
+      "line": 53,
+      "needle": "public ProductoResponse actualizar",
+      "label": "ProductoService.actualizar(): edición y categorías",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java#L53"
+    },
+    "prod_delete": {
+      "path": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java",
+      "line": 64,
+      "needle": "public void eliminar",
+      "label": "ProductoService.eliminar(): baja lógica",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java#L64"
+    },
+    "prod_query": {
+      "path": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/repository/ProductoRepository.java",
+      "line": 30,
+      "needle": "Page<Producto> buscar",
+      "label": "ProductoRepository.buscar(): filtros y paginación",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/repository/ProductoRepository.java#L30"
+    },
+    "prod_entity": {
+      "path": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/entity/Producto.java",
+      "line": 44,
+      "needle": "@ManyToMany",
+      "label": "Producto: relación N:M con categorías",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/entity/Producto.java#L44"
+    },
+    "prod_mapper": {
+      "path": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/mapper/ProductoMapper.java",
+      "line": 30,
+      "needle": "public ProductoResponse toResponse",
+      "label": "ProductoMapper: entidad a respuesta",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/mapper/ProductoMapper.java#L30"
+    },
+    "cat_controller": {
+      "path": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/CategoriaController.java",
+      "line": 16,
+      "needle": "public class CategoriaController",
+      "label": "CategoriaController: CRUD de categorías",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/CategoriaController.java#L16"
+    },
+    "cat_service": {
+      "path": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/CategoriaService.java",
+      "line": 16,
+      "needle": "public class CategoriaService",
+      "label": "CategoriaService: reglas y persistencia",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/CategoriaService.java#L16"
+    },
+    "inv_consume": {
+      "path": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java",
+      "line": 25,
+      "needle": "public void consume",
+      "label": "InventarioEvents.consume(): entrada de Kafka",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L25"
+    },
+    "inv_reserve": {
+      "path": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java",
+      "line": 37,
+      "needle": "private void reservar",
+      "label": "InventarioEvents.reservar(): reserva e idempotencia",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L37"
+    },
+    "inv_lock": {
+      "path": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java",
+      "line": 52,
+      "needle": "SELECT stock,activo,precio",
+      "label": "Bloqueo de filas antes de cambiar stock",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L52"
+    },
+    "inv_release": {
+      "path": "services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java",
+      "line": 76,
+      "needle": "private void liberar",
+      "label": "InventarioEvents.liberar(): compensación",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L76"
+    },
+    "user_controller": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/UsuarioController.java",
+      "line": 16,
+      "needle": "public class UsuarioController",
+      "label": "UsuarioController: gestión administrativa de usuarios",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/UsuarioController.java#L16"
+    },
+    "me_controller": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MiCuentaController.java",
+      "line": 14,
+      "needle": "public class MiCuentaController",
+      "label": "MiCuentaController: perfil y mascotas propias",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MiCuentaController.java#L14"
+    },
+    "profile_save": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/UsuarioService.java",
+      "line": 95,
+      "needle": "public UsuarioResponse guardarMe",
+      "label": "UsuarioService.guardarMe(): persistencia por sub",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/UsuarioService.java#L95"
+    },
+    "profile_lookup": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/UsuarioService.java",
+      "line": 128,
+      "needle": "public Usuario miUsuario",
+      "label": "UsuarioService.miUsuario(): identidad y perfil",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/UsuarioService.java#L128"
+    },
+    "user_roles": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Usuario.java",
+      "line": 50,
+      "needle": "@ManyToMany",
+      "label": "Usuario: relación N:M con Rol",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Usuario.java#L50"
+    },
+    "user_pets": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Usuario.java",
+      "line": 42,
+      "needle": "@OneToMany",
+      "label": "Usuario: relación 1:N con Mascota",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Usuario.java#L42"
+    },
+    "role_controller": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/RolController.java",
+      "line": 15,
+      "needle": "public class RolController",
+      "label": "RolController: catálogo de roles internos",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/RolController.java#L15"
+    },
+    "role_service": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/RolService.java",
+      "line": 50,
+      "needle": "public void eliminar",
+      "label": "RolService.eliminar(): protección de roles usados",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/RolService.java#L50"
+    },
+    "role_assign": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/UsuarioController.java",
+      "line": 62,
+      "needle": "public UsuarioResponse asignarRol",
+      "label": "UsuarioController.asignarRol(): asociación usuario–rol",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/UsuarioController.java#L62"
+    },
+    "pet_controller": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MascotaController.java",
+      "line": 15,
+      "needle": "public class MascotaController",
+      "label": "MascotaController: mascotas por usuario",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MascotaController.java#L15"
+    },
+    "pet_service": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/MascotaService.java",
+      "line": 29,
+      "needle": "public MascotaResponse crear",
+      "label": "MascotaService.crear(): alta y propiedad",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/MascotaService.java#L29"
+    },
+    "phone": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/dto/UsuarioRequest.java",
+      "line": 26,
+      "needle": "El celular peruano",
+      "label": "UsuarioRequest: validación del celular y DNI",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/dto/UsuarioRequest.java#L26"
+    },
+    "pet_age": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/dto/MascotaRequest.java",
+      "line": 25,
+      "needle": "edadUnidad",
+      "label": "MascotaRequest: edad y unidad explícita",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/dto/MascotaRequest.java#L25"
+    },
+    "sub_controller": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/SuscripcionController.java",
+      "line": 14,
+      "needle": "public class SuscripcionController",
+      "label": "SuscripcionController: planes y ciclo de suscripciones",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/SuscripcionController.java#L14"
+    },
+    "sub_contract": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java",
+      "line": 64,
+      "needle": "public SuscripcionResponse contratar",
+      "label": "SuscripcionService.contratar(): proceso transaccional",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java#L64"
+    },
+    "sub_renew": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java",
+      "line": 98,
+      "needle": "public SuscripcionResponse renovar",
+      "label": "SuscripcionService.renovar(): período e idempotencia",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java#L98"
+    },
+    "sub_cancel": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java",
+      "line": 134,
+      "needle": "public SuscripcionResponse cancelar",
+      "label": "SuscripcionService.cancelar(): transición local",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java#L134"
+    },
+    "sub_lock": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java",
+      "line": 142,
+      "needle": "private void lock",
+      "label": "Bloqueos de suscripción y clave de reintento",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java#L142"
+    },
+    "sub_entity": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Suscripcion.java",
+      "line": 18,
+      "needle": "@ManyToOne",
+      "label": "Suscripcion: entidad de asociación Usuario–Plan",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Suscripcion.java#L18"
+    },
+    "sub_period": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/PeriodoSuscripcion.java",
+      "line": 28,
+      "needle": "private UUID idempotencyKey",
+      "label": "PeriodoSuscripcion: clave y precio histórico",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/PeriodoSuscripcion.java#L28"
+    },
+    "user_repo": {
+      "path": "services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/repository/UsuarioRepository.java",
+      "line": 23,
+      "needle": "Page<Usuario> buscarConRol",
+      "label": "UsuarioRepository: búsqueda por rol y DNI/nombre",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/repository/UsuarioRepository.java#L23"
+    },
+    "security": {
+      "path": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SecurityConfiguration.java",
+      "line": 11,
+      "needle": "SecurityFilterChain",
+      "label": "SecurityConfiguration: protección de rutas",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SecurityConfiguration.java#L11"
+    },
+    "jwt_roles": {
+      "path": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SecurityConfiguration.java",
+      "line": 26,
+      "needle": "realm_access",
+      "label": "Conversión de roles reales del JWT",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SecurityConfiguration.java#L26"
+    },
+    "identity": {
+      "path": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/CurrentUser.java",
+      "line": 18,
+      "needle": "public static void requireOwner",
+      "label": "CurrentUser.requireOwner(): propiedad de recursos",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/CurrentUser.java#L18"
+    },
+    "outbox": {
+      "path": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java",
+      "line": 35,
+      "needle": "public void append",
+      "label": "Outbox.append(): cambio y evento en una transacción",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java#L35"
+    },
+    "outbox_send": {
+      "path": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java",
+      "line": 48,
+      "needle": "public void publish",
+      "label": "Outbox.publish(): publicación posterior a Kafka",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java#L48"
+    },
+    "inbox": {
+      "path": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Inbox.java",
+      "line": 13,
+      "needle": "public boolean claim",
+      "label": "Inbox.claim(): deduplicación por eventId",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Inbox.java#L13"
+    },
+    "event_contract": {
+      "path": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SagaEvent.java",
+      "line": 9,
+      "needle": "public record SagaEvent",
+      "label": "SagaEvent: contrato del evento",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SagaEvent.java#L9"
+    },
+    "messaging": {
+      "path": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/MessagingConfiguration.java",
+      "line": 31,
+      "needle": "NewTopic sagaTopic",
+      "label": "MessagingConfiguration: topic y particiones",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/MessagingConfiguration.java#L31"
+    },
+    "dlt": {
+      "path": "infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/MessagingConfiguration.java",
+      "line": 41,
+      "needle": "DefaultErrorHandler kafkaErrorHandler",
+      "label": "Reintentos y topic DLT",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/MessagingConfiguration.java#L41"
+    },
+    "sale_create": {
+      "path": "services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/service/VentaService.java",
+      "line": 49,
+      "needle": "public VentaResponse crear",
+      "label": "VentaService.crear(): validación, total y outbox",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/service/VentaService.java#L49"
+    },
+    "sale_events": {
+      "path": "services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/messaging/VentaEvents.java",
+      "line": 22,
+      "needle": "public void consume",
+      "label": "VentaEvents: estados de Saga y despacho pagado",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/messaging/VentaEvents.java#L22"
+    },
+    "feign": {
+      "path": "services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/ProductoClient.java",
+      "line": 7,
+      "needle": "@FeignClient",
+      "label": "ProductoClient: Feign por nombre lógico",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/ProductoClient.java#L7"
+    },
+    "breaker": {
+      "path": "services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/CatalogoConsulta.java",
+      "line": 18,
+      "needle": ".create(\"catalogo\")",
+      "label": "CatalogoConsulta: Circuit Breaker y respuesta controlada",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/CatalogoConsulta.java#L18"
+    },
+    "pago": {
+      "path": "services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/messaging/PagoEvents.java",
+      "line": 33,
+      "needle": "boolean aprobado",
+      "label": "PagoEvents: pago simulado y rechazo",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/messaging/PagoEvents.java#L33"
+    },
+    "gateway": {
+      "path": "infra/garritas-config/config-repo/garritas-gateway-dev.yml",
+      "line": 26,
+      "needle": "uri: lb://garritas-catalogo-ms",
+      "label": "Rutas del Gateway hacia Catálogo y Usuario",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-gateway-dev.yml#L26"
+    },
+    "eureka": {
+      "path": "infra/garritas-config/config-repo/garritas-eureka-dev.yml",
+      "line": 2,
+      "needle": "port:",
+      "label": "Configuración de Eureka DEV",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-eureka-dev.yml#L2"
+    },
+    "catalog_config": {
+      "path": "infra/garritas-config/config-repo/garritas-catalogo-ms-dev.yml",
+      "line": 69,
+      "needle": "defaultZone:",
+      "label": "Registro de Catálogo en Eureka",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-catalogo-ms-dev.yml#L69"
+    },
+    "user_config": {
+      "path": "infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml",
+      "line": 45,
+      "needle": "defaultZone:",
+      "label": "Registro de Usuario en Eureka",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml#L45"
+    },
+    "jwt_config": {
+      "path": "infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml",
+      "line": 30,
+      "needle": "jwk-set-uri:",
+      "label": "Emisor, claves públicas y audiencia del JWT",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml#L30"
+    },
+    "timeout": {
+      "path": "infra/garritas-config/config-repo/garritas-venta-ms-dev.yml",
+      "line": 60,
+      "needle": "connectTimeout:",
+      "label": "Timeouts Feign y configuración de los circuitos",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-venta-ms-dev.yml#L60"
+    },
+    "kafka_config": {
+      "path": "kafka/compose-dev.yml",
+      "line": 16,
+      "needle": "KAFKA_ADVERTISED_LISTENERS",
+      "label": "Kafka: direcciones internas y externas",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/kafka/compose-dev.yml#L16"
+    },
+    "kafka_groups": {
+      "path": "infra/garritas-config/config-repo/garritas-catalogo-ms-dev.yml",
+      "line": 47,
+      "needle": "group-id:",
+      "label": "Grupo consumidor propio de Catálogo",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-catalogo-ms-dev.yml#L47"
+    },
+    "db_catalog": {
+      "path": "services/garritas-catalogo-ms/compose-dev.yml",
+      "line": 11,
+      "needle": "POSTGRES_PASSWORD:",
+      "label": "PostgreSQL de Catálogo: credenciales DEV",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/compose-dev.yml#L11"
+    },
+    "db_user": {
+      "path": "services/garritas-usuario-ms/compose-dev.yml",
+      "line": 11,
+      "needle": "POSTGRES_PASSWORD:",
+      "label": "PostgreSQL de Usuario: credenciales DEV",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/compose-dev.yml#L11"
+    },
+    "kc_users": {
+      "path": "keycloak/garritas-realm.json",
+      "line": 47,
+      "needle": "\"username\": \"cliente\"",
+      "label": "Usuario cliente de demostración en Keycloak",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/keycloak/garritas-realm.json#L47"
+    },
+    "kc_adminstore": {
+      "path": "keycloak/garritas-realm.json",
+      "line": 65,
+      "needle": "\"username\": \"admin-store\"",
+      "label": "Usuario administrador de la tienda",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/keycloak/garritas-realm.json#L65"
+    },
+    "kc_password": {
+      "path": "keycloak/compose-dev.yml",
+      "line": 32,
+      "needle": "KC_BOOTSTRAP_ADMIN_PASSWORD",
+      "label": "Contraseña de administración inicial de Keycloak",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/keycloak/compose-dev.yml#L32"
+    },
+    "grafana_password": {
+      "path": "obs/compose-dev.yml",
+      "line": 46,
+      "needle": "GF_SECURITY_ADMIN_PASSWORD",
+      "label": "Contraseña inicial de Grafana DEV",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/obs/compose-dev.yml#L46"
+    },
+    "pkce": {
+      "path": "clients/garritas-frontend/src/app/core/auth.ts",
+      "line": 29,
+      "needle": "pkceMethod:",
+      "label": "Auth de Angular: PKCE y sesión",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/src/app/core/auth.ts#L29"
+    },
+    "frontend_api": {
+      "path": "clients/garritas-frontend/public/config.json",
+      "line": 1,
+      "needle": "apiUrl",
+      "label": "Angular: dirección de la API del Gateway",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/public/config.json#L1"
+    },
+    "frontend_prod": {
+      "path": "clients/garritas-frontend/src/app/features/admin/productos.component.ts",
+      "line": 149,
+      "needle": "  save()",
+      "label": "Angular: formulario de producto y categorías",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/src/app/features/admin/productos.component.ts#L149"
+    },
+    "frontend_profile": {
+      "path": "clients/garritas-frontend/src/app/features/cuenta/cuenta.component.ts",
+      "line": 61,
+      "needle": "  save()",
+      "label": "Angular: guardar y volver a consultar el perfil",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/src/app/features/cuenta/cuenta.component.ts#L61"
+    },
+    "frontend_roles": {
+      "path": "clients/garritas-frontend/src/app/features/admin/usuarios-roles.component.ts",
+      "line": 16,
+      "needle": "export class",
+      "label": "Angular: asignación de roles internos",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/src/app/features/admin/usuarios-roles.component.ts#L16"
+    },
+    "frontend_sub": {
+      "path": "clients/garritas-frontend/src/app/features/planes/planes.component.ts",
+      "line": 118,
+      "needle": "  contratar(",
+      "label": "Angular: contratación de planes",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/src/app/features/planes/planes.component.ts#L118"
+    },
+    "flyway_cat": {
+      "path": "services/garritas-catalogo-ms/src/main/resources/db/migration/V5__producto_categorias_many_to_many.sql",
+      "line": 1,
+      "needle": "CREATE TABLE",
+      "label": "Migración producto_categoria",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/resources/db/migration/V5__producto_categorias_many_to_many.sql#L1"
+    },
+    "flyway_user": {
+      "path": "services/garritas-usuario-ms/src/main/resources/db/migration/V5__create_roles_tables.sql",
+      "line": 1,
+      "needle": "CREATE TABLE",
+      "label": "Migración rol y usuario_rol",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/resources/db/migration/V5__create_roles_tables.sql#L1"
+    },
+    "flyway_sub": {
+      "path": "services/garritas-usuario-ms/src/main/resources/db/migration/V4__suscripciones_periodos.sql",
+      "line": 2,
+      "needle": "CREATE TABLE suscripciones",
+      "label": "Migración de suscripciones y períodos",
+      "url": "https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/resources/db/migration/V4__suscripciones_periodos.sql#L2"
+    }
+  }
+}

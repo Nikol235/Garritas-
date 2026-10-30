@@ -1,0 +1,20 @@
+digraph G { graph [rankdir=TB,bgcolor="transparent",pad="0.18",nodesep="0.35",ranksep="0.48",fontname="DejaVu Sans",fontsize=12]; node [shape=box,style="rounded,filled",fillcolor="#eef7f0",color="#729b84",fontname="DejaVu Sans",fontsize=12,margin="0.16,0.12"]; edge [color="#526777",fontname="DejaVu Sans",fontsize=10,arrowsize=0.7];
+cliente [label="Cliente
+[Persona]
+Compra y gestiona sus mascotas",fillcolor="#155e75",fontcolor="white"];
+admin [label="Administrador
+[Persona]
+Mantiene productos y usuarios",fillcolor="#155e75",fontcolor="white"];
+sys [label="Garritas Store
+[Sistema de software]
+Tienda y servicios para mascotas",fillcolor="#176b4d",fontcolor="white"];
+idp [label="Keycloak
+[Sistema externo al negocio]
+Identidad y roles de acceso",fillcolor="#e2e8f0"];
+cliente -> sys [label="Compra, consulta y reserva"];
+admin -> sys [label="Administra"];
+sys -> idp [label="Integra OIDC y valida JWT"];
+cliente -> idp [label="Inicia sesión",style=dashed];
+admin -> idp [label="Inicia sesión",style=dashed];
+
+}

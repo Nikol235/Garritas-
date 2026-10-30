@@ -1,0 +1,286 @@
+GARRITAS STORE · CATÁLOGO Y USUARIO
+Código: cf3cedec51da578248ce840fe03c4600bb7af593
+
+ProductoController: endpoints de productos
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/ProductoController.java:16
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/ProductoController.java#L16
+
+ProductoService.crear(): alta de productos
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java:45
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java#L45
+
+ProductoService.actualizar(): edición y categorías
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java:53
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java#L53
+
+ProductoService.eliminar(): baja lógica
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java:64
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java#L64
+
+ProductoRepository.buscar(): filtros y paginación
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/repository/ProductoRepository.java:30
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/repository/ProductoRepository.java#L30
+
+Producto: relación N:M con categorías
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/entity/Producto.java:44
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/entity/Producto.java#L44
+
+ProductoMapper: entidad a respuesta
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/mapper/ProductoMapper.java:30
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/mapper/ProductoMapper.java#L30
+
+CategoriaController: CRUD de categorías
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/CategoriaController.java:16
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/CategoriaController.java#L16
+
+CategoriaService: reglas y persistencia
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/CategoriaService.java:16
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/CategoriaService.java#L16
+
+InventarioEvents.consume(): entrada de Kafka
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java:25
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L25
+
+InventarioEvents.reservar(): reserva e idempotencia
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java:37
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L37
+
+Bloqueo de filas antes de cambiar stock
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java:52
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L52
+
+InventarioEvents.liberar(): compensación
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java:76
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L76
+
+UsuarioController: gestión administrativa de usuarios
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/UsuarioController.java:16
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/UsuarioController.java#L16
+
+MiCuentaController: perfil y mascotas propias
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MiCuentaController.java:14
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MiCuentaController.java#L14
+
+UsuarioService.guardarMe(): persistencia por sub
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/UsuarioService.java:95
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/UsuarioService.java#L95
+
+UsuarioService.miUsuario(): identidad y perfil
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/UsuarioService.java:128
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/UsuarioService.java#L128
+
+Usuario: relación N:M con Rol
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Usuario.java:50
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Usuario.java#L50
+
+Usuario: relación 1:N con Mascota
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Usuario.java:42
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Usuario.java#L42
+
+RolController: catálogo de roles internos
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/RolController.java:15
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/RolController.java#L15
+
+RolService.eliminar(): protección de roles usados
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/RolService.java:50
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/RolService.java#L50
+
+UsuarioController.asignarRol(): asociación usuario–rol
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/UsuarioController.java:62
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/UsuarioController.java#L62
+
+MascotaController: mascotas por usuario
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MascotaController.java:15
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MascotaController.java#L15
+
+MascotaService.crear(): alta y propiedad
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/MascotaService.java:29
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/MascotaService.java#L29
+
+UsuarioRequest: validación del celular y DNI
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/dto/UsuarioRequest.java:26
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/dto/UsuarioRequest.java#L26
+
+MascotaRequest: edad y unidad explícita
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/dto/MascotaRequest.java:25
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/dto/MascotaRequest.java#L25
+
+SuscripcionController: planes y ciclo de suscripciones
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/SuscripcionController.java:14
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/SuscripcionController.java#L14
+
+SuscripcionService.contratar(): proceso transaccional
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java:64
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java#L64
+
+SuscripcionService.renovar(): período e idempotencia
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java:98
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java#L98
+
+SuscripcionService.cancelar(): transición local
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java:134
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java#L134
+
+Bloqueos de suscripción y clave de reintento
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java:142
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java#L142
+
+Suscripcion: entidad de asociación Usuario–Plan
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Suscripcion.java:18
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Suscripcion.java#L18
+
+PeriodoSuscripcion: clave y precio histórico
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/PeriodoSuscripcion.java:28
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/PeriodoSuscripcion.java#L28
+
+UsuarioRepository: búsqueda por rol y DNI/nombre
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/repository/UsuarioRepository.java:23
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/repository/UsuarioRepository.java#L23
+
+SecurityConfiguration: protección de rutas
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SecurityConfiguration.java:11
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SecurityConfiguration.java#L11
+
+Conversión de roles reales del JWT
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SecurityConfiguration.java:26
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SecurityConfiguration.java#L26
+
+CurrentUser.requireOwner(): propiedad de recursos
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/CurrentUser.java:18
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/CurrentUser.java#L18
+
+Outbox.append(): cambio y evento en una transacción
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java:35
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java#L35
+
+Outbox.publish(): publicación posterior a Kafka
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java:48
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java#L48
+
+Inbox.claim(): deduplicación por eventId
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Inbox.java:13
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Inbox.java#L13
+
+SagaEvent: contrato del evento
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SagaEvent.java:9
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SagaEvent.java#L9
+
+MessagingConfiguration: topic y particiones
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/MessagingConfiguration.java:31
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/MessagingConfiguration.java#L31
+
+Reintentos y topic DLT
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/MessagingConfiguration.java:41
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/MessagingConfiguration.java#L41
+
+VentaService.crear(): validación, total y outbox
+services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/service/VentaService.java:49
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/service/VentaService.java#L49
+
+VentaEvents: estados de Saga y despacho pagado
+services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/messaging/VentaEvents.java:22
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/messaging/VentaEvents.java#L22
+
+ProductoClient: Feign por nombre lógico
+services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/ProductoClient.java:7
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/ProductoClient.java#L7
+
+CatalogoConsulta: Circuit Breaker y respuesta controlada
+services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/CatalogoConsulta.java:18
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/CatalogoConsulta.java#L18
+
+PagoEvents: pago simulado y rechazo
+services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/messaging/PagoEvents.java:33
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/messaging/PagoEvents.java#L33
+
+Rutas del Gateway hacia Catálogo y Usuario
+infra/garritas-config/config-repo/garritas-gateway-dev.yml:26
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-gateway-dev.yml#L26
+
+Configuración de Eureka DEV
+infra/garritas-config/config-repo/garritas-eureka-dev.yml:2
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-eureka-dev.yml#L2
+
+Registro de Catálogo en Eureka
+infra/garritas-config/config-repo/garritas-catalogo-ms-dev.yml:69
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-catalogo-ms-dev.yml#L69
+
+Registro de Usuario en Eureka
+infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml:45
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml#L45
+
+Emisor, claves públicas y audiencia del JWT
+infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml:30
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml#L30
+
+Timeouts Feign y configuración de los circuitos
+infra/garritas-config/config-repo/garritas-venta-ms-dev.yml:60
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-venta-ms-dev.yml#L60
+
+Kafka: direcciones internas y externas
+kafka/compose-dev.yml:16
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/kafka/compose-dev.yml#L16
+
+Grupo consumidor propio de Catálogo
+infra/garritas-config/config-repo/garritas-catalogo-ms-dev.yml:47
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-catalogo-ms-dev.yml#L47
+
+PostgreSQL de Catálogo: credenciales DEV
+services/garritas-catalogo-ms/compose-dev.yml:11
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/compose-dev.yml#L11
+
+PostgreSQL de Usuario: credenciales DEV
+services/garritas-usuario-ms/compose-dev.yml:11
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/compose-dev.yml#L11
+
+Usuario cliente de demostración en Keycloak
+keycloak/garritas-realm.json:47
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/keycloak/garritas-realm.json#L47
+
+Usuario administrador de la tienda
+keycloak/garritas-realm.json:65
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/keycloak/garritas-realm.json#L65
+
+Contraseña de administración inicial de Keycloak
+keycloak/compose-dev.yml:32
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/keycloak/compose-dev.yml#L32
+
+Contraseña inicial de Grafana DEV
+obs/compose-dev.yml:46
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/obs/compose-dev.yml#L46
+
+Auth de Angular: PKCE y sesión
+clients/garritas-frontend/src/app/core/auth.ts:29
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/src/app/core/auth.ts#L29
+
+Angular: dirección de la API del Gateway
+clients/garritas-frontend/public/config.json:1
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/public/config.json#L1
+
+Angular: formulario de producto y categorías
+clients/garritas-frontend/src/app/features/admin/productos.component.ts:149
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/src/app/features/admin/productos.component.ts#L149
+
+Angular: guardar y volver a consultar el perfil
+clients/garritas-frontend/src/app/features/cuenta/cuenta.component.ts:61
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/src/app/features/cuenta/cuenta.component.ts#L61
+
+Angular: asignación de roles internos
+clients/garritas-frontend/src/app/features/admin/usuarios-roles.component.ts:16
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/src/app/features/admin/usuarios-roles.component.ts#L16
+
+Angular: contratación de planes
+clients/garritas-frontend/src/app/features/planes/planes.component.ts:118
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/src/app/features/planes/planes.component.ts#L118
+
+Migración producto_categoria
+services/garritas-catalogo-ms/src/main/resources/db/migration/V5__producto_categorias_many_to_many.sql:1
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/resources/db/migration/V5__producto_categorias_many_to_many.sql#L1
+
+Migración rol y usuario_rol
+services/garritas-usuario-ms/src/main/resources/db/migration/V5__create_roles_tables.sql:1
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/resources/db/migration/V5__create_roles_tables.sql#L1
+
+Migración de suscripciones y períodos
+services/garritas-usuario-ms/src/main/resources/db/migration/V4__suscripciones_periodos.sql:2
+https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/resources/db/migration/V4__suscripciones_periodos.sql#L2

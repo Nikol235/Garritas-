@@ -1,0 +1,34 @@
+digraph G { graph [rankdir=TB,bgcolor="transparent",pad="0.18",nodesep="0.35",ranksep="0.48",fontname="DejaVu Sans",fontsize=12]; node [shape=box,style="rounded,filled",fillcolor="#eef7f0",color="#729b84",fontname="DejaVu Sans",fontsize=12,margin="0.16,0.12"]; edge [color="#526777",fontname="DejaVu Sans",fontsize=10,arrowsize=0.7];
+controllers [label="Usuario / MiCuenta / Mascota /
+Rol / SuscripcionController
+[Componentes REST]"];
+services [label="Usuario / Mascota / Rol /
+SuscripcionService
+[Reglas de negocio]"];
+security [label="SecurityConfiguration
+CurrentUser.requireOwner
+[JWT y propiedad]",fillcolor="#e2e8f0"];
+repos [label="Usuario, Mascota, Rol, Plan,
+Suscripcion y PeriodoRepository
+[Persistencia JPA]"];
+mappers [label="Mappers y DTO
+[Validación de entrada
+y respuestas sin entidades]"];
+lock [label="JdbcTemplate + EntityManager
+[Bloqueos de suscripción
+y actualización segura]"];
+db [label="PostgreSQL Usuario
+Perfiles, mascotas, roles,
+planes, suscripciones y períodos",shape=cylinder];
+controllers -> services [label="Invoca operación"];
+controllers -> mappers [label="Request validado",style=dashed];
+services -> security [label="Comprueba propietario",style=dashed];
+services -> repos [label="Consulta / guarda"];
+services -> mappers [label="Genera DTO"];
+services -> lock [label="Contratar / renovar"];
+repos -> db [label="JPA"];
+lock -> db [label="Misma transacción local"];
+
+subgraph cluster_boundary {label="Límite del contenedor: garritas-usuario-ms"; color="#9db8a6"; style="rounded,dashed"; fontname="DejaVu Sans"; fontsize=12; controllers; services; security; repos; mappers; lock;}
+
+}

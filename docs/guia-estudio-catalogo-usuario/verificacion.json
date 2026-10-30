@@ -1,0 +1,12 @@
+{
+  "source_commit": "cf3cedec51da578248ce840fe03c4600bb7af593",
+  "pdf_pages": 27,
+  "references": 71,
+  "diagrams": 8,
+  "source_paths_and_lines": "verified",
+  "pdf_links": 205,
+  "pdf_outline_entries": 39,
+  "html": "standalone with inline SVG",
+  "pdf": "selectable text and clickable code links",
+  "application_changes": false
+}

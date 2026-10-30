@@ -1,0 +1,926 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Guía de estudio C4 · Catálogo y Usuario · Garritas Store</title><style>
+:root{--green:#195c47;--ink:#20342e;--muted:#52645d;--border:#d5e1da}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#eef3ef;color:var(--ink);font:16px/1.58 Arial,"DejaVu Sans",sans-serif}main{max-width:1040px;margin:auto;background:white;padding:48px 64px}h1,h2{color:var(--green);line-height:1.2}h1{font-size:31px;margin:12px 0 24px}h2{font-size:21px;margin:25px 0 12px}p{margin:12px 0}a{color:#145a78;text-decoration:underline;text-underline-offset:2px}code,pre{font-family:"DejaVu Sans Mono",monospace;font-size:.84em}code{overflow-wrap:anywhere}.path{word-break:break-all}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f6f4;border:1px solid var(--border);padding:14px;border-radius:8px;line-height:1.45;break-inside:avoid}.source{font-size:13px;margin-top:16px}.eyebrow{letter-spacing:2px;font-weight:bold;font-size:11px;color:var(--green)}.cover{min-height:82vh;padding-top:65px}.cover h1{font-size:48px}.cover h1 span{color:#36748a}.cover .lead{font-size:23px}.cover-tags{border-top:3px solid var(--green);padding-top:18px;margin:35px 0}.revision{font-size:13px;color:var(--muted);margin-top:35px}.chapter{margin:50px 0;padding-top:24px;border-top:2px solid var(--border)}table{width:100%;border-collapse:collapse;font-size:14px;margin:18px 0;table-layout:fixed}th,td{padding:10px;border:1px solid var(--border);text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#e6f0e8;color:var(--green)}tr{break-inside:avoid}.note{background:#eef5e9;border-left:4px solid #6b8e49;padding:14px 18px;margin:20px 0;break-inside:avoid}.toc{columns:2;padding-left:0;list-style:none}.toc li{margin-bottom:12px;break-inside:avoid}.toc a{font-size:15px}figure{margin:20px 0;break-inside:avoid;text-align:center}figure svg{max-width:100%;width:auto;height:auto;max-height:690px}figcaption{font-size:12px;color:var(--muted);margin-top:10px}dt{font-weight:bold;color:var(--green);margin-top:17px;break-after:avoid}dd{margin:5px 0 12px}button{background:var(--green);color:white;padding:10px;border:0;border-radius:5px;cursor:pointer}li{margin-bottom:7px}
+@media(max-width:700px){main{padding:20px}.cover h1{font-size:35px}.toc{columns:1}table{font-size:12px}th,td{padding:6px}figure svg{width:100%}}
+@page{size:A4;margin:17mm 15mm 18mm}
+@media print{html{scroll-behavior:auto}body{background:white;font-size:10.5pt;line-height:1.45}main{max-width:none;padding:0}.cover{min-height:240mm;padding-top:35mm}.cover h1{font-size:35pt}.cover .lead{font-size:19pt}.chapter{break-before:page;margin:0;padding:0;border:0}h1{font-size:22pt;margin:10px 0 18px}h2{font-size:15pt}table{font-size:8.5pt}th,td{padding:7px}pre{font-size:8pt}figure svg{max-height:172mm;max-width:100%}.toc a{font-size:10pt}button{display:none}a{color:#145a78}thead{display:table-header-group}.source{font-size:9pt}.note{padding:10px 13px}#contenedores figure svg{max-height:100mm}#claves table{font-size:8pt}#claves td,#claves th{padding:5px}#seguridad figure svg{max-height:115mm}#cat-codigo figure svg{max-height:100mm}#usr-codigo figure svg{max-height:95mm}#mapa table{font-size:7.5pt}#mapa th:nth-child(1){width:28%}#mapa th:nth-child(2){width:65%}#mapa th:nth-child(3){width:7%}.eyebrow{font-size:8pt}}
+</style></head><body><main><section class="cover"><p class="eyebrow">ESTUDIAR · ENTENDER · SUSTENTAR</p><h1>Catálogo y Usuario<br><span>Garritas Store</span></h1><p class="lead">Guía explicada con C4 Model, código real y ejemplos para la exposición.</p><div class="cover-tags">C1 Contexto · C2 Contenedores · C3 Componentes · C4 Código</div><p>Incluye Eureka, Gateway, Keycloak, Kafka, Saga, compensación y ubicaciones de credenciales de demostración.</p><p><strong>Responsable de estos servicios: Fio.</strong><br>El contenido también permite explicar cómo colaboran con Venta, Pago y Citas.</p><p class="revision">Código revisado: <code>cf3cede</code> · Rama <code>feat/garritas-store</code><br>Los enlaces de código fijan esta revisión para conservar sus líneas exactas.</p><p><a href="#indice">Ir al índice</a> · <button onclick="window.print()">Imprimir / guardar como PDF</button></p></section><section class="chapter" id="indice"><h1>Índice</h1><ol class="toc"><li><a href="#rapido">1. Lo esencial para explicar en un minuto</a></li><li><a href="#c4">2. Cómo leer C4 Model</a></li><li><a href="#contexto">3. C1: contexto de Garritas</a></li><li><a href="#contenedores">4. C2: conexiones reales</a></li><li><a href="#catalogo">5. Qué administra Catálogo</a></li><li><a href="#cat-componentes">6. C3: componentes de Catálogo</a></li><li><a href="#cat-codigo">7. C4: clases y muchos a muchos de Catálogo</a></li><li><a href="#usuario">8. Qué administra Usuario</a></li><li><a href="#usr-componentes">9. C3: componentes de Usuario</a></li><li><a href="#usr-codigo">10. C4: clases y relaciones de Usuario</a></li><li><a href="#crud">11. Dónde están los CRUD y reglas</a></li><li><a href="#infra">12. Eureka, Gateway y comunicación resiliente</a></li><li><a href="#seguridad">13. Keycloak, JWT y perfil propio</a></li><li><a href="#mensajes">14. Kafka, Outbox e Inbox</a></li><li><a href="#saga">15. Saga: fallos y compensación</a></li><li><a href="#claves">16. Credenciales, claves e identificadores</a></li><li><a href="#demo">17. Cómo exponerlo desde Angular</a></li><li><a href="#preguntas">18. Preguntas y respuestas rápidas</a></li><li><a href="#mapa">19. Mapa completo del código</a></li></ol><aside class="note">Los diagramas se pueden ampliar en el HTML. El PDF contiene texto seleccionable y enlaces al código. Las imágenes PNG y SVG también están en la carpeta <code>diagramas</code>.</aside></section><section class="chapter" id="rapido"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>1. Lo esencial para explicar en un minuto</h1><table><thead><tr><th>Servicio</th><th>Qué administra</th><th>Cómo lo explicas</th></tr></thead><tbody><tr><td>Catálogo</td><td>Productos, categorías, stock y reservas de inventario.</td><td>“Dice qué vendemos, cuánto cuesta y qué unidades podemos reservar”.</td></tr><tr><td>Usuario</td><td>Perfiles, mascotas, roles internos, planes, suscripciones y períodos.</td><td>“Organiza al cliente y registra su vínculo con los planes, conservando su historial”.</td></tr></tbody></table><h2>Clasificación para la sustentación</h2><p><strong>Catálogo es principalmente un servicio de datos maestros</strong>, aunque también participa transaccionalmente en la reserva y compensación del stock. No significa que carezca de transacciones.</p><p><strong>Usuario tiene una capacidad transaccional verificable en las suscripciones</strong>: contratar, renovar y cancelar con estados e historial. El CRUD de perfiles por sí solo no explica esa capacidad.</p><p>Fio puede demostrar muchos a muchos tanto en <strong>Producto–Categoría</strong> como en <strong>Usuario–Rol</strong>. También existe Usuario–Plan mediante Suscripcion.</p><aside class="note">No atribuyas a Usuario la emisión de tokens: el proveedor de identidad es Keycloak. No atribuyas a Usuario una Saga de Kafka: la Saga implementada de compra involucra Venta, Catálogo y Pago.</aside></section><section class="chapter" id="c4"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>2. Cómo leer C4 Model</h1><p>C4 es una forma de explicar una arquitectura con cuatro acercamientos. Cada nivel responde una pregunta distinta.</p><table><thead><tr><th>Nivel</th><th>Pregunta</th><th>En esta guía</th></tr></thead><tbody><tr><td>C1 · Contexto</td><td>¿Quién usa el sistema y con qué sistema externo se relaciona?</td><td>Clientes, administradores, Garritas y Keycloak.</td></tr><tr><td>C2 · Contenedores</td><td>¿Qué aplicaciones y almacenes ejecutables lo componen?</td><td>Angular, Gateway, microservicios, Kafka y PostgreSQL.</td></tr><tr><td>C3 · Componentes</td><td>¿Cómo se organiza por dentro una aplicación?</td><td>Controllers, services, repositorios y mensajería.</td></tr><tr><td>C4 · Código</td><td>¿Qué clases y relaciones implementan un componente?</td><td>Entidades, asociaciones y métodos reales de Catálogo y Usuario.</td></tr></tbody></table><p><strong>“Contenedor” en C4 no significa obligatoriamente contenedor Docker.</strong> Un microservicio ejecutado como proceso Java sigue siendo un contenedor de software en el modelo C4.</p><p>Los diagramas de nivel 4 usan clases reales y anotaciones JPA. Cuando aparece una tabla SQL como apoyo, se identifica explícitamente como tabla, no como clase Java.</p></section><section class="chapter" id="contexto"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>3. C1: contexto de Garritas</h1><figure><svg role="img" aria-label="C4 · Nivel 1 — Contexto del sistema" width="506pt" height="291pt"
+ viewBox="0.00 0.00 506.42 290.92" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(12.96 277.96)">
+<title>G</title>
+<!-- cliente -->
+<g id="node1" class="node">
+<title>cliente</title>
+<path fill="#155e75" stroke="#729b84" d="M211,-265C211,-265 12,-265 12,-265 6,-265 0,-259 0,-253 0,-253 0,-220 0,-220 0,-214 6,-208 12,-208 12,-208 211,-208 211,-208 217,-208 223,-214 223,-220 223,-220 223,-253 223,-253 223,-259 217,-265 211,-265"/>
+<text text-anchor="middle" x="111.5" y="-246.4" font-family="DejaVu Sans" font-size="12.00" fill="white">Cliente</text>
+<text text-anchor="middle" x="111.5" y="-233.4" font-family="DejaVu Sans" font-size="12.00" fill="white">[Persona]</text>
+<text text-anchor="middle" x="111.5" y="-220.4" font-family="DejaVu Sans" font-size="12.00" fill="white">Compra y gestiona sus mascotas</text>
+</g>
+<!-- sys -->
+<g id="node3" class="node">
+<title>sys</title>
+<path fill="#176b4d" stroke="#729b84" d="M373,-161C373,-161 174,-161 174,-161 168,-161 162,-155 162,-149 162,-149 162,-116 162,-116 162,-110 168,-104 174,-104 174,-104 373,-104 373,-104 379,-104 385,-110 385,-116 385,-116 385,-149 385,-149 385,-155 379,-161 373,-161"/>
+<text text-anchor="middle" x="273.5" y="-142.4" font-family="DejaVu Sans" font-size="12.00" fill="white">Garritas Store</text>
+<text text-anchor="middle" x="273.5" y="-129.4" font-family="DejaVu Sans" font-size="12.00" fill="white">[Sistema de software]</text>
+<text text-anchor="middle" x="273.5" y="-116.4" font-family="DejaVu Sans" font-size="12.00" fill="white">Tienda y servicios para mascotas</text>
+</g>
+<!-- cliente&#45;&gt;sys -->
+<g id="edge1" class="edge">
+<title>cliente&#45;&gt;sys</title>
+<path fill="none" stroke="#526777" d="M141.43,-207.96C152.87,-198.17 166.34,-187.48 179.5,-179 187.47,-173.87 196.11,-168.93 204.81,-164.33"/>
+<polygon fill="#526777" stroke="#526777" points="206.07,-166.44 211.15,-161.04 203.81,-162.09 206.07,-166.44"/>
+<text text-anchor="middle" x="247" y="-182" font-family="DejaVu Sans" font-size="10.00">Compra, consulta y reserva</text>
+</g>
+<!-- idp -->
+<g id="node4" class="node">
+<title>idp</title>
+<path fill="#e2e8f0" stroke="#729b84" d="M359.5,-57C359.5,-57 187.5,-57 187.5,-57 181.5,-57 175.5,-51 175.5,-45 175.5,-45 175.5,-12 175.5,-12 175.5,-6 181.5,0 187.5,0 187.5,0 359.5,0 359.5,0 365.5,0 371.5,-6 371.5,-12 371.5,-12 371.5,-45 371.5,-45 371.5,-51 365.5,-57 359.5,-57"/>
+<text text-anchor="middle" x="273.5" y="-38.4" font-family="DejaVu Sans" font-size="12.00">Keycloak</text>
+<text text-anchor="middle" x="273.5" y="-25.4" font-family="DejaVu Sans" font-size="12.00">[Sistema externo al negocio]</text>
+<text text-anchor="middle" x="273.5" y="-12.4" font-family="DejaVu Sans" font-size="12.00">Identidad y roles de acceso</text>
+</g>
+<!-- cliente&#45;&gt;idp -->
+<g id="edge4" class="edge">
+<title>cliente&#45;&gt;idp</title>
+<path fill="none" stroke="#526777" stroke-dasharray="5,2" d="M95.97,-207.92C82.28,-179.51 67.49,-135.11 88.5,-104 106.97,-76.66 137.32,-59.35 168.15,-48.39"/>
+<polygon fill="#526777" stroke="#526777" points="169.31,-50.58 175.15,-46.01 167.73,-45.94 169.31,-50.58"/>
+<text text-anchor="middle" x="119" y="-130" font-family="DejaVu Sans" font-size="10.00">Inicia sesión</text>
+</g>
+<!-- admin -->
+<g id="node2" class="node">
+<title>admin</title>
+<path fill="#155e75" stroke="#729b84" d="M467.5,-265C467.5,-265 283.5,-265 283.5,-265 277.5,-265 271.5,-259 271.5,-253 271.5,-253 271.5,-220 271.5,-220 271.5,-214 277.5,-208 283.5,-208 283.5,-208 467.5,-208 467.5,-208 473.5,-208 479.5,-214 479.5,-220 479.5,-220 479.5,-253 479.5,-253 479.5,-259 473.5,-265 467.5,-265"/>
+<text text-anchor="middle" x="375.5" y="-246.4" font-family="DejaVu Sans" font-size="12.00" fill="white">Administrador</text>
+<text text-anchor="middle" x="375.5" y="-233.4" font-family="DejaVu Sans" font-size="12.00" fill="white">[Persona]</text>
+<text text-anchor="middle" x="375.5" y="-220.4" font-family="DejaVu Sans" font-size="12.00" fill="white">Mantiene productos y usuarios</text>
+</g>
+<!-- admin&#45;&gt;sys -->
+<g id="edge2" class="edge">
+<title>admin&#45;&gt;sys</title>
+<path fill="none" stroke="#526777" d="M347.9,-207.9C335.08,-195.08 319.76,-179.76 306.35,-166.35"/>
+<polygon fill="#526777" stroke="#526777" points="307.81,-164.34 301.12,-161.12 304.34,-167.81 307.81,-164.34"/>
+<text text-anchor="middle" x="354.5" y="-182" font-family="DejaVu Sans" font-size="10.00">Administra</text>
+</g>
+<!-- admin&#45;&gt;idp -->
+<g id="edge5" class="edge">
+<title>admin&#45;&gt;idp</title>
+<path fill="none" stroke="#526777" stroke-dasharray="5,2" d="M392.49,-207.83C411.13,-173.51 434.89,-114.71 406.5,-75 399.08,-64.61 389.13,-56.57 378.01,-50.35"/>
+<polygon fill="#526777" stroke="#526777" points="379.06,-48.14 371.72,-47.08 376.8,-52.48 379.06,-48.14"/>
+<text text-anchor="middle" x="450" y="-130" font-family="DejaVu Sans" font-size="10.00">Inicia sesión</text>
+</g>
+<!-- sys&#45;&gt;idp -->
+<g id="edge3" class="edge">
+<title>sys&#45;&gt;idp</title>
+<path fill="none" stroke="#526777" d="M273.5,-103.9C273.5,-91.65 273.5,-77.11 273.5,-64.14"/>
+<polygon fill="#526777" stroke="#526777" points="275.95,-64.12 273.5,-57.12 271.05,-64.12 275.95,-64.12"/>
+<text text-anchor="middle" x="337" y="-78" font-family="DejaVu Sans" font-size="10.00">Integra OIDC y valida JWT</text>
+</g>
+</g>
+</svg>
+<figcaption>C4 · Nivel 1 — Contexto del sistema</figcaption></figure><p>El cliente compra y gestiona a sus mascotas. El administrador mantiene información y opera la tienda. Keycloak proporciona autenticación y roles de acceso; forma parte de la solución desplegada, pero está fuera de la lógica propia del negocio.</p></section><section class="chapter" id="contenedores"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>4. C2: conexiones reales</h1><figure><svg role="img" aria-label="C4 · Nivel 2 — Contenedores: foco en Catálogo y Usuario" width="610pt" height="469pt"
+ viewBox="0.00 0.00 609.92 469.29" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(12.96 456.33)">
+<title>G</title>
+<g id="clust1" class="cluster">
+<title>cluster_store</title>
+<path fill="transparent" stroke="#9db8a6" stroke-dasharray="5,2" d="M20,-8C20,-8 564,-8 564,-8 570,-8 576,-14 576,-20 576,-20 576,-423.38 576,-423.38 576,-429.38 570,-435.38 564,-435.38 564,-435.38 20,-435.38 20,-435.38 14,-435.38 8,-429.38 8,-423.38 8,-423.38 8,-20 8,-20 8,-14 14,-8 20,-8"/>
+<text text-anchor="middle" x="292" y="-421.77" font-family="DejaVu Sans" font-size="12.00">Garritas Store · aplicaciones y bases enfocadas</text>
+</g>
+<!-- angular -->
+<g id="node1" class="node">
+<title>angular</title>
+<path fill="#eef7f0" stroke="#729b84" d="M301.5,-406.38C301.5,-406.38 216.5,-406.38 216.5,-406.38 210.5,-406.38 204.5,-400.38 204.5,-394.38 204.5,-394.38 204.5,-361.38 204.5,-361.38 204.5,-355.38 210.5,-349.38 216.5,-349.38 216.5,-349.38 301.5,-349.38 301.5,-349.38 307.5,-349.38 313.5,-355.38 313.5,-361.38 313.5,-361.38 313.5,-394.38 313.5,-394.38 313.5,-400.38 307.5,-406.38 301.5,-406.38"/>
+<text text-anchor="middle" x="259" y="-387.77" font-family="DejaVu Sans" font-size="12.00">Angular :4200</text>
+<text text-anchor="middle" x="259" y="-374.77" font-family="DejaVu Sans" font-size="12.00">[SPA]</text>
+<text text-anchor="middle" x="259" y="-361.77" font-family="DejaVu Sans" font-size="12.00">Cliente web</text>
+</g>
+<!-- gateway -->
+<g id="node2" class="node">
+<title>gateway</title>
+<path fill="#eef7f0" stroke="#729b84" d="M345,-302.38C345,-302.38 173,-302.38 173,-302.38 167,-302.38 161,-296.38 161,-290.38 161,-290.38 161,-257.38 161,-257.38 161,-251.38 167,-245.38 173,-245.38 173,-245.38 345,-245.38 345,-245.38 351,-245.38 357,-251.38 357,-257.38 357,-257.38 357,-290.38 357,-290.38 357,-296.38 351,-302.38 345,-302.38"/>
+<text text-anchor="middle" x="259" y="-283.77" font-family="DejaVu Sans" font-size="12.00">Gateway :18080</text>
+<text text-anchor="middle" x="259" y="-270.77" font-family="DejaVu Sans" font-size="12.00">[Spring Cloud Gateway MVC]</text>
+<text text-anchor="middle" x="259" y="-257.77" font-family="DejaVu Sans" font-size="12.00">Entrada de las APIs</text>
+</g>
+<!-- angular&#45;&gt;gateway -->
+<g id="edge1" class="edge">
+<title>angular&#45;&gt;gateway</title>
+<path fill="none" stroke="#526777" d="M259,-349.27C259,-337.03 259,-322.48 259,-309.52"/>
+<polygon fill="#526777" stroke="#526777" points="261.45,-309.5 259,-302.5 256.55,-309.5 261.45,-309.5"/>
+<text text-anchor="middle" x="288" y="-323.38" font-family="DejaVu Sans" font-size="10.00">REST + JWT</text>
+</g>
+<!-- cat -->
+<g id="node5" class="node">
+<title>cat</title>
+<path fill="#176b4d" stroke="#729b84" d="M454,-198.38C454,-198.38 320,-198.38 320,-198.38 314,-198.38 308,-192.38 308,-186.38 308,-186.38 308,-153.38 308,-153.38 308,-147.38 314,-141.38 320,-141.38 320,-141.38 454,-141.38 454,-141.38 460,-141.38 466,-147.38 466,-153.38 466,-153.38 466,-186.38 466,-186.38 466,-192.38 460,-198.38 454,-198.38"/>
+<text text-anchor="middle" x="387" y="-179.78" font-family="DejaVu Sans" font-size="12.00" fill="white">Catálogo :8085</text>
+<text text-anchor="middle" x="387" y="-166.78" font-family="DejaVu Sans" font-size="12.00" fill="white">[Spring Boot]</text>
+<text text-anchor="middle" x="387" y="-153.78" font-family="DejaVu Sans" font-size="12.00" fill="white">Productos e inventario</text>
+</g>
+<!-- gateway&#45;&gt;cat -->
+<g id="edge2" class="edge">
+<title>gateway&#45;&gt;cat</title>
+<path fill="none" stroke="#526777" d="M283.23,-245.36C292.4,-235.67 303.23,-225.05 314,-216.38 319.97,-211.57 326.47,-206.86 333.06,-202.41"/>
+<polygon fill="#526777" stroke="#526777" points="334.64,-204.3 339.12,-198.39 331.94,-200.22 334.64,-204.3"/>
+<text text-anchor="middle" x="373" y="-219.38" font-family="DejaVu Sans" font-size="10.00">/productos y /categorias</text>
+</g>
+<!-- usr -->
+<g id="node6" class="node">
+<title>usr</title>
+<path fill="#176b4d" stroke="#729b84" d="M184.5,-198.38C184.5,-198.38 45.5,-198.38 45.5,-198.38 39.5,-198.38 33.5,-192.38 33.5,-186.38 33.5,-186.38 33.5,-153.38 33.5,-153.38 33.5,-147.38 39.5,-141.38 45.5,-141.38 45.5,-141.38 184.5,-141.38 184.5,-141.38 190.5,-141.38 196.5,-147.38 196.5,-153.38 196.5,-153.38 196.5,-186.38 196.5,-186.38 196.5,-192.38 190.5,-198.38 184.5,-198.38"/>
+<text text-anchor="middle" x="115" y="-179.78" font-family="DejaVu Sans" font-size="12.00" fill="white">Usuario :8086</text>
+<text text-anchor="middle" x="115" y="-166.78" font-family="DejaVu Sans" font-size="12.00" fill="white">[Spring Boot]</text>
+<text text-anchor="middle" x="115" y="-153.78" font-family="DejaVu Sans" font-size="12.00" fill="white">Perfiles y suscripciones</text>
+</g>
+<!-- gateway&#45;&gt;usr -->
+<g id="edge3" class="edge">
+<title>gateway&#45;&gt;usr</title>
+<path fill="none" stroke="#526777" d="M212.91,-245.27C203.87,-239.54 194.54,-233.4 186,-227.38 175.25,-219.79 163.96,-211.13 153.62,-202.92"/>
+<polygon fill="#526777" stroke="#526777" points="154.98,-200.87 147.98,-198.41 151.92,-204.7 154.98,-200.87"/>
+<text text-anchor="middle" x="241" y="-219.38" font-family="DejaVu Sans" font-size="10.00">/usuarios, /planes, etc.</text>
+</g>
+<!-- venta -->
+<g id="node3" class="node">
+<title>venta</title>
+<path fill="#e2e8f0" stroke="#729b84" d="M525,-302.38C525,-302.38 409,-302.38 409,-302.38 403,-302.38 397,-296.38 397,-290.38 397,-290.38 397,-257.38 397,-257.38 397,-251.38 403,-245.38 409,-245.38 409,-245.38 525,-245.38 525,-245.38 531,-245.38 537,-251.38 537,-257.38 537,-257.38 537,-290.38 537,-290.38 537,-296.38 531,-302.38 525,-302.38"/>
+<text text-anchor="middle" x="467" y="-283.77" font-family="DejaVu Sans" font-size="12.00">Venta :8081</text>
+<text text-anchor="middle" x="467" y="-270.77" font-family="DejaVu Sans" font-size="12.00">[Spring Boot]</text>
+<text text-anchor="middle" x="467" y="-257.77" font-family="DejaVu Sans" font-size="12.00">Proceso de compra</text>
+</g>
+<!-- venta&#45;&gt;cat -->
+<g id="edge4" class="edge">
+<title>venta&#45;&gt;cat</title>
+<path fill="none" stroke="#526777" d="M455.33,-245.22C450.65,-235.63 444.74,-225.1 438,-216.38 434.63,-212.02 430.81,-207.75 426.81,-203.67"/>
+<polygon fill="#526777" stroke="#526777" points="428.37,-201.78 421.66,-198.62 424.94,-205.28 428.37,-201.78"/>
+<text text-anchor="middle" x="494.5" y="-219.38" font-family="DejaVu Sans" font-size="10.00">Feign: precio y stock</text>
+</g>
+<!-- citas -->
+<g id="node4" class="node">
+<title>citas</title>
+<path fill="#e2e8f0" stroke="#729b84" d="M107.5,-302.38C107.5,-302.38 28.5,-302.38 28.5,-302.38 22.5,-302.38 16.5,-296.38 16.5,-290.38 16.5,-290.38 16.5,-257.38 16.5,-257.38 16.5,-251.38 22.5,-245.38 28.5,-245.38 28.5,-245.38 107.5,-245.38 107.5,-245.38 113.5,-245.38 119.5,-251.38 119.5,-257.38 119.5,-257.38 119.5,-290.38 119.5,-290.38 119.5,-296.38 113.5,-302.38 107.5,-302.38"/>
+<text text-anchor="middle" x="68" y="-283.77" font-family="DejaVu Sans" font-size="12.00">Citas :8084</text>
+<text text-anchor="middle" x="68" y="-270.77" font-family="DejaVu Sans" font-size="12.00">[Spring Boot]</text>
+<text text-anchor="middle" x="68" y="-257.77" font-family="DejaVu Sans" font-size="12.00">Reservas</text>
+</g>
+<!-- citas&#45;&gt;usr -->
+<g id="edge5" class="edge">
+<title>citas&#45;&gt;usr</title>
+<path fill="none" stroke="#526777" d="M42.98,-245.27C37.55,-235.98 34.79,-225.63 40,-216.38 42.62,-211.72 45.93,-207.49 49.69,-203.65"/>
+<polygon fill="#526777" stroke="#526777" points="51.61,-205.21 55.07,-198.66 48.28,-201.62 51.61,-205.21"/>
+<text text-anchor="middle" x="94" y="-219.38" font-family="DejaVu Sans" font-size="10.00">HTTP: mascota propia</text>
+</g>
+<!-- dbc -->
+<g id="node7" class="node">
+<title>dbc</title>
+<path fill="#eef7f0" stroke="#729b84" d="M546,-87.4C546,-91.35 512.38,-94.56 471,-94.56 429.62,-94.56 396,-91.35 396,-87.4 396,-87.4 396,-22.97 396,-22.97 396,-19.02 429.62,-15.81 471,-15.81 512.38,-15.81 546,-19.02 546,-22.97 546,-22.97 546,-87.4 546,-87.4"/>
+<path fill="none" stroke="#729b84" d="M546,-87.4C546,-83.45 512.38,-80.24 471,-80.24 429.62,-80.24 396,-83.45 396,-87.4"/>
+<text text-anchor="middle" x="471" y="-65.09" font-family="DejaVu Sans" font-size="12.00">PostgreSQL Catálogo</text>
+<text text-anchor="middle" x="471" y="-52.09" font-family="DejaVu Sans" font-size="12.00">:15445 → :5432</text>
+<text text-anchor="middle" x="471" y="-39.09" font-family="DejaVu Sans" font-size="12.00">[Base de datos]</text>
+</g>
+<!-- cat&#45;&gt;dbc -->
+<g id="edge6" class="edge">
+<title>cat&#45;&gt;dbc</title>
+<path fill="none" stroke="#526777" d="M407.55,-141.31C416.73,-128.99 427.78,-114.17 438.06,-100.37"/>
+<polygon fill="#526777" stroke="#526777" points="440.2,-101.61 442.42,-94.53 436.27,-98.68 440.2,-101.61"/>
+<text text-anchor="middle" x="453.5" y="-115.37" font-family="DejaVu Sans" font-size="10.00">JPA / JDBC</text>
+</g>
+<!-- kafka -->
+<g id="node9" class="node">
+<title>kafka</title>
+<path fill="#fff1cc" stroke="#729b84" d="M359,-83.69C359,-83.69 241,-83.69 241,-83.69 235,-83.69 229,-77.69 229,-71.69 229,-71.69 229,-38.69 229,-38.69 229,-32.69 235,-26.69 241,-26.69 241,-26.69 359,-26.69 359,-26.69 365,-26.69 371,-32.69 371,-38.69 371,-38.69 371,-71.69 371,-71.69 371,-77.69 365,-83.69 359,-83.69"/>
+<text text-anchor="middle" x="300" y="-65.09" font-family="DejaVu Sans" font-size="12.00">Kafka :19092 (host)</text>
+<text text-anchor="middle" x="300" y="-52.09" font-family="DejaVu Sans" font-size="12.00">[Broker]</text>
+<text text-anchor="middle" x="300" y="-39.09" font-family="DejaVu Sans" font-size="12.00">Eventos de ventas</text>
+</g>
+<!-- cat&#45;&gt;kafka -->
+<g id="edge8" class="edge">
+<title>cat&#45;&gt;kafka</title>
+<path fill="none" stroke="#b7791f" d="M338.56,-141.25C332,-135.97 325.87,-129.99 321,-123.38 313.98,-113.84 309.26,-101.9 306.11,-90.74"/>
+<polygon fill="#b7791f" stroke="#b7791f" points="308.47,-90.08 304.35,-83.92 303.73,-91.31 308.47,-90.08"/>
+<text text-anchor="middle" x="368" y="-115.37" font-family="DejaVu Sans" font-size="10.00">Consume / produce</text>
+</g>
+<!-- dbu -->
+<g id="node8" class="node">
+<title>dbu</title>
+<path fill="#eef7f0" stroke="#729b84" d="M186,-87.4C186,-91.35 154.18,-94.56 115,-94.56 75.82,-94.56 44,-91.35 44,-87.4 44,-87.4 44,-22.97 44,-22.97 44,-19.02 75.82,-15.81 115,-15.81 154.18,-15.81 186,-19.02 186,-22.97 186,-22.97 186,-87.4 186,-87.4"/>
+<path fill="none" stroke="#729b84" d="M186,-87.4C186,-83.45 154.18,-80.24 115,-80.24 75.82,-80.24 44,-83.45 44,-87.4"/>
+<text text-anchor="middle" x="115" y="-65.09" font-family="DejaVu Sans" font-size="12.00">PostgreSQL Usuario</text>
+<text text-anchor="middle" x="115" y="-52.09" font-family="DejaVu Sans" font-size="12.00">:15446 → :5432</text>
+<text text-anchor="middle" x="115" y="-39.09" font-family="DejaVu Sans" font-size="12.00">[Base de datos]</text>
+</g>
+<!-- usr&#45;&gt;dbu -->
+<g id="edge7" class="edge">
+<title>usr&#45;&gt;dbu</title>
+<path fill="none" stroke="#526777" d="M115,-141.31C115,-129.43 115,-115.23 115,-101.85"/>
+<polygon fill="#526777" stroke="#526777" points="117.45,-101.53 115,-94.53 112.55,-101.53 117.45,-101.53"/>
+<text text-anchor="middle" x="139.5" y="-115.37" font-family="DejaVu Sans" font-size="10.00">JPA / JDBC</text>
+</g>
+</g>
+</svg>
+<figcaption>C4 · Nivel 2 — Contenedores: foco en Catálogo y Usuario</figcaption></figure><p>Esta es una vista enfocada: también existen Pago, Institución, Envío y Bienestar, además de Eureka, Keycloak, Config Server y observabilidad. Venta y Pago también intercambian eventos con Kafka, como muestra el diagrama de Saga. No se dibujan todos sus enlaces para mantener legible el acercamiento a los dos servicios estudiados.</p><p>Catálogo y Usuario <strong>no comparten base de datos ni necesitan llamarse directamente</strong> para sus CRUD. Venta consulta Catálogo por Feign. Citas consulta Usuario para verificar la mascota del cliente. Las llamadas del navegador a las APIs de negocio pasan por Gateway; el login se comunica con Keycloak.</p><table><thead><tr><th>Componente DEV</th><th>Puerto de tu PC</th><th>Función</th></tr></thead><tbody><tr><td>Angular</td><td>4200</td><td>Interfaz</td></tr><tr><td>Gateway</td><td>18080</td><td>Entrada de APIs</td></tr><tr><td>Catálogo / PostgreSQL</td><td>8085 / 15445</td><td>Productos e inventario</td></tr><tr><td>Usuario / PostgreSQL</td><td>8086 / 15446</td><td>Perfiles y suscripciones</td></tr><tr><td>Eureka / Config Server</td><td>18761 / 18888</td><td>Descubrimiento / configuración</td></tr><tr><td>Keycloak / Kafka UI</td><td>18180 / 18085</td><td>Identidad / inspección de eventos</td></tr><tr><td>Kafka / Grafana / Prometheus</td><td>19092 / 13000 / 19090</td><td>Mensajería / visualización / métricas</td></tr></tbody></table></section><section class="chapter" id="catalogo"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>5. Qué administra Catálogo</h1><h2>Responsabilidades</h2><ul><li><strong>Producto:</strong> nombre, descripción, precio, stock, estado y categorías.</li><li><strong>Categoría:</strong> clasificación reutilizable: alimentos, higiene, juguetes, etc.</li><li><strong>Reserva de inventario:</strong> descontar disponibilidad de manera controlada para una venta.</li><li><strong>Compensación:</strong> liberar la reserva si el pago es rechazado.</li></ul><h2>Reglas que debes poder explicar</h2><p>Se rechazan cantidades inválidas y stock insuficiente. Los IDs de categorías deben existir. La búsqueda admite filtros y paginación. La eliminación de un producto es <strong>baja lógica</strong>: lo deja inactivo para conservar historial y reservas. La reserva Kafka bloquea filas en orden y verifica todos los productos antes de descontar stock.</p><table><thead><tr><th>Qué mostrar en Angular</th><th>Qué código lo respalda</th></tr></thead><tbody><tr><td>Productos: crear y editar</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/ProductoController.java#L16">ProductoController: endpoints de productos</a> → <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java#L45">ProductoService.crear(): alta de productos</a></td></tr><tr><td>Dos categorías para el mismo producto</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/entity/Producto.java#L44">Producto: relación N:M con categorías</a> y <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/resources/db/migration/V5__producto_categorias_many_to_many.sql#L1">Migración producto_categoria</a></td></tr><tr><td>Filtros y paginación</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/repository/ProductoRepository.java#L30">ProductoRepository.buscar(): filtros y paginación</a></td></tr><tr><td>Desactivar producto</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java#L64">ProductoService.eliminar(): baja lógica</a></td></tr><tr><td>Pago rechazado y stock recuperado</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L76">InventarioEvents.liberar(): compensación</a></td></tr></tbody></table><aside class="note">El precio que envía o muestra el navegador no se acepta como verdad para crear la venta. Venta obtiene el precio real desde Catálogo y la reserva vuelve a verificarlo.</aside></section><section class="chapter" id="cat-componentes"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>6. C3: componentes de Catálogo</h1><figure><svg role="img" aria-label="C4 · Nivel 3 — Componentes dentro de Catálogo" width="852pt" height="453pt"
+ viewBox="0.00 0.00 851.92 453.29" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(12.96 440.33)">
+<title>G</title>
+<g id="clust1" class="cluster">
+<title>cluster_boundary</title>
+<path fill="transparent" stroke="#9db8a6" stroke-dasharray="5,2" d="M20,-117.38C20,-117.38 693,-117.38 693,-117.38 699,-117.38 705,-123.38 705,-129.38 705,-129.38 705,-407.38 705,-407.38 705,-413.38 699,-419.38 693,-419.38 693,-419.38 20,-419.38 20,-419.38 14,-419.38 8,-413.38 8,-407.38 8,-407.38 8,-129.38 8,-129.38 8,-123.38 14,-117.38 20,-117.38"/>
+<text text-anchor="middle" x="356.5" y="-405.77" font-family="DejaVu Sans" font-size="12.00">Límite del contenedor: garritas&#45;catalogo&#45;ms</text>
+</g>
+<!-- rest -->
+<g id="node1" class="node">
+<title>rest</title>
+<path fill="#eef7f0" stroke="#729b84" d="M213.5,-390.38C213.5,-390.38 86.5,-390.38 86.5,-390.38 80.5,-390.38 74.5,-384.38 74.5,-378.38 74.5,-378.38 74.5,-345.38 74.5,-345.38 74.5,-339.38 80.5,-333.38 86.5,-333.38 86.5,-333.38 213.5,-333.38 213.5,-333.38 219.5,-333.38 225.5,-339.38 225.5,-345.38 225.5,-345.38 225.5,-378.38 225.5,-378.38 225.5,-384.38 219.5,-390.38 213.5,-390.38"/>
+<text text-anchor="middle" x="150" y="-371.77" font-family="DejaVu Sans" font-size="12.00">ProductoController</text>
+<text text-anchor="middle" x="150" y="-358.77" font-family="DejaVu Sans" font-size="12.00">CategoriaController</text>
+<text text-anchor="middle" x="150" y="-345.77" font-family="DejaVu Sans" font-size="12.00">[Componentes REST]</text>
+</g>
+<!-- security -->
+<g id="node2" class="node">
+<title>security</title>
+<path fill="#e2e8f0" stroke="#729b84" d="M366.5,-286.38C366.5,-286.38 223.5,-286.38 223.5,-286.38 217.5,-286.38 211.5,-280.38 211.5,-274.38 211.5,-274.38 211.5,-241.38 211.5,-241.38 211.5,-235.38 217.5,-229.38 223.5,-229.38 223.5,-229.38 366.5,-229.38 366.5,-229.38 372.5,-229.38 378.5,-235.38 378.5,-241.38 378.5,-241.38 378.5,-274.38 378.5,-274.38 378.5,-280.38 372.5,-286.38 366.5,-286.38"/>
+<text text-anchor="middle" x="295" y="-267.77" font-family="DejaVu Sans" font-size="12.00">SecurityConfiguration</text>
+<text text-anchor="middle" x="295" y="-254.78" font-family="DejaVu Sans" font-size="12.00">CurrentUser</text>
+<text text-anchor="middle" x="295" y="-241.78" font-family="DejaVu Sans" font-size="12.00">[Seguridad compartida]</text>
+</g>
+<!-- rest&#45;&gt;security -->
+<g id="edge1" class="edge">
+<title>rest&#45;&gt;security</title>
+<path fill="none" stroke="#526777" stroke-dasharray="5,2" d="M189.24,-333.27C207.94,-320.12 230.4,-304.32 249.81,-290.66"/>
+<polygon fill="#526777" stroke="#526777" points="251.41,-292.53 255.73,-286.5 248.59,-288.52 251.41,-292.53"/>
+<text text-anchor="middle" x="271.5" y="-307.38" font-family="DejaVu Sans" font-size="10.00">Petición protegida</text>
+</g>
+<!-- service -->
+<g id="node3" class="node">
+<title>service</title>
+<path fill="#eef7f0" stroke="#729b84" d="M174,-286.38C174,-286.38 28,-286.38 28,-286.38 22,-286.38 16,-280.38 16,-274.38 16,-274.38 16,-241.38 16,-241.38 16,-235.38 22,-229.38 28,-229.38 28,-229.38 174,-229.38 174,-229.38 180,-229.38 186,-235.38 186,-241.38 186,-241.38 186,-274.38 186,-274.38 186,-280.38 180,-286.38 174,-286.38"/>
+<text text-anchor="middle" x="101" y="-267.77" font-family="DejaVu Sans" font-size="12.00">ProductoService</text>
+<text text-anchor="middle" x="101" y="-254.78" font-family="DejaVu Sans" font-size="12.00">CategoriaService</text>
+<text text-anchor="middle" x="101" y="-241.78" font-family="DejaVu Sans" font-size="12.00">[Reglas y transacciones]</text>
+</g>
+<!-- rest&#45;&gt;service -->
+<g id="edge2" class="edge">
+<title>rest&#45;&gt;service</title>
+<path fill="none" stroke="#526777" d="M136.74,-333.27C130.8,-320.91 123.74,-306.21 117.47,-293.16"/>
+<polygon fill="#526777" stroke="#526777" points="119.51,-291.75 114.27,-286.5 115.09,-293.87 119.51,-291.75"/>
+<text text-anchor="middle" x="144.5" y="-307.38" font-family="DejaVu Sans" font-size="10.00">Delega</text>
+</g>
+<!-- mapper -->
+<g id="node4" class="node">
+<title>mapper</title>
+<path fill="#eef7f0" stroke="#729b84" d="M176,-182.38C176,-182.38 28,-182.38 28,-182.38 22,-182.38 16,-176.38 16,-170.38 16,-170.38 16,-137.38 16,-137.38 16,-131.38 22,-125.38 28,-125.38 28,-125.38 176,-125.38 176,-125.38 182,-125.38 188,-131.38 188,-137.38 188,-137.38 188,-170.38 188,-170.38 188,-176.38 182,-182.38 176,-182.38"/>
+<text text-anchor="middle" x="102" y="-163.78" font-family="DejaVu Sans" font-size="12.00">ProductoMapper</text>
+<text text-anchor="middle" x="102" y="-150.78" font-family="DejaVu Sans" font-size="12.00">CategoriaMapper + DTO</text>
+<text text-anchor="middle" x="102" y="-137.78" font-family="DejaVu Sans" font-size="12.00">[Conversión]</text>
+</g>
+<!-- service&#45;&gt;mapper -->
+<g id="edge4" class="edge">
+<title>service&#45;&gt;mapper</title>
+<path fill="none" stroke="#526777" d="M101.27,-229.27C101.39,-217.03 101.53,-202.48 101.66,-189.52"/>
+<polygon fill="#526777" stroke="#526777" points="104.11,-189.52 101.73,-182.5 99.21,-189.48 104.11,-189.52"/>
+<text text-anchor="middle" x="152.5" y="-203.38" font-family="DejaVu Sans" font-size="10.00">Construye respuesta</text>
+</g>
+<!-- repo -->
+<g id="node5" class="node">
+<title>repo</title>
+<path fill="#eef7f0" stroke="#729b84" d="M378,-182.38C378,-182.38 256,-182.38 256,-182.38 250,-182.38 244,-176.38 244,-170.38 244,-170.38 244,-137.38 244,-137.38 244,-131.38 250,-125.38 256,-125.38 256,-125.38 378,-125.38 378,-125.38 384,-125.38 390,-131.38 390,-137.38 390,-137.38 390,-170.38 390,-170.38 390,-176.38 384,-182.38 378,-182.38"/>
+<text text-anchor="middle" x="317" y="-163.78" font-family="DejaVu Sans" font-size="12.00">ProductoRepository</text>
+<text text-anchor="middle" x="317" y="-150.78" font-family="DejaVu Sans" font-size="12.00">CategoriaRepository</text>
+<text text-anchor="middle" x="317" y="-137.78" font-family="DejaVu Sans" font-size="12.00">[JPA y consultas]</text>
+</g>
+<!-- service&#45;&gt;repo -->
+<g id="edge3" class="edge">
+<title>service&#45;&gt;repo</title>
+<path fill="none" stroke="#526777" d="M168.79,-229.33C182.2,-223.6 196.12,-217.45 209,-211.38 225.73,-203.49 243.62,-194.41 259.94,-185.86"/>
+<polygon fill="#526777" stroke="#526777" points="261.29,-187.91 266.35,-182.49 259.01,-183.58 261.29,-187.91"/>
+<text text-anchor="middle" x="273" y="-203.38" font-family="DejaVu Sans" font-size="10.00">Consulta / guarda</text>
+</g>
+<!-- db -->
+<g id="node9" class="node">
+<title>db</title>
+<path fill="#eef7f0" stroke="#729b84" d="M626.5,-71.4C626.5,-75.35 588.63,-78.56 542,-78.56 495.37,-78.56 457.5,-75.35 457.5,-71.4 457.5,-71.4 457.5,-6.97 457.5,-6.97 457.5,-3.02 495.37,0.19 542,0.19 588.63,0.19 626.5,-3.02 626.5,-6.97 626.5,-6.97 626.5,-71.4 626.5,-71.4"/>
+<path fill="none" stroke="#729b84" d="M626.5,-71.4C626.5,-67.45 588.63,-64.24 542,-64.24 495.37,-64.24 457.5,-67.45 457.5,-71.4"/>
+<text text-anchor="middle" x="542" y="-49.09" font-family="DejaVu Sans" font-size="12.00">PostgreSQL Catálogo</text>
+<text text-anchor="middle" x="542" y="-36.09" font-family="DejaVu Sans" font-size="12.00">Productos, categorías,</text>
+<text text-anchor="middle" x="542" y="-23.09" font-family="DejaVu Sans" font-size="12.00">reservas, inbox y outbox</text>
+</g>
+<!-- repo&#45;&gt;db -->
+<g id="edge5" class="edge">
+<title>repo&#45;&gt;db</title>
+<path fill="none" stroke="#526777" d="M350.07,-125.15C362.93,-115.22 378.14,-104.49 393,-96.37 411.09,-86.49 431.29,-77.6 450.82,-69.96"/>
+<polygon fill="#526777" stroke="#526777" points="451.77,-72.22 457.42,-67.42 450.01,-67.65 451.77,-72.22"/>
+<text text-anchor="middle" x="420.5" y="-99.37" font-family="DejaVu Sans" font-size="10.00">SQL vía JPA</text>
+</g>
+<!-- consumer -->
+<g id="node6" class="node">
+<title>consumer</title>
+<path fill="#fff1cc" stroke="#729b84" d="M600.5,-390.38C600.5,-390.38 471.5,-390.38 471.5,-390.38 465.5,-390.38 459.5,-384.38 459.5,-378.38 459.5,-378.38 459.5,-345.38 459.5,-345.38 459.5,-339.38 465.5,-333.38 471.5,-333.38 471.5,-333.38 600.5,-333.38 600.5,-333.38 606.5,-333.38 612.5,-339.38 612.5,-345.38 612.5,-345.38 612.5,-378.38 612.5,-378.38 612.5,-384.38 606.5,-390.38 600.5,-390.38"/>
+<text text-anchor="middle" x="536" y="-371.77" font-family="DejaVu Sans" font-size="12.00">InventarioEvents</text>
+<text text-anchor="middle" x="536" y="-358.77" font-family="DejaVu Sans" font-size="12.00">[Consumidor Kafka]</text>
+<text text-anchor="middle" x="536" y="-345.77" font-family="DejaVu Sans" font-size="12.00">Reserva / libera stock</text>
+</g>
+<!-- inbox -->
+<g id="node7" class="node">
+<title>inbox</title>
+<path fill="#eef7f0" stroke="#729b84" d="M510,-279.88C510,-279.88 416,-279.88 416,-279.88 410,-279.88 404,-273.88 404,-267.88 404,-267.88 404,-247.88 404,-247.88 404,-241.88 410,-235.88 416,-235.88 416,-235.88 510,-235.88 510,-235.88 516,-235.88 522,-241.88 522,-247.88 522,-247.88 522,-267.88 522,-267.88 522,-273.88 516,-279.88 510,-279.88"/>
+<text text-anchor="middle" x="463" y="-261.27" font-family="DejaVu Sans" font-size="12.00">Inbox</text>
+<text text-anchor="middle" x="463" y="-248.28" font-family="DejaVu Sans" font-size="12.00">[Deduplicación]</text>
+</g>
+<!-- consumer&#45;&gt;inbox -->
+<g id="edge6" class="edge">
+<title>consumer&#45;&gt;inbox</title>
+<path fill="none" stroke="#526777" d="M459.34,-339.44C448.92,-333.31 439.56,-325.45 433,-315.38 426.93,-306.05 430.2,-295.37 436.44,-285.82"/>
+<polygon fill="#526777" stroke="#526777" points="438.51,-287.15 440.65,-280.05 434.55,-284.26 438.51,-287.15"/>
+<text text-anchor="middle" x="469" y="-307.38" font-family="DejaVu Sans" font-size="10.00">claim(eventId)</text>
+</g>
+<!-- outbox -->
+<g id="node8" class="node">
+<title>outbox</title>
+<path fill="#eef7f0" stroke="#729b84" d="M685,-279.88C685,-279.88 559,-279.88 559,-279.88 553,-279.88 547,-273.88 547,-267.88 547,-267.88 547,-247.88 547,-247.88 547,-241.88 553,-235.88 559,-235.88 559,-235.88 685,-235.88 685,-235.88 691,-235.88 697,-241.88 697,-247.88 697,-247.88 697,-267.88 697,-267.88 697,-273.88 691,-279.88 685,-279.88"/>
+<text text-anchor="middle" x="622" y="-261.27" font-family="DejaVu Sans" font-size="12.00">Outbox</text>
+<text text-anchor="middle" x="622" y="-248.28" font-family="DejaVu Sans" font-size="12.00">[Publicación durable]</text>
+</g>
+<!-- consumer&#45;&gt;outbox -->
+<g id="edge8" class="edge">
+<title>consumer&#45;&gt;outbox</title>
+<path fill="none" stroke="#526777" d="M541.43,-333.26C544.3,-323.46 548.62,-312.78 555,-304.38 560.76,-296.79 568.16,-290.03 575.93,-284.2"/>
+<polygon fill="#526777" stroke="#526777" points="577.65,-285.98 581.93,-279.92 574.81,-281.99 577.65,-285.98"/>
+<text text-anchor="middle" x="635.5" y="-307.38" font-family="DejaVu Sans" font-size="10.00">Resultado de reserva / liberación</text>
+</g>
+<!-- consumer&#45;&gt;db -->
+<g id="edge7" class="edge">
+<title>consumer&#45;&gt;db</title>
+<path fill="none" stroke="#526777" d="M612.93,-351.2C656.43,-343.97 704.72,-332.38 718,-315.38 739.04,-288.43 685.15,-118.89 684,-117.38 670.72,-99.92 652.31,-85.93 633.14,-74.91"/>
+<polygon fill="#526777" stroke="#526777" points="633.93,-72.55 626.62,-71.29 631.55,-76.83 633.93,-72.55"/>
+<text text-anchor="middle" x="768" y="-203.38" font-family="DejaVu Sans" font-size="10.00">JDBC + bloqueos de fila</text>
+</g>
+<!-- inbox&#45;&gt;db -->
+<g id="edge9" class="edge">
+<title>inbox&#45;&gt;db</title>
+<path fill="none" stroke="#526777" d="M464.45,-235.8C466.95,-207.81 473.51,-157.27 490,-117.38 494.64,-106.14 501.05,-94.84 507.78,-84.49"/>
+<polygon fill="#526777" stroke="#526777" points="509.92,-85.69 511.77,-78.51 505.85,-82.97 509.92,-85.69"/>
+<text text-anchor="middle" x="536.5" y="-151.38" font-family="DejaVu Sans" font-size="10.00">Misma transacción</text>
+</g>
+<!-- outbox&#45;&gt;db -->
+<g id="edge10" class="edge">
+<title>outbox&#45;&gt;db</title>
+<path fill="none" stroke="#526777" d="M618.07,-235.55C612.55,-207.72 601.32,-157.8 585,-117.38 580.62,-106.54 575.04,-95.32 569.36,-84.9"/>
+<polygon fill="#526777" stroke="#526777" points="571.37,-83.45 565.83,-78.52 567.08,-85.83 571.37,-83.45"/>
+<text text-anchor="middle" x="641.5" y="-151.38" font-family="DejaVu Sans" font-size="10.00">Guarda evento</text>
+</g>
+</g>
+</svg>
+<figcaption>C4 · Nivel 3 — Componentes dentro de Catálogo</figcaption></figure><p><strong>Flujo REST:</strong> Controller recibe la petición y valida el DTO; Service aplica reglas; Repository accede a PostgreSQL; Mapper prepara el DTO de salida.</p><p><strong>Flujo Kafka:</strong> InventarioEvents recibe un contrato de evento, reclama su eventId en Inbox y reserva o libera stock mediante JDBC. Guarda el resultado en Outbox dentro de la misma transacción local. El publicador de Outbox lo envía después a Kafka.</p><div class="source"><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java#L45">ProductoService.crear(): alta de productos</a> · línea 45</div><pre> 45    public ProductoResponse crear(ProductoRequest request) {
+ 46      Producto producto = productoMapper.toEntity(request);
+ 47      asignarCategoriasDesdeRequest(producto, request);
+ 48      ProductoResponse response = productoMapper.toResponse(productoRepository.save(producto));
+ 49      meterRegistry.counter(&quot;garritas_productos_creados_total&quot;).increment();
+ 50      return response;
+ 51    }
+ 52  
+ 53    public ProductoResponse actualizar(Long id, ProductoRequest request) {</pre></section><section class="chapter" id="cat-codigo"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>7. C4: clases y muchos a muchos de Catálogo</h1><figure><svg role="img" aria-label="C4 · Nivel 4 — Código: clases y persistencia de Catálogo" width="439pt" height="521pt"
+ viewBox="0.00 0.00 438.90 521.42" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(12.96 508.46)">
+<title>G</title>
+<!-- p -->
+<g id="node1" class="node">
+<title>p</title>
+<path fill="#eef7f0" stroke="#729b84" d="M190.98,-332.44C190.98,-332.44 42.98,-332.44 42.98,-332.44 36.98,-332.44 30.98,-326.44 30.98,-320.44 30.98,-320.44 30.98,-274.44 30.98,-274.44 30.98,-268.44 36.98,-262.44 42.98,-262.44 42.98,-262.44 190.98,-262.44 190.98,-262.44 196.98,-262.44 202.98,-268.44 202.98,-274.44 202.98,-274.44 202.98,-320.44 202.98,-320.44 202.98,-326.44 196.98,-332.44 190.98,-332.44"/>
+<text text-anchor="middle" x="116.98" y="-313.84" font-family="DejaVu Sans" font-size="12.00">Producto</text>
+<text text-anchor="middle" x="116.98" y="-300.84" font-family="DejaVu Sans" font-size="12.00">[Clase JPA]</text>
+<text text-anchor="middle" x="116.98" y="-287.84" font-family="DejaVu Sans" font-size="12.00">id, nombre, precio, stock</text>
+<text text-anchor="middle" x="116.98" y="-274.84" font-family="DejaVu Sans" font-size="12.00">activo, version</text>
+</g>
+<!-- c -->
+<g id="node2" class="node">
+<title>c</title>
+<path fill="#eef7f0" stroke="#729b84" d="M187.48,-182.38C187.48,-182.38 46.48,-182.38 46.48,-182.38 40.48,-182.38 34.48,-176.38 34.48,-170.38 34.48,-170.38 34.48,-137.38 34.48,-137.38 34.48,-131.38 40.48,-125.38 46.48,-125.38 46.48,-125.38 187.48,-125.38 187.48,-125.38 193.48,-125.38 199.48,-131.38 199.48,-137.38 199.48,-137.38 199.48,-170.38 199.48,-170.38 199.48,-176.38 193.48,-182.38 187.48,-182.38"/>
+<text text-anchor="middle" x="116.98" y="-163.78" font-family="DejaVu Sans" font-size="12.00">Categoria</text>
+<text text-anchor="middle" x="116.98" y="-150.78" font-family="DejaVu Sans" font-size="12.00">[Clase JPA]</text>
+<text text-anchor="middle" x="116.98" y="-137.78" font-family="DejaVu Sans" font-size="12.00">id, nombre, descripcion</text>
+</g>
+<!-- p&#45;&gt;c -->
+<g id="edge1" class="edge">
+<title>p&#45;&gt;c</title>
+<path fill="none" stroke="#526777" d="M30.56,-258.41C6.82,-242.43 -8.81,-222.42 5.98,-200.38 11.78,-191.73 19.54,-184.73 28.28,-179.06"/>
+<polygon fill="#526777" stroke="#526777" points="29.54,-260.67 36.75,-262.39 32.18,-256.55 29.54,-260.67"/>
+<polygon fill="#526777" stroke="#526777" points="29.74,-181.04 34.48,-175.34 27.22,-176.84 29.74,-181.04"/>
+<text text-anchor="middle" x="45.98" y="-214.38" font-family="DejaVu Sans" font-size="10.00">N:M · categorias</text>
+<text text-anchor="middle" x="45.98" y="-203.38" font-family="DejaVu Sans" font-size="10.00">@ManyToMany</text>
+</g>
+<!-- p&#45;&gt;c -->
+<g id="edge2" class="edge">
+<title>p&#45;&gt;c</title>
+<path fill="none" stroke="#526777" stroke-dasharray="5,2" d="M116.27,-262.2C115.98,-243.87 115.76,-220.89 115.98,-200.38 116.02,-197 116.07,-193.48 116.13,-189.96"/>
+<polygon fill="#526777" stroke="#526777" points="118.59,-189.83 116.27,-182.79 113.69,-189.74 118.59,-189.83"/>
+<text text-anchor="middle" x="175.98" y="-214.38" font-family="DejaVu Sans" font-size="10.00">N:1 · categoria</text>
+<text text-anchor="middle" x="175.98" y="-203.38" font-family="DejaVu Sans" font-size="10.00">Compatibilidad histórica</text>
+</g>
+<!-- j -->
+<g id="node3" class="node">
+<title>j</title>
+<path fill="#eef7f0" stroke="#729b84" d="M278.48,-71.4C278.48,-75.35 237.02,-78.56 185.98,-78.56 134.94,-78.56 93.48,-75.35 93.48,-71.4 93.48,-71.4 93.48,-6.97 93.48,-6.97 93.48,-3.02 134.94,0.19 185.98,0.19 237.02,0.19 278.48,-3.02 278.48,-6.97 278.48,-6.97 278.48,-71.4 278.48,-71.4"/>
+<path fill="none" stroke="#729b84" d="M278.48,-71.4C278.48,-67.45 237.02,-64.24 185.98,-64.24 134.94,-64.24 93.48,-67.45 93.48,-71.4"/>
+<text text-anchor="middle" x="185.98" y="-49.09" font-family="DejaVu Sans" font-size="12.00">producto_categoria</text>
+<text text-anchor="middle" x="185.98" y="-36.09" font-family="DejaVu Sans" font-size="12.00">[Tabla de unión]</text>
+<text text-anchor="middle" x="185.98" y="-23.09" font-family="DejaVu Sans" font-size="12.00">id_producto + id_categoria</text>
+</g>
+<!-- p&#45;&gt;j -->
+<g id="edge3" class="edge">
+<title>p&#45;&gt;j</title>
+<path fill="none" stroke="#526777" d="M178.37,-262.39C206.43,-246.2 234.29,-228.96 237.98,-222.38 248.7,-203.25 281.37,-214.92 234.98,-96.37 233.37,-92.26 231.32,-88.25 228.97,-84.38"/>
+<polygon fill="#526777" stroke="#526777" points="230.96,-82.93 225.07,-78.42 226.86,-85.62 230.96,-82.93"/>
+<text text-anchor="middle" x="285.98" y="-151.38" font-family="DejaVu Sans" font-size="10.00">@JoinTable</text>
+</g>
+<!-- c&#45;&gt;j -->
+<g id="edge4" class="edge">
+<title>c&#45;&gt;j</title>
+<path fill="none" stroke="#526777" d="M133.86,-125.31C141.33,-113.1 150.32,-98.44 158.7,-84.74"/>
+<polygon fill="#526777" stroke="#526777" points="160.94,-85.78 162.5,-78.53 156.76,-83.22 160.94,-85.78"/>
+<text text-anchor="middle" x="190.48" y="-99.37" font-family="DejaVu Sans" font-size="10.00">FK de categoría</text>
+</g>
+<!-- r -->
+<g id="node4" class="node">
+<title>r</title>
+<path fill="#eef7f0" stroke="#729b84" d="M397.98,-344.18C397.98,-349.91 359.88,-354.56 312.98,-354.56 266.08,-354.56 227.98,-349.91 227.98,-344.18 227.98,-344.18 227.98,-250.7 227.98,-250.7 227.98,-244.97 266.08,-240.31 312.98,-240.31 359.88,-240.31 397.98,-244.97 397.98,-250.7 397.98,-250.7 397.98,-344.18 397.98,-344.18"/>
+<path fill="none" stroke="#729b84" d="M397.98,-344.18C397.98,-338.45 359.88,-333.79 312.98,-333.79 266.08,-333.79 227.98,-338.45 227.98,-344.18"/>
+<text text-anchor="middle" x="312.98" y="-320.34" font-family="DejaVu Sans" font-size="12.00">reservas_stock</text>
+<text text-anchor="middle" x="312.98" y="-307.34" font-family="DejaVu Sans" font-size="12.00">[Tabla SQL]</text>
+<text text-anchor="middle" x="312.98" y="-294.34" font-family="DejaVu Sans" font-size="12.00">id_venta único</text>
+<text text-anchor="middle" x="312.98" y="-281.34" font-family="DejaVu Sans" font-size="12.00">NUEVA / RESERVADA /</text>
+<text text-anchor="middle" x="312.98" y="-268.34" font-family="DejaVu Sans" font-size="12.00">RECHAZADA / LIBERADA</text>
+</g>
+<!-- i -->
+<g id="node5" class="node">
+<title>i</title>
+<path fill="#fff1cc" stroke="#729b84" d="M265.48,-495.5C265.48,-495.5 164.48,-495.5 164.48,-495.5 158.48,-495.5 152.48,-489.5 152.48,-483.5 152.48,-483.5 152.48,-424.5 152.48,-424.5 152.48,-418.5 158.48,-412.5 164.48,-412.5 164.48,-412.5 265.48,-412.5 265.48,-412.5 271.48,-412.5 277.48,-418.5 277.48,-424.5 277.48,-424.5 277.48,-483.5 277.48,-483.5 277.48,-489.5 271.48,-495.5 265.48,-495.5"/>
+<text text-anchor="middle" x="214.98" y="-476.9" font-family="DejaVu Sans" font-size="12.00">InventarioEvents</text>
+<text text-anchor="middle" x="214.98" y="-463.9" font-family="DejaVu Sans" font-size="12.00">[Clase]</text>
+<text text-anchor="middle" x="214.98" y="-450.9" font-family="DejaVu Sans" font-size="12.00">consume()</text>
+<text text-anchor="middle" x="214.98" y="-437.9" font-family="DejaVu Sans" font-size="12.00">reservar()</text>
+<text text-anchor="middle" x="214.98" y="-424.9" font-family="DejaVu Sans" font-size="12.00">liberar()</text>
+</g>
+<!-- i&#45;&gt;p -->
+<g id="edge5" class="edge">
+<title>i&#45;&gt;p</title>
+<path fill="none" stroke="#526777" d="M189.23,-412.39C174.76,-389.57 156.77,-361.18 142.36,-338.46"/>
+<polygon fill="#526777" stroke="#526777" points="144.4,-337.11 138.58,-332.51 140.26,-339.73 144.4,-337.11"/>
+<text text-anchor="middle" x="227.48" y="-386.5" font-family="DejaVu Sans" font-size="10.00">JDBC modifica stock</text>
+<text text-anchor="middle" x="227.48" y="-375.5" font-family="DejaVu Sans" font-size="10.00">y aumenta version</text>
+</g>
+<!-- i&#45;&gt;r -->
+<g id="edge6" class="edge">
+<title>i&#45;&gt;r</title>
+<path fill="none" stroke="#526777" d="M268.57,-412.27C273.92,-406.71 278.88,-400.75 282.98,-394.5 289.56,-384.49 294.77,-372.96 298.86,-361.43"/>
+<polygon fill="#526777" stroke="#526777" points="301.23,-362.07 301.15,-354.65 296.59,-360.5 301.23,-362.07"/>
+<text text-anchor="middle" x="353.48" y="-381" font-family="DejaVu Sans" font-size="10.00">Deduplicación por venta</text>
+</g>
+</g>
+</svg>
+<figcaption>C4 · Nivel 4 — Código: clases y persistencia de Catálogo</figcaption></figure><h2>Muchos a muchos que puedes demostrar</h2><p>Un champú puede pertenecer a <strong>Higiene</strong> y <strong>Cuidado</strong>. A su vez, Higiene agrupa champú, cepillos y otros productos. La tabla <code>producto_categoria</code> guarda cada par de IDs.</p><div class="source"><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/entity/Producto.java#L44">Producto: relación N:M con categorías</a> · línea 44</div><pre> 44    @ManyToMany(fetch = FetchType.LAZY)
+ 45    @JoinTable(
+ 46        name = &quot;producto_categoria&quot;,
+ 47        joinColumns = @JoinColumn(name = &quot;id_producto&quot;),
+ 48        inverseJoinColumns = @JoinColumn(name = &quot;id_categoria&quot;))
+ 49    private Set&lt;Categoria&gt; categorias = new HashSet&lt;&gt;();
+ 50  }</pre><p>Existe además el campo antiguo <code>categoria</code> con @ManyToOne para compatibilidad. No debes usarlo para explicar toda la relación actual: las múltiples categorías viven en <code>categorias</code> y en la tabla de unión.</p><h2>Concurrencia e inventario</h2><p><code>@Version</code> protege actualizaciones JPA. Las operaciones JDBC de reserva/liberación aumentan también <code>version</code>. <code>reservas_stock.id_venta</code> identifica el efecto de negocio, incluso si llega otro eventId para la misma venta.</p></section><section class="chapter" id="usuario"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>8. Qué administra Usuario</h1><h2>Responsabilidades</h2><table><thead><tr><th>Capacidad</th><th>Qué conserva</th><th>Regla importante</th></tr></thead><tbody><tr><td>Perfil</td><td>Nombre, correo, teléfono, dirección, DNI y subject.</td><td>El perfil propio se identifica con el sub del JWT; guardar comprueba persistencia.</td></tr><tr><td>Mascotas</td><td>Nombre, especie, raza, edad y DIAS/MESES.</td><td>Pertenecen a un usuario; se controla propiedad.</td></tr><tr><td>Roles internos</td><td>Clasificaciones como VENTAS o SECRETARIA.</td><td>No conceden permisos ADMIN en el JWT.</td></tr><tr><td>Planes</td><td>Nombre, precio, duración y estado.</td><td>Se desactivan sin borrar el historial contratado.</td></tr><tr><td>Suscripciones</td><td>Usuario, plan, estado y vigencia.</td><td>No duplicar una suscripción activa del mismo plan.</td></tr><tr><td>Períodos</td><td>ALTA o RENOVACION, precio y fechas acordados.</td><td>La misma clave de reintento no agrega otro período.</td></tr></tbody></table><p>Teléfono opcional: si se informa, celular peruano de nueve dígitos y empieza con 9. DNI opcional: ocho dígitos. La edad de mascota se expresa como entero con unidad explícita.</p><aside class="note">Keycloak guarda y verifica las credenciales de acceso. La tabla usuarios de este microservicio guarda el perfil del negocio; no contiene un campo de contraseña de login.</aside></section><section class="chapter" id="usr-componentes"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>9. C3: componentes de Usuario</h1><figure><svg role="img" aria-label="C4 · Nivel 3 — Componentes dentro de Usuario" width="925pt" height="453pt"
+ viewBox="0.00 0.00 924.92 453.29" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(12.96 440.33)">
+<title>G</title>
+<g id="clust1" class="cluster">
+<title>cluster_boundary</title>
+<path fill="transparent" stroke="#9db8a6" stroke-dasharray="5,2" d="M20,-117.38C20,-117.38 879,-117.38 879,-117.38 885,-117.38 891,-123.38 891,-129.38 891,-129.38 891,-407.38 891,-407.38 891,-413.38 885,-419.38 879,-419.38 879,-419.38 20,-419.38 20,-419.38 14,-419.38 8,-413.38 8,-407.38 8,-407.38 8,-129.38 8,-129.38 8,-123.38 14,-117.38 20,-117.38"/>
+<text text-anchor="middle" x="449.5" y="-405.77" font-family="DejaVu Sans" font-size="12.00">Límite del contenedor: garritas&#45;usuario&#45;ms</text>
+</g>
+<!-- controllers -->
+<g id="node1" class="node">
+<title>controllers</title>
+<path fill="#eef7f0" stroke="#729b84" d="M811.5,-390.38C811.5,-390.38 628.5,-390.38 628.5,-390.38 622.5,-390.38 616.5,-384.38 616.5,-378.38 616.5,-378.38 616.5,-345.38 616.5,-345.38 616.5,-339.38 622.5,-333.38 628.5,-333.38 628.5,-333.38 811.5,-333.38 811.5,-333.38 817.5,-333.38 823.5,-339.38 823.5,-345.38 823.5,-345.38 823.5,-378.38 823.5,-378.38 823.5,-384.38 817.5,-390.38 811.5,-390.38"/>
+<text text-anchor="middle" x="720" y="-371.77" font-family="DejaVu Sans" font-size="12.00">Usuario / MiCuenta / Mascota /</text>
+<text text-anchor="middle" x="720" y="-358.77" font-family="DejaVu Sans" font-size="12.00">Rol / SuscripcionController</text>
+<text text-anchor="middle" x="720" y="-345.77" font-family="DejaVu Sans" font-size="12.00">[Componentes REST]</text>
+</g>
+<!-- services -->
+<g id="node2" class="node">
+<title>services</title>
+<path fill="#eef7f0" stroke="#729b84" d="M639.5,-286.38C639.5,-286.38 494.5,-286.38 494.5,-286.38 488.5,-286.38 482.5,-280.38 482.5,-274.38 482.5,-274.38 482.5,-241.38 482.5,-241.38 482.5,-235.38 488.5,-229.38 494.5,-229.38 494.5,-229.38 639.5,-229.38 639.5,-229.38 645.5,-229.38 651.5,-235.38 651.5,-241.38 651.5,-241.38 651.5,-274.38 651.5,-274.38 651.5,-280.38 645.5,-286.38 639.5,-286.38"/>
+<text text-anchor="middle" x="567" y="-267.77" font-family="DejaVu Sans" font-size="12.00">Usuario / Mascota / Rol /</text>
+<text text-anchor="middle" x="567" y="-254.78" font-family="DejaVu Sans" font-size="12.00">SuscripcionService</text>
+<text text-anchor="middle" x="567" y="-241.78" font-family="DejaVu Sans" font-size="12.00">[Reglas de negocio]</text>
+</g>
+<!-- controllers&#45;&gt;services -->
+<g id="edge1" class="edge">
+<title>controllers&#45;&gt;services</title>
+<path fill="none" stroke="#526777" d="M678.6,-333.27C658.78,-320.06 634.96,-304.18 614.42,-290.49"/>
+<polygon fill="#526777" stroke="#526777" points="615.62,-288.34 608.44,-286.5 612.9,-292.42 615.62,-288.34"/>
+<text text-anchor="middle" x="690" y="-307.38" font-family="DejaVu Sans" font-size="10.00">Invoca operación</text>
+</g>
+<!-- mappers -->
+<g id="node5" class="node">
+<title>mappers</title>
+<path fill="#eef7f0" stroke="#729b84" d="M871.5,-182.38C871.5,-182.38 708.5,-182.38 708.5,-182.38 702.5,-182.38 696.5,-176.38 696.5,-170.38 696.5,-170.38 696.5,-137.38 696.5,-137.38 696.5,-131.38 702.5,-125.38 708.5,-125.38 708.5,-125.38 871.5,-125.38 871.5,-125.38 877.5,-125.38 883.5,-131.38 883.5,-137.38 883.5,-137.38 883.5,-170.38 883.5,-170.38 883.5,-176.38 877.5,-182.38 871.5,-182.38"/>
+<text text-anchor="middle" x="790" y="-163.78" font-family="DejaVu Sans" font-size="12.00">Mappers y DTO</text>
+<text text-anchor="middle" x="790" y="-150.78" font-family="DejaVu Sans" font-size="12.00">[Validación de entrada</text>
+<text text-anchor="middle" x="790" y="-137.78" font-family="DejaVu Sans" font-size="12.00">y respuestas sin entidades]</text>
+</g>
+<!-- controllers&#45;&gt;mappers -->
+<g id="edge2" class="edge">
+<title>controllers&#45;&gt;mappers</title>
+<path fill="none" stroke="#526777" stroke-dasharray="5,2" d="M731.32,-333.07C733.6,-327.25 735.93,-321.13 738,-315.38 753.43,-272.45 769.33,-222.36 779.42,-189.7"/>
+<polygon fill="#526777" stroke="#526777" points="781.88,-190.01 781.6,-182.6 777.2,-188.57 781.88,-190.01"/>
+<text text-anchor="middle" x="808.5" y="-255.38" font-family="DejaVu Sans" font-size="10.00">Request validado</text>
+</g>
+<!-- security -->
+<g id="node3" class="node">
+<title>security</title>
+<path fill="#e2e8f0" stroke="#729b84" d="M425.5,-182.38C425.5,-182.38 268.5,-182.38 268.5,-182.38 262.5,-182.38 256.5,-176.38 256.5,-170.38 256.5,-170.38 256.5,-137.38 256.5,-137.38 256.5,-131.38 262.5,-125.38 268.5,-125.38 268.5,-125.38 425.5,-125.38 425.5,-125.38 431.5,-125.38 437.5,-131.38 437.5,-137.38 437.5,-137.38 437.5,-170.38 437.5,-170.38 437.5,-176.38 431.5,-182.38 425.5,-182.38"/>
+<text text-anchor="middle" x="347" y="-163.78" font-family="DejaVu Sans" font-size="12.00">SecurityConfiguration</text>
+<text text-anchor="middle" x="347" y="-150.78" font-family="DejaVu Sans" font-size="12.00">CurrentUser.requireOwner</text>
+<text text-anchor="middle" x="347" y="-137.78" font-family="DejaVu Sans" font-size="12.00">[JWT y propiedad]</text>
+</g>
+<!-- services&#45;&gt;security -->
+<g id="edge3" class="edge">
+<title>services&#45;&gt;security</title>
+<path fill="none" stroke="#526777" stroke-dasharray="5,2" d="M490.14,-229.36C475.97,-223.76 461.42,-217.66 448,-211.38 431.92,-203.85 414.9,-194.79 399.51,-186.15"/>
+<polygon fill="#526777" stroke="#526777" points="400.33,-183.79 393.03,-182.47 397.91,-188.05 400.33,-183.79"/>
+<text text-anchor="middle" x="504.5" y="-203.38" font-family="DejaVu Sans" font-size="10.00">Comprueba propietario</text>
+</g>
+<!-- repos -->
+<g id="node4" class="node">
+<title>repos</title>
+<path fill="#eef7f0" stroke="#729b84" d="M219.5,-182.38C219.5,-182.38 28.5,-182.38 28.5,-182.38 22.5,-182.38 16.5,-176.38 16.5,-170.38 16.5,-170.38 16.5,-137.38 16.5,-137.38 16.5,-131.38 22.5,-125.38 28.5,-125.38 28.5,-125.38 219.5,-125.38 219.5,-125.38 225.5,-125.38 231.5,-131.38 231.5,-137.38 231.5,-137.38 231.5,-170.38 231.5,-170.38 231.5,-176.38 225.5,-182.38 219.5,-182.38"/>
+<text text-anchor="middle" x="124" y="-163.78" font-family="DejaVu Sans" font-size="12.00">Usuario, Mascota, Rol, Plan,</text>
+<text text-anchor="middle" x="124" y="-150.78" font-family="DejaVu Sans" font-size="12.00">Suscripcion y PeriodoRepository</text>
+<text text-anchor="middle" x="124" y="-137.78" font-family="DejaVu Sans" font-size="12.00">[Persistencia JPA]</text>
+</g>
+<!-- services&#45;&gt;repos -->
+<g id="edge4" class="edge">
+<title>services&#45;&gt;repos</title>
+<path fill="none" stroke="#526777" d="M482.23,-241.57C438.43,-233.3 384.18,-222.53 336,-211.38 300.86,-203.24 262.71,-193.4 228.59,-184.22"/>
+<polygon fill="#526777" stroke="#526777" points="229.22,-181.85 221.82,-182.39 227.94,-186.58 229.22,-181.85"/>
+<text text-anchor="middle" x="379" y="-203.38" font-family="DejaVu Sans" font-size="10.00">Consulta / guarda</text>
+</g>
+<!-- services&#45;&gt;mappers -->
+<g id="edge5" class="edge">
+<title>services&#45;&gt;mappers</title>
+<path fill="none" stroke="#526777" d="M627.35,-229.27C656.97,-215.72 692.75,-199.36 723.19,-185.43"/>
+<polygon fill="#526777" stroke="#526777" points="724.26,-187.64 729.6,-182.5 722.22,-183.18 724.26,-187.64"/>
+<text text-anchor="middle" x="715" y="-203.38" font-family="DejaVu Sans" font-size="10.00">Genera DTO</text>
+</g>
+<!-- lock -->
+<g id="node6" class="node">
+<title>lock</title>
+<path fill="#eef7f0" stroke="#729b84" d="M659.5,-182.38C659.5,-182.38 474.5,-182.38 474.5,-182.38 468.5,-182.38 462.5,-176.38 462.5,-170.38 462.5,-170.38 462.5,-137.38 462.5,-137.38 462.5,-131.38 468.5,-125.38 474.5,-125.38 474.5,-125.38 659.5,-125.38 659.5,-125.38 665.5,-125.38 671.5,-131.38 671.5,-137.38 671.5,-137.38 671.5,-170.38 671.5,-170.38 671.5,-176.38 665.5,-182.38 659.5,-182.38"/>
+<text text-anchor="middle" x="567" y="-163.78" font-family="DejaVu Sans" font-size="12.00">JdbcTemplate + EntityManager</text>
+<text text-anchor="middle" x="567" y="-150.78" font-family="DejaVu Sans" font-size="12.00">[Bloqueos de suscripción</text>
+<text text-anchor="middle" x="567" y="-137.78" font-family="DejaVu Sans" font-size="12.00">y actualización segura]</text>
+</g>
+<!-- services&#45;&gt;lock -->
+<g id="edge6" class="edge">
+<title>services&#45;&gt;lock</title>
+<path fill="none" stroke="#526777" d="M567,-229.27C567,-217.03 567,-202.48 567,-189.52"/>
+<polygon fill="#526777" stroke="#526777" points="569.45,-189.5 567,-182.5 564.55,-189.5 569.45,-189.5"/>
+<text text-anchor="middle" x="613.5" y="-203.38" font-family="DejaVu Sans" font-size="10.00">Contratar / renovar</text>
+</g>
+<!-- db -->
+<g id="node7" class="node">
+<title>db</title>
+<path fill="#eef7f0" stroke="#729b84" d="M453.5,-71.4C453.5,-75.35 404.87,-78.56 345,-78.56 285.13,-78.56 236.5,-75.35 236.5,-71.4 236.5,-71.4 236.5,-6.97 236.5,-6.97 236.5,-3.02 285.13,0.19 345,0.19 404.87,0.19 453.5,-3.02 453.5,-6.97 453.5,-6.97 453.5,-71.4 453.5,-71.4"/>
+<path fill="none" stroke="#729b84" d="M453.5,-71.4C453.5,-67.45 404.87,-64.24 345,-64.24 285.13,-64.24 236.5,-67.45 236.5,-71.4"/>
+<text text-anchor="middle" x="345" y="-49.09" font-family="DejaVu Sans" font-size="12.00">PostgreSQL Usuario</text>
+<text text-anchor="middle" x="345" y="-36.09" font-family="DejaVu Sans" font-size="12.00">Perfiles, mascotas, roles,</text>
+<text text-anchor="middle" x="345" y="-23.09" font-family="DejaVu Sans" font-size="12.00">planes, suscripciones y períodos</text>
+</g>
+<!-- repos&#45;&gt;db -->
+<g id="edge7" class="edge">
+<title>repos&#45;&gt;db</title>
+<path fill="none" stroke="#526777" d="M178.06,-125.31C204.2,-111.98 236.09,-95.72 264.98,-80.99"/>
+<polygon fill="#526777" stroke="#526777" points="266.35,-83.04 271.47,-77.68 264.12,-78.68 266.35,-83.04"/>
+<text text-anchor="middle" x="242" y="-99.37" font-family="DejaVu Sans" font-size="10.00">JPA</text>
+</g>
+<!-- lock&#45;&gt;db -->
+<g id="edge8" class="edge">
+<title>lock&#45;&gt;db</title>
+<path fill="none" stroke="#526777" d="M512.69,-125.31C486.44,-111.98 454.4,-95.72 425.39,-80.99"/>
+<polygon fill="#526777" stroke="#526777" points="426.21,-78.66 418.86,-77.68 423.99,-83.03 426.21,-78.66"/>
+<text text-anchor="middle" x="534.5" y="-99.37" font-family="DejaVu Sans" font-size="10.00">Misma transacción local</text>
+</g>
+</g>
+</svg>
+<figcaption>C4 · Nivel 3 — Componentes dentro de Usuario</figcaption></figure><p>MiCuentaController expone <code>/usuarios/me</code>: usa el token para operar sobre el perfil propio. UsuarioController permite el mantenimiento administrativo. MascotaService comprueba que la mascota corresponde al usuario. RolService valida el catálogo de clasificaciones.</p><p>SuscripcionService administra planes y el ciclo de contratación. Sus repositorios conservan cabecera e historial. Los bloqueos PostgreSQL serializan operaciones del usuario y la clave de idempotencia. Todo esto es una transacción local de Usuario, no una transacción distribuida entre bases.</p></section><section class="chapter" id="usr-codigo"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>10. C4: clases y relaciones de Usuario</h1><figure><svg role="img" aria-label="C4 · Nivel 4 — Código: asociaciones de Usuario" width="677pt" height="317pt"
+ viewBox="0.00 0.00 677.42 316.92" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(12.96 303.96)">
+<title>G</title>
+<!-- u -->
+<g id="node1" class="node">
+<title>u</title>
+<path fill="#eef7f0" stroke="#729b84" d="M376,-291C376,-291 233,-291 233,-291 227,-291 221,-285 221,-279 221,-279 221,-233 221,-233 221,-227 227,-221 233,-221 233,-221 376,-221 376,-221 382,-221 388,-227 388,-233 388,-233 388,-279 388,-279 388,-285 382,-291 376,-291"/>
+<text text-anchor="middle" x="304.5" y="-272.4" font-family="DejaVu Sans" font-size="12.00">Usuario</text>
+<text text-anchor="middle" x="304.5" y="-259.4" font-family="DejaVu Sans" font-size="12.00">[Clase JPA]</text>
+<text text-anchor="middle" x="304.5" y="-246.4" font-family="DejaVu Sans" font-size="12.00">id Long + subject String</text>
+<text text-anchor="middle" x="304.5" y="-233.4" font-family="DejaVu Sans" font-size="12.00">Datos de contacto</text>
+</g>
+<!-- m -->
+<g id="node2" class="node">
+<title>m</title>
+<path fill="#eef7f0" stroke="#729b84" d="M133,-174C133,-174 12,-174 12,-174 6,-174 0,-168 0,-162 0,-162 0,-129 0,-129 0,-123 6,-117 12,-117 12,-117 133,-117 133,-117 139,-117 145,-123 145,-129 145,-129 145,-162 145,-162 145,-168 139,-174 133,-174"/>
+<text text-anchor="middle" x="72.5" y="-155.4" font-family="DejaVu Sans" font-size="12.00">Mascota</text>
+<text text-anchor="middle" x="72.5" y="-142.4" font-family="DejaVu Sans" font-size="12.00">[Clase JPA]</text>
+<text text-anchor="middle" x="72.5" y="-129.4" font-family="DejaVu Sans" font-size="12.00">Edad + DIAS/MESES</text>
+</g>
+<!-- u&#45;&gt;m -->
+<g id="edge1" class="edge">
+<title>u&#45;&gt;m</title>
+<path fill="none" stroke="#526777" d="M220.86,-225.54C203.33,-218.67 185.13,-211 168.5,-203 153.1,-195.59 136.89,-186.56 122.27,-177.92"/>
+<polygon fill="#526777" stroke="#526777" points="123.37,-175.72 116.11,-174.24 120.86,-179.93 123.37,-175.72"/>
+<text text-anchor="middle" x="205" y="-195" font-family="DejaVu Sans" font-size="10.00">1:N · mascotas</text>
+</g>
+<!-- r -->
+<g id="node3" class="node">
+<title>r</title>
+<path fill="#eef7f0" stroke="#729b84" d="M303,-174C303,-174 182,-174 182,-174 176,-174 170,-168 170,-162 170,-162 170,-129 170,-129 170,-123 176,-117 182,-117 182,-117 303,-117 303,-117 309,-117 315,-123 315,-129 315,-129 315,-162 315,-162 315,-168 309,-174 303,-174"/>
+<text text-anchor="middle" x="242.5" y="-155.4" font-family="DejaVu Sans" font-size="12.00">Rol</text>
+<text text-anchor="middle" x="242.5" y="-142.4" font-family="DejaVu Sans" font-size="12.00">[Clase JPA]</text>
+<text text-anchor="middle" x="242.5" y="-129.4" font-family="DejaVu Sans" font-size="12.00">Clasificación interna</text>
+</g>
+<!-- u&#45;&gt;r -->
+<g id="edge2" class="edge">
+<title>u&#45;&gt;r</title>
+<path fill="none" stroke="#526777" d="M259.29,-215.24C256.34,-211.33 253.68,-207.23 251.5,-203 248.08,-196.38 245.9,-188.79 244.51,-181.37"/>
+<polygon fill="#526777" stroke="#526777" points="257.5,-216.91 263.8,-220.82 261.31,-213.84 257.5,-216.91"/>
+<polygon fill="#526777" stroke="#526777" points="246.87,-180.58 243.38,-174.04 242.03,-181.33 246.87,-180.58"/>
+<text text-anchor="middle" x="299" y="-195" font-family="DejaVu Sans" font-size="10.00">N:M vía usuario_rol</text>
+</g>
+<!-- s -->
+<g id="node4" class="node">
+<title>s</title>
+<path fill="#eef7f0" stroke="#729b84" d="M639.5,-174C639.5,-174 499.5,-174 499.5,-174 493.5,-174 487.5,-168 487.5,-162 487.5,-162 487.5,-129 487.5,-129 487.5,-123 493.5,-117 499.5,-117 499.5,-117 639.5,-117 639.5,-117 645.5,-117 651.5,-123 651.5,-129 651.5,-129 651.5,-162 651.5,-162 651.5,-168 645.5,-174 639.5,-174"/>
+<text text-anchor="middle" x="569.5" y="-155.4" font-family="DejaVu Sans" font-size="12.00">Suscripcion</text>
+<text text-anchor="middle" x="569.5" y="-142.4" font-family="DejaVu Sans" font-size="12.00">[Entidad de asociación]</text>
+<text text-anchor="middle" x="569.5" y="-129.4" font-family="DejaVu Sans" font-size="12.00">Estado y vigencia</text>
+</g>
+<!-- u&#45;&gt;s -->
+<g id="edge3" class="edge">
+<title>u&#45;&gt;s</title>
+<path fill="none" stroke="#526777" d="M387.62,-220.97C422.2,-206.81 462.02,-190.51 495.56,-176.77"/>
+<polygon fill="#526777" stroke="#526777" points="496.63,-178.98 502.18,-174.06 494.78,-174.45 496.63,-178.98"/>
+<text text-anchor="middle" x="502" y="-195" font-family="DejaVu Sans" font-size="10.00">1:N (por id_usuario)</text>
+</g>
+<!-- period -->
+<g id="node6" class="node">
+<title>period</title>
+<path fill="#eef7f0" stroke="#729b84" d="M456.5,-70C456.5,-70 316.5,-70 316.5,-70 310.5,-70 304.5,-64 304.5,-58 304.5,-58 304.5,-12 304.5,-12 304.5,-6 310.5,0 316.5,0 316.5,0 456.5,0 456.5,0 462.5,0 468.5,-6 468.5,-12 468.5,-12 468.5,-58 468.5,-58 468.5,-64 462.5,-70 456.5,-70"/>
+<text text-anchor="middle" x="386.5" y="-51.4" font-family="DejaVu Sans" font-size="12.00">PeriodoSuscripcion</text>
+<text text-anchor="middle" x="386.5" y="-38.4" font-family="DejaVu Sans" font-size="12.00">[Clase JPA]</text>
+<text text-anchor="middle" x="386.5" y="-25.4" font-family="DejaVu Sans" font-size="12.00">ALTA / RENOVACION</text>
+<text text-anchor="middle" x="386.5" y="-12.4" font-family="DejaVu Sans" font-size="12.00">Precio histórico + clave</text>
+</g>
+<!-- u&#45;&gt;period -->
+<g id="edge6" class="edge">
+<title>u&#45;&gt;period</title>
+<path fill="none" stroke="#526777" stroke-dasharray="5,2" d="M337.25,-220.81C341.5,-215.16 345.44,-209.14 348.5,-203 368.46,-163.01 378.08,-112.41 382.62,-77.44"/>
+<polygon fill="#526777" stroke="#526777" points="385.09,-77.48 383.52,-70.23 380.23,-76.87 385.09,-77.48"/>
+<text text-anchor="middle" x="425" y="-143" font-family="DejaVu Sans" font-size="10.00">1:N (por id_usuario)</text>
+</g>
+<!-- s&#45;&gt;period -->
+<g id="edge5" class="edge">
+<title>s&#45;&gt;period</title>
+<path fill="none" stroke="#526777" d="M522.85,-116.84C500.69,-103.7 473.86,-87.8 449.89,-73.59"/>
+<polygon fill="#526777" stroke="#526777" points="451.13,-71.47 443.86,-70.01 448.64,-75.69 451.13,-71.47"/>
+<text text-anchor="middle" x="523.5" y="-91" font-family="DejaVu Sans" font-size="10.00">1:N · periodos</text>
+</g>
+<!-- p -->
+<g id="node5" class="node">
+<title>p</title>
+<path fill="#eef7f0" stroke="#729b84" d="M621,-284.5C621,-284.5 518,-284.5 518,-284.5 512,-284.5 506,-278.5 506,-272.5 506,-272.5 506,-239.5 506,-239.5 506,-233.5 512,-227.5 518,-227.5 518,-227.5 621,-227.5 621,-227.5 627,-227.5 633,-233.5 633,-239.5 633,-239.5 633,-272.5 633,-272.5 633,-278.5 627,-284.5 621,-284.5"/>
+<text text-anchor="middle" x="569.5" y="-265.9" font-family="DejaVu Sans" font-size="12.00">Plan</text>
+<text text-anchor="middle" x="569.5" y="-252.9" font-family="DejaVu Sans" font-size="12.00">[Clase JPA]</text>
+<text text-anchor="middle" x="569.5" y="-239.9" font-family="DejaVu Sans" font-size="12.00">Precio y duración</text>
+</g>
+<!-- p&#45;&gt;s -->
+<g id="edge4" class="edge">
+<title>p&#45;&gt;s</title>
+<path fill="none" stroke="#526777" d="M569.5,-227.34C569.5,-213.31 569.5,-196.13 569.5,-181.22"/>
+<polygon fill="#526777" stroke="#526777" points="571.95,-181.11 569.5,-174.11 567.05,-181.11 571.95,-181.11"/>
+<text text-anchor="middle" x="610.5" y="-195" font-family="DejaVu Sans" font-size="10.00">1:N (por id_plan)</text>
+</g>
+</g>
+</svg>
+<figcaption>C4 · Nivel 4 — Código: asociaciones de Usuario</figcaption></figure><h2>Tres relaciones que puedes señalar</h2><ul><li><strong>Usuario 1:N Mascota:</strong> una familia registra varias mascotas; cada mascota tiene su propietario.</li><li><strong>Usuario N:M Rol:</strong> varios roles por usuario y varios usuarios por rol; unión <code>usuario_rol</code>.</li><li><strong>Usuario N:M Plan mediante Suscripcion:</strong> la asociación tiene estado, fechas y períodos; por eso es una entidad de negocio y no solamente @ManyToMany.</li></ul><div class="source"><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Usuario.java#L50">Usuario: relación N:M con Rol</a> · línea 50</div><pre> 50    @ManyToMany(fetch = FetchType.LAZY)
+ 51    @JoinTable(
+ 52        name = &quot;usuario_rol&quot;,
+ 53        joinColumns = @JoinColumn(name = &quot;id_usuario&quot;),
+ 54        inverseJoinColumns = @JoinColumn(name = &quot;id_rol&quot;))
+ 55    private Set&lt;Rol&gt; roles = new HashSet&lt;&gt;();
+ 56  }</pre><div class="source"><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Suscripcion.java#L18">Suscripcion: entidad de asociación Usuario–Plan</a> · línea 18</div><pre> 18    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+ 19    @JoinColumn(name = &quot;id_usuario&quot;)
+ 20    private Usuario usuario;
+ 21  
+ 22    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+ 23    @JoinColumn(name = &quot;id_plan&quot;)
+ 24    private Plan plan;
+ 25  
+ 26    @Column(name = &quot;nombre_plan&quot;, nullable = false, length = 100)</pre><p>Los IDs de estas asociaciones pertenecen a la misma base de Usuario. Una referencia entre microservicios, como el id de mascota que guarda Citas, no se convierte en una FK entre bases independientes.</p></section><section class="chapter" id="crud"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>11. Dónde están los CRUD y reglas</h1><p>CRUD significa crear, consultar, actualizar y eliminar. En este dominio algunas eliminaciones son desactivaciones; las suscripciones usan operaciones de negocio, no una edición arbitraria de todos sus campos.</p><table><thead><tr><th>Recurso y ruta por Gateway</th><th>Operaciones</th><th>Código</th></tr></thead><tbody><tr><td>/api/v1/productos</td><td>GET lista/detalle; POST alta; PUT /{id}; DELETE /{id} desactiva.</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/ProductoController.java#L16">ProductoController: endpoints de productos</a></td></tr><tr><td>/api/v1/categorias</td><td>GET lista/detalle; POST; PUT /{id}; DELETE /{id}.</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/CategoriaController.java#L16">CategoriaController: CRUD de categorías</a></td></tr><tr><td>/api/v1/usuarios</td><td>Administración: GET, POST, PUT /{id}, DELETE /{id} con restricciones de historial.</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/UsuarioController.java#L16">UsuarioController: gestión administrativa de usuarios</a></td></tr><tr><td>/api/v1/usuarios/me</td><td>GET y PUT del perfil autenticado.</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MiCuentaController.java#L14">MiCuentaController: perfil y mascotas propias</a></td></tr><tr><td>/api/v1/usuarios/me/mascotas</td><td>GET, POST; GET/PUT/DELETE /{id}, con propiedad.</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MiCuentaController.java#L14">MiCuentaController: perfil y mascotas propias</a></td></tr><tr><td>/api/v1/usuarios/{id}/mascotas</td><td>Mantenimiento de mascotas del usuario autorizado.</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MascotaController.java#L15">MascotaController: mascotas por usuario</a></td></tr><tr><td>/api/v1/roles o /api/v1/usuarios/roles</td><td>CRUD administrativo del catálogo interno.</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/RolController.java#L15">RolController: catálogo de roles internos</a></td></tr><tr><td>/api/v1/usuarios/{id}/roles/{idRol}</td><td>POST asigna; DELETE retira la asociación.</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/UsuarioController.java#L62">UsuarioController.asignarRol(): asociación usuario–rol</a></td></tr><tr><td>/api/v1/planes</td><td>GET público; POST, PUT /{id} y DELETE /{id} administrativos.</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/SuscripcionController.java#L14">SuscripcionController: planes y ciclo de suscripciones</a></td></tr><tr><td>/api/v1/suscripciones</td><td>GET y POST contratar; POST /{id}/renovar o /cancelar.</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/SuscripcionController.java#L14">SuscripcionController: planes y ciclo de suscripciones</a></td></tr></tbody></table><h2>Cómo encontrar cualquier clase</h2><p>Abre la raíz del proyecto en VS Code. Pulsa <strong>Ctrl+P</strong>, pega la ruta completa del mapa final y presiona Enter. Con <strong>Ctrl+G</strong> salta a la línea indicada. Los enlaces azules abren la misma ubicación en GitHub.</p></section><section class="chapter" id="infra"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>12. Eureka, Gateway y comunicación resiliente</h1><h2>Eureka: la agenda de direcciones</h2><p>Cada servicio registra nombre, instancia y puerto, y mantiene su presencia con renovaciones. Eureka permite descubrir dónde está un servicio. No almacena productos ni transporta los eventos de Kafka. La detección de una caída no es instantánea.</p><p>Configuración: <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-eureka-dev.yml#L2">Configuración de Eureka DEV</a>; registro de <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-catalogo-ms-dev.yml#L69">Registro de Catálogo en Eureka</a> y <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml#L45">Registro de Usuario en Eureka</a>.</p><h2>Gateway: la entrada de las APIs</h2><p>Angular llama a <code>http://localhost:18080/api/v1</code>. Gateway aplica seguridad y enruta <code>/productos</code> a <code>lb://garritas-catalogo-ms</code> y <code>/usuarios</code> a <code>lb://garritas-usuario-ms</code>. El prefijo lb indica resolución y balanceo por nombre lógico.</p><p>Rutas reales: <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-gateway-dev.yml#L26">Rutas del Gateway hacia Catálogo y Usuario</a>; dirección que usa Angular: <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/public/config.json#L1">Angular: dirección de la API del Gateway</a>.</p><h2>Feign y resiliencia: S6</h2><p>Venta necesita consultar precio y disponibilidad antes de aceptar una orden. Feign expresa esa consulta como una interfaz Java con nombre lógico. El timeout limita una espera; el Circuit Breaker evita seguir insistiendo sobre una dependencia que falla; su fallback devuelve una respuesta controlada, sin inventar stock ni precio.</p><div class="source"><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/ProductoClient.java#L7">ProductoClient: Feign por nombre lógico</a> · línea 7</div><pre>  7  @FeignClient(name = &quot;garritas-catalogo-ms&quot;)
+  8  public interface ProductoClient {
+  9    record Producto(Long id, String nombre, BigDecimal precio, Integer stock, Boolean activo) {}
+ 10  
+ 11    @GetMapping(&quot;/api/v1/productos/{id}&quot;)
+ 12    Producto obtener(@PathVariable Long id);
+ 13  }</pre><p>Consulta protegida: <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/CatalogoConsulta.java#L18">CatalogoConsulta: Circuit Breaker y respuesta controlada</a>; límites: <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-venta-ms-dev.yml#L60">Timeouts Feign y configuración de los circuitos</a>. En DEV hay connectTimeout de 2 segundos y readTimeout de 3 segundos; el circuito de Catálogo tiene ventana 10, mínimo 5 llamadas, umbral 50% y apertura de 10 segundos.</p><aside class="note">No toda llamada interna usa Feign. Citas utiliza ServiceClient con descubrimiento y tiempos acotados para consultar Usuario. No dibujes un Circuit Breaker que no exista en esa llamada.</aside></section><section class="chapter" id="seguridad"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>13. Keycloak, JWT y perfil propio</h1><figure><svg role="img" aria-label="Diagrama dinámico — Identidad y protección del perfil" width="439pt" height="382pt"
+ viewBox="0.00 0.00 439.42 381.92" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(12.96 368.96)">
+<title>G</title>
+<!-- a -->
+<g id="node1" class="node">
+<title>a</title>
+<path fill="#eef7f0" stroke="#729b84" d="M236,-356C236,-356 125,-356 125,-356 119,-356 113,-350 113,-344 113,-344 113,-324 113,-324 113,-318 119,-312 125,-312 125,-312 236,-312 236,-312 242,-312 248,-318 248,-324 248,-324 248,-344 248,-344 248,-350 242,-356 236,-356"/>
+<text text-anchor="middle" x="180.5" y="-337.4" font-family="DejaVu Sans" font-size="12.00">Cliente en Angular</text>
+<text text-anchor="middle" x="180.5" y="-324.4" font-family="DejaVu Sans" font-size="12.00">Inicia sesión</text>
+</g>
+<!-- b -->
+<g id="node2" class="node">
+<title>b</title>
+<path fill="#eef7f0" stroke="#729b84" d="M175,-265C175,-265 12,-265 12,-265 6,-265 0,-259 0,-253 0,-253 0,-220 0,-220 0,-214 6,-208 12,-208 12,-208 175,-208 175,-208 181,-208 187,-214 187,-220 187,-220 187,-253 187,-253 187,-259 181,-265 175,-265"/>
+<text text-anchor="middle" x="93.5" y="-246.4" font-family="DejaVu Sans" font-size="12.00">Keycloak</text>
+<text text-anchor="middle" x="93.5" y="-233.4" font-family="DejaVu Sans" font-size="12.00">Authorization Code + PKCE</text>
+<text text-anchor="middle" x="93.5" y="-220.4" font-family="DejaVu Sans" font-size="12.00">Emite JWT firmado</text>
+</g>
+<!-- a&#45;&gt;b -->
+<g id="edge1" class="edge">
+<title>a&#45;&gt;b</title>
+<path fill="none" stroke="#526777" d="M112.72,-325.03C94.1,-319.37 75.91,-309.87 64.5,-294 59.52,-287.08 60.2,-279.18 63.57,-271.53"/>
+<polygon fill="#526777" stroke="#526777" points="65.82,-272.51 66.97,-265.19 61.5,-270.2 65.82,-272.51"/>
+<text text-anchor="middle" x="107" y="-286" font-family="DejaVu Sans" font-size="10.00">Redirección OIDC</text>
+</g>
+<!-- c -->
+<g id="node3" class="node">
+<title>c</title>
+<path fill="#eef7f0" stroke="#729b84" d="M369.5,-258.5C369.5,-258.5 251.5,-258.5 251.5,-258.5 245.5,-258.5 239.5,-252.5 239.5,-246.5 239.5,-246.5 239.5,-226.5 239.5,-226.5 239.5,-220.5 245.5,-214.5 251.5,-214.5 251.5,-214.5 369.5,-214.5 369.5,-214.5 375.5,-214.5 381.5,-220.5 381.5,-226.5 381.5,-226.5 381.5,-246.5 381.5,-246.5 381.5,-252.5 375.5,-258.5 369.5,-258.5"/>
+<text text-anchor="middle" x="310.5" y="-239.9" font-family="DejaVu Sans" font-size="12.00">Gateway</text>
+<text text-anchor="middle" x="310.5" y="-226.9" font-family="DejaVu Sans" font-size="12.00">Valida JWT y enruta</text>
+</g>
+<!-- a&#45;&gt;c -->
+<g id="edge3" class="edge">
+<title>a&#45;&gt;c</title>
+<path fill="none" stroke="#526777" d="M236.63,-311.8C246.73,-306.75 256.81,-300.81 265.5,-294 275.98,-285.79 285.51,-274.68 293.07,-264.47"/>
+<polygon fill="#526777" stroke="#526777" points="295.2,-265.72 297.29,-258.6 291.22,-262.86 295.2,-265.72"/>
+<text text-anchor="middle" x="340.5" y="-286" font-family="DejaVu Sans" font-size="10.00">Authorization: Bearer JWT</text>
+</g>
+<!-- b&#45;&gt;a -->
+<g id="edge2" class="edge">
+<title>b&#45;&gt;a</title>
+<path fill="none" stroke="#526777" d="M133.07,-265.21C139.62,-270.7 146.04,-276.72 151.5,-283 157.36,-289.75 162.66,-297.85 167.07,-305.55"/>
+<polygon fill="#526777" stroke="#526777" points="165.03,-306.94 170.56,-311.88 169.33,-304.57 165.03,-306.94"/>
+<text text-anchor="middle" x="209.5" y="-286" font-family="DejaVu Sans" font-size="10.00">Código y canje PKCE</text>
+</g>
+<!-- d -->
+<g id="node4" class="node">
+<title>d</title>
+<path fill="#eef7f0" stroke="#729b84" d="M382,-161C382,-161 239,-161 239,-161 233,-161 227,-155 227,-149 227,-149 227,-116 227,-116 227,-110 233,-104 239,-104 239,-104 382,-104 382,-104 388,-104 394,-110 394,-116 394,-116 394,-149 394,-149 394,-155 388,-161 382,-161"/>
+<text text-anchor="middle" x="310.5" y="-142.4" font-family="DejaVu Sans" font-size="12.00">Usuario MS</text>
+<text text-anchor="middle" x="310.5" y="-129.4" font-family="DejaVu Sans" font-size="12.00">Valida JWT nuevamente</text>
+<text text-anchor="middle" x="310.5" y="-116.4" font-family="DejaVu Sans" font-size="12.00">CurrentUser.subject()</text>
+</g>
+<!-- c&#45;&gt;d -->
+<g id="edge4" class="edge">
+<title>c&#45;&gt;d</title>
+<path fill="none" stroke="#526777" d="M310.5,-214.37C310.5,-201.13 310.5,-183.74 310.5,-168.49"/>
+<polygon fill="#526777" stroke="#526777" points="312.95,-168.2 310.5,-161.2 308.05,-168.2 312.95,-168.2"/>
+<text text-anchor="middle" x="354.5" y="-182" font-family="DejaVu Sans" font-size="10.00">HTTP con el token</text>
+</g>
+<!-- e -->
+<g id="node5" class="node">
+<title>e</title>
+<path fill="#eef7f0" stroke="#729b84" d="M401,-57C401,-57 220,-57 220,-57 214,-57 208,-51 208,-45 208,-45 208,-12 208,-12 208,-6 214,0 220,0 220,0 401,0 401,0 407,0 413,-6 413,-12 413,-12 413,-45 413,-45 413,-51 407,-57 401,-57"/>
+<text text-anchor="middle" x="310.5" y="-38.4" font-family="DejaVu Sans" font-size="12.00">Perfil propio</text>
+<text text-anchor="middle" x="310.5" y="-25.4" font-family="DejaVu Sans" font-size="12.00">Busca usuarios.subject = sub</text>
+<text text-anchor="middle" x="310.5" y="-12.4" font-family="DejaVu Sans" font-size="12.00">Valida propiedad de mascotas</text>
+</g>
+<!-- d&#45;&gt;e -->
+<g id="edge5" class="edge">
+<title>d&#45;&gt;e</title>
+<path fill="none" stroke="#526777" d="M310.5,-103.9C310.5,-91.65 310.5,-77.11 310.5,-64.14"/>
+<polygon fill="#526777" stroke="#526777" points="312.95,-64.12 310.5,-57.12 308.05,-64.12 312.95,-64.12"/>
+<text text-anchor="middle" x="362" y="-78" font-family="DejaVu Sans" font-size="10.00">Control de propiedad</text>
+</g>
+</g>
+</svg>
+<figcaption>Diagrama dinámico — Identidad y protección del perfil</figcaption></figure><p><strong>Autenticación:</strong> Keycloak identifica al usuario. <strong>Autorización:</strong> Gateway y cada servicio deciden qué puede hacer según el JWT y el recurso.</p><p>El token contiene <code>sub</code> (identidad de tipo String) y <code>realm_access.roles</code>. La conversión añade el prefijo ROLE_ para Spring Security. El id local de la fila de usuario sigue siendo Long; no debe confundirse con sub.</p><p>El servicio valida firma, emisor y audiencia configurada. Las claves públicas se consultan en el endpoint JWKS; la clave privada de firma permanece en Keycloak. Para el perfil propio se compara subject con la identidad autenticada.</p><div class="source"><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/CurrentUser.java#L18">CurrentUser.requireOwner(): propiedad de recursos</a> · línea 18</div><pre> 18    public static void requireOwner(String owner) {
+ 19      if (!admin() &amp;&amp; !subject().equals(owner))
+ 20        throw new AccessDeniedException(&quot;El recurso pertenece a otro cliente&quot;);
+ 21    }
+ 22  }</pre><p>Ubicaciones: <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SecurityConfiguration.java#L11">SecurityConfiguration: protección de rutas</a>, <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SecurityConfiguration.java#L26">Conversión de roles reales del JWT</a>, <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml#L30">Emisor, claves públicas y audiencia del JWT</a> y <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/src/app/core/auth.ts#L29">Auth de Angular: PKCE y sesión</a>.</p><aside class="note">El cliente Angular usa Authorization Code + PKCE y administra tokens en memoria; no guarda access_token en localStorage. Las guardas o botones ocultos no sustituyen la autorización del backend. Los roles internos de PostgreSQL no cambian el rol firmado por Keycloak.</aside></section><section class="chapter" id="mensajes"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>14. Kafka, Outbox e Inbox</h1><h2>Kafka: comunicar hechos de negocio</h2><p>Un productor publica un evento y cada grupo consumidor procesa los eventos que le corresponden. Garritas utiliza <code>garritas.ventas.v1</code>, con tres particiones y un grupo independiente para Venta, Catálogo y Pago. La clave de publicación es la venta, para distribuir sus eventos de forma coherente por partición.</p><p><strong>REST/Feign:</strong> el llamador espera una respuesta ahora. <strong>Kafka:</strong> se informa un hecho y el resultado final puede conocerse después. Hay desacople temporal y consistencia eventual; deben manejarse duplicados.</p><table><thead><tr><th>Pieza</th><th>Qué problema resuelve</th><th>Código</th></tr></thead><tbody><tr><td>SagaEvent</td><td>Contrato con eventId, tipo, ventaId, cliente, total, items y traceId.</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SagaEvent.java#L9">SagaEvent: contrato del evento</a></td></tr><tr><td>Outbox</td><td>Guarda el evento junto con el cambio de base; lo publica después.</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java#L35">Outbox.append(): cambio y evento en una transacción</a> y <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java#L48">Outbox.publish(): publicación posterior a Kafka</a></td></tr><tr><td>Inbox</td><td>Deduplica por eventId dentro de la transacción del consumidor.</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Inbox.java#L13">Inbox.claim(): deduplicación por eventId</a></td></tr><tr><td>reserva por venta</td><td>Evita repetir el efecto aunque llegue otro eventId para la misma venta.</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L37">InventarioEvents.reservar(): reserva e idempotencia</a></td></tr><tr><td>Reintentos y DLT</td><td>El manejador aplica reintentos finitos y deriva errores no resueltos a .DLT.</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/MessagingConfiguration.java#L41">Reintentos y topic DLT</a></td></tr></tbody></table><p>La entrega puede repetirse: si el proceso cae después del ACK de Kafka y antes de marcar publicado el outbox, el evento podría volver a salir. Por eso no prometemos “exactamente una vez” global; construimos efectos idempotentes.</p><p>Un mensaje que acaba en DLT requiere diagnóstico y reprocesamiento controlado; no se recupera por arte de magia. Usuario no implementa un consumidor de esta Saga. Su idempotencia de suscripciones se basa en la clave de petición y los períodos guardados en su propia base.</p></section><section class="chapter" id="saga"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>15. Saga: fallos y compensación</h1><figure><svg role="img" aria-label="Diagrama dinámico — Saga y compensación de inventario" width="438pt" height="486pt"
+ viewBox="0.00 0.00 438.42 485.92" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(12.96 472.96)">
+<title>G</title>
+<!-- a -->
+<g id="node1" class="node">
+<title>a</title>
+<path fill="#eef7f0" stroke="#729b84" d="M300,-460C300,-460 118,-460 118,-460 112,-460 106,-454 106,-448 106,-448 106,-415 106,-415 106,-409 112,-403 118,-403 118,-403 300,-403 300,-403 306,-403 312,-409 312,-415 312,-415 312,-448 312,-448 312,-454 306,-460 300,-460"/>
+<text text-anchor="middle" x="209" y="-441.4" font-family="DejaVu Sans" font-size="12.00">1. Venta crea orden pendiente</text>
+<text text-anchor="middle" x="209" y="-428.4" font-family="DejaVu Sans" font-size="12.00">Guarda venta + outbox</text>
+<text text-anchor="middle" x="209" y="-415.4" font-family="DejaVu Sans" font-size="12.00">Evento: venta.creada</text>
+</g>
+<!-- b -->
+<g id="node2" class="node">
+<title>b</title>
+<path fill="#eef7f0" stroke="#729b84" d="M295.5,-356C295.5,-356 122.5,-356 122.5,-356 116.5,-356 110.5,-350 110.5,-344 110.5,-344 110.5,-311 110.5,-311 110.5,-305 116.5,-299 122.5,-299 122.5,-299 295.5,-299 295.5,-299 301.5,-299 307.5,-305 307.5,-311 307.5,-311 307.5,-344 307.5,-344 307.5,-350 301.5,-356 295.5,-356"/>
+<text text-anchor="middle" x="209" y="-337.4" font-family="DejaVu Sans" font-size="12.00">2. Catálogo reserva stock</text>
+<text text-anchor="middle" x="209" y="-324.4" font-family="DejaVu Sans" font-size="12.00">10 → 8 unidades</text>
+<text text-anchor="middle" x="209" y="-311.4" font-family="DejaVu Sans" font-size="12.00">Evento: inventario.reservado</text>
+</g>
+<!-- a&#45;&gt;b -->
+<g id="edge1" class="edge">
+<title>a&#45;&gt;b</title>
+<path fill="none" stroke="#526777" d="M209,-402.9C209,-390.65 209,-376.11 209,-363.14"/>
+<polygon fill="#526777" stroke="#526777" points="211.45,-363.12 209,-356.12 206.55,-363.12 211.45,-363.12"/>
+<text text-anchor="middle" x="223" y="-377" font-family="DejaVu Sans" font-size="10.00">Kafka</text>
+</g>
+<!-- c -->
+<g id="node3" class="node">
+<title>c</title>
+<path fill="#eef7f0" stroke="#729b84" d="M305.5,-252C305.5,-252 112.5,-252 112.5,-252 106.5,-252 100.5,-246 100.5,-240 100.5,-240 100.5,-207 100.5,-207 100.5,-201 106.5,-195 112.5,-195 112.5,-195 305.5,-195 305.5,-195 311.5,-195 317.5,-201 317.5,-207 317.5,-207 317.5,-240 317.5,-240 317.5,-246 311.5,-252 305.5,-252"/>
+<text text-anchor="middle" x="209" y="-233.4" font-family="DejaVu Sans" font-size="12.00">3. Pago procesa el total</text>
+<text text-anchor="middle" x="209" y="-220.4" font-family="DejaVu Sans" font-size="12.00">TRANSFERENCIA simula rechazo</text>
+<text text-anchor="middle" x="209" y="-207.4" font-family="DejaVu Sans" font-size="12.00">Evento: pago.fallido</text>
+</g>
+<!-- b&#45;&gt;c -->
+<g id="edge2" class="edge">
+<title>b&#45;&gt;c</title>
+<path fill="none" stroke="#526777" d="M209,-298.9C209,-286.65 209,-272.11 209,-259.14"/>
+<polygon fill="#526777" stroke="#526777" points="211.45,-259.12 209,-252.12 206.55,-259.12 211.45,-259.12"/>
+<text text-anchor="middle" x="223" y="-273" font-family="DejaVu Sans" font-size="10.00">Kafka</text>
+</g>
+<!-- d -->
+<g id="node4" class="node">
+<title>d</title>
+<path fill="#fff1cc" stroke="#729b84" d="M182,-148C182,-148 20,-148 20,-148 14,-148 8,-142 8,-136 8,-136 8,-103 8,-103 8,-97 14,-91 20,-91 20,-91 182,-91 182,-91 188,-91 194,-97 194,-103 194,-103 194,-136 194,-136 194,-142 188,-148 182,-148"/>
+<text text-anchor="middle" x="101" y="-129.4" font-family="DejaVu Sans" font-size="12.00">4. Catálogo compensa</text>
+<text text-anchor="middle" x="101" y="-116.4" font-family="DejaVu Sans" font-size="12.00">8 → 10 unidades</text>
+<text text-anchor="middle" x="101" y="-103.4" font-family="DejaVu Sans" font-size="12.00">Evento: inventario.liberado</text>
+</g>
+<!-- c&#45;&gt;d -->
+<g id="edge3" class="edge">
+<title>c&#45;&gt;d</title>
+<path fill="none" stroke="#b45309" d="M179.77,-194.9C166.09,-181.97 149.69,-166.48 135.41,-153"/>
+<polygon fill="#b45309" stroke="#b45309" points="137.02,-151.15 130.25,-148.12 133.66,-154.71 137.02,-151.15"/>
+<text text-anchor="middle" x="180" y="-169" font-family="DejaVu Sans" font-size="10.00">Rechazo</text>
+</g>
+<!-- ok -->
+<g id="node6" class="node">
+<title>ok</title>
+<path fill="#dcfce7" stroke="#729b84" d="M400.5,-148C400.5,-148 231.5,-148 231.5,-148 225.5,-148 219.5,-142 219.5,-136 219.5,-136 219.5,-103 219.5,-103 219.5,-97 225.5,-91 231.5,-91 231.5,-91 400.5,-91 400.5,-91 406.5,-91 412.5,-97 412.5,-103 412.5,-103 412.5,-136 412.5,-136 412.5,-142 406.5,-148 400.5,-148"/>
+<text text-anchor="middle" x="316" y="-129.4" font-family="DejaVu Sans" font-size="12.00">Pago aprobado</text>
+<text text-anchor="middle" x="316" y="-116.4" font-family="DejaVu Sans" font-size="12.00">pago.validado → PAGADA</text>
+<text text-anchor="middle" x="316" y="-103.4" font-family="DejaVu Sans" font-size="12.00">Despacho si incluyó delivery</text>
+</g>
+<!-- c&#45;&gt;ok -->
+<g id="edge5" class="edge">
+<title>c&#45;&gt;ok</title>
+<path fill="none" stroke="#526777" stroke-dasharray="5,2" d="M237.96,-194.9C251.52,-181.97 267.76,-166.48 281.91,-153"/>
+<polygon fill="#526777" stroke="#526777" points="283.64,-154.73 287.02,-148.12 280.26,-151.18 283.64,-154.73"/>
+<text text-anchor="middle" x="312" y="-169" font-family="DejaVu Sans" font-size="10.00">Alternativa exitosa</text>
+</g>
+<!-- e -->
+<g id="node5" class="node">
+<title>e</title>
+<path fill="#eef7f0" stroke="#729b84" d="M190,-44C190,-44 12,-44 12,-44 6,-44 0,-38 0,-32 0,-32 0,-12 0,-12 0,-6 6,0 12,0 12,0 190,0 190,0 196,0 202,-6 202,-12 202,-12 202,-32 202,-32 202,-38 196,-44 190,-44"/>
+<text text-anchor="middle" x="101" y="-25.4" font-family="DejaVu Sans" font-size="12.00">5. Venta termina CANCELADA</text>
+<text text-anchor="middle" x="101" y="-12.4" font-family="DejaVu Sans" font-size="12.00">Sin despacho</text>
+</g>
+<!-- d&#45;&gt;e -->
+<g id="edge4" class="edge">
+<title>d&#45;&gt;e</title>
+<path fill="none" stroke="#526777" d="M101,-90.88C101,-78.44 101,-63.78 101,-51.27"/>
+<polygon fill="#526777" stroke="#526777" points="103.45,-51.19 101,-44.19 98.55,-51.19 103.45,-51.19"/>
+<text text-anchor="middle" x="115" y="-65" font-family="DejaVu Sans" font-size="10.00">Kafka</text>
+</g>
+</g>
+</svg>
+<figcaption>Diagrama dinámico — Saga y compensación de inventario</figcaption></figure><h2>Compensación real</h2><p>Es una operación nueva que revierte un efecto de negocio ya confirmado. Catálogo pasó de stock 10 a 8 al reservar dos unidades. Ante pago.fallido, <code>liberar()</code> recupera las cantidades de la reserva original, pasa de 8 a 10 y marca la reserva LIBERADA. Si el evento vuelve a llegar, no debe liberar nuevamente.</p><div class="source"><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L76">InventarioEvents.liberar(): compensación</a> · línea 76</div><pre> 76    private void liberar(SagaEvent e) {
+ 77      var rows =
+ 78          jdbc.queryForList(
+ 79              &quot;SELECT estado,payload FROM reservas_stock WHERE id_venta=? FOR UPDATE&quot;, e.ventaId());
+ 80      if (rows.isEmpty()) throw new IllegalStateException(&quot;Reserva inexistente: &quot; + e.ventaId());
+ 81      if (!rows.getFirst().get(&quot;estado&quot;).equals(&quot;RESERVADA&quot;)) return;
+ 82      var original = json.readValue(rows.getFirst().get(&quot;payload&quot;).toString(), SagaEvent.class);
+ 83      for (var item :
+ 84          original.items().stream().sorted(Comparator.comparing(SagaEvent.Item::productoId)).toList())
+ 85        jdbc.update(
+ 86            &quot;UPDATE productos SET stock=stock+?,version=version+1 WHERE id=?&quot;,
+ 87            item.cantidad(),
+ 88            item.productoId());
+ 89      jdbc.update(&quot;UPDATE reservas_stock SET estado=&#x27;LIBERADA&#x27; WHERE id_venta=?&quot;, e.ventaId());
+ 90      outbox.append(original.next(&quot;inventario.liberado&quot;));
+ 91    }
+ 92  }</pre><table><thead><tr><th>Situación</th><th>Qué hace Garritas</th><th>Clasificación</th></tr></thead><tbody><tr><td>Falla una validación previa</td><td>No se crea la venta.</td><td>Validación / resiliencia</td></tr><tr><td>Falla la reserva asíncrona</td><td>Venta existente termina cancelada sin pago.</td><td>Rechazo del proceso</td></tr><tr><td>Pago rechaza tras reservar</td><td>Catálogo devuelve stock; Venta COMPENSANDO → CANCELADA.</td><td>Compensación</td></tr><tr><td>Pago/Kafka temporalmente detenido</td><td>El proceso puede continuar tras recuperarse; revisar reintentos y DLT ante errores persistentes.</td><td>Recuperación</td></tr><tr><td>Evento repetido</td><td>No se repite el efecto.</td><td>Idempotencia</td></tr><tr><td>Error antes del commit de una base</td><td>Se deshacen cambios de esa transacción.</td><td>Rollback local</td></tr></tbody></table><aside class="note">No existe compensación universal de todos los módulos ni una transacción ACID que abarque sus bases. El pago de Garritas es simulado. Cancelar una suscripción es una transición local; no equivale a un reembolso bancario.</aside></section><section class="chapter" id="claves"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>16. Credenciales, claves e identificadores</h1><p>“Claves” puede referirse a contraseñas, identificadores o claves de seguridad. Aquí se separan para no confundirlos.</p><h2>Credenciales de demostración de la configuración DEV</h2><table><thead><tr><th>Acceso</th><th>Usuario / contraseña inicial</th><th>Dónde está</th></tr></thead><tbody><tr><td>Angular cliente</td><td>cliente / Cliente123!</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/keycloak/garritas-realm.json#L47">Usuario cliente de demostración en Keycloak</a></td></tr><tr><td>Angular administrador</td><td>admin-store / Admin123!</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/keycloak/garritas-realm.json#L65">Usuario administrador de la tienda</a></td></tr><tr><td>Keycloak, consola de administración</td><td>admin / local-admin-change-me</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/keycloak/compose-dev.yml#L32">Contraseña de administración inicial de Keycloak</a></td></tr><tr><td>Grafana</td><td>admin / local-grafana</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/obs/compose-dev.yml#L46">Contraseña inicial de Grafana DEV</a></td></tr><tr><td>PostgreSQL Catálogo</td><td>garritas / garritas · DB garritas_catalogo_db</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/compose-dev.yml#L11">PostgreSQL de Catálogo: credenciales DEV</a></td></tr><tr><td>PostgreSQL Usuario</td><td>garritas / garritas · DB garritas_usuario_db</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/compose-dev.yml#L11">PostgreSQL de Usuario: credenciales DEV</a></td></tr></tbody></table><p>Son valores de desarrollo publicados en el repositorio. Si cambiaste la contraseña en una instalación o definiste la variable de entorno correspondiente, prevalece ese valor. Editar el archivo de importación del realm no restablece automáticamente la contraseña de un usuario existente.</p><h2>Claves de firma y claves de idempotencia</h2><table><thead><tr><th>Término</th><th>Significado y ubicación</th></tr></thead><tbody><tr><td>Clave privada JWT</td><td>Keycloak la administra. No se pega una clave privada en Angular ni en Usuario MS.</td></tr><tr><td>Claves públicas JWKS</td><td>http://localhost:18180/realms/garritas/protocol/openid-connect/certs · <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml#L30">Emisor, claves públicas y audiencia del JWT</a></td></tr><tr><td>sub</td><td>Identificador del usuario autenticado; se guarda como subject. <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/UsuarioService.java#L128">UsuarioService.miUsuario(): identidad y perfil</a></td></tr><tr><td>Idempotency-Key</td><td>UUID enviado para reintentar una operación sin duplicarla. <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/SuscripcionController.java#L14">SuscripcionController: planes y ciclo de suscripciones</a></td></tr><tr><td>eventId</td><td>Identificador de un evento; Inbox lo usa para deduplicar. <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Inbox.java#L13">Inbox.claim(): deduplicación por eventId</a></td></tr><tr><td>idVenta</td><td>Clave de negocio de la reserva; protege también contra duplicados semánticos. <a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L37">InventarioEvents.reservar(): reserva e idempotencia</a></td></tr></tbody></table><aside class="note">La SPA es un cliente público (publicClient=true): no tiene client_secret. Su protección de login se basa en PKCE.</aside></section><section class="chapter" id="demo"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>17. Cómo exponerlo desde Angular</h1><h2>Guion para Fio: tres minutos, con datos preparados</h2><table><thead><tr><th>Tiempo</th><th>Acción visible</th><th>Frase para explicar</th></tr></thead><tbody><tr><td>0:00–0:40</td><td>Administrador → Productos. Muestra un producto con dos categorías y usa un filtro.</td><td>“Catálogo mantiene productos y la relación muchos a muchos Producto–Categoría”.</td></tr><tr><td>0:40–1:15</td><td>Cliente → Mi cuenta y mascotas. Guarda un dato y recarga; muestra edad con unidad.</td><td>“El perfil se vincula al sub del token; la mascota pertenece a este cliente”.</td></tr><tr><td>1:15–1:50</td><td>Planes y suscripciones. Muestra un contrato y sus períodos; utiliza un cliente preparado.</td><td>“Usuario registra una operación con estado e historial. Un reintento con la misma clave no agrega otro período”.</td></tr><tr><td>1:50–3:00</td><td>Anota stock; compra con TRANSFERENCIA; espera cancelación y comprueba stock recuperado. Apoya con logs/eventos.</td><td>“La reserva se confirmó, el pago falló y Catálogo compensó liberando las unidades”.</td></tr></tbody></table><h2>Pestañas listas antes de empezar</h2><p>Angular en una ventana de cliente y otra de administrador; Kafka UI en :18085; Grafana en :13000; mapa de código abierto. No uses la cuenta administradora para comprar. Preparar datos evita dedicar la demo a escribir formularios largos.</p><h2>Qué observar en las herramientas</h2><p>En Kafka UI selecciona el topic de ventas y localiza venta.creada, inventario.reservado, pago.fallido e inventario.liberado por ventaId. En Grafana, Explore → Loki permite buscar el traceId y comparar servicios. Para disponibilidad de Keycloak usa Prometheus: <code>up{job="keycloak"}</code>; esto demuestra scrape correcto, no por sí solo un login exitoso.</p><aside class="note">Presionar Renovar dos veces con claves nuevas son dos operaciones distintas. Para demostrar idempotencia, hay que repetir la misma petición con el mismo propietario y la misma Idempotency-Key.</aside></section><section class="chapter" id="preguntas"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>18. Preguntas y respuestas rápidas</h1><dl>
+<dt>¿Qué diferencia hay entre Catálogo y Usuario?</dt><dd>Catálogo administra lo que se vende y su inventario; Usuario administra perfiles, mascotas y el ciclo de suscripciones.</dd>
+<dt>¿Dónde está mi muchos a muchos?</dt><dd>En Producto.categorias → producto_categoria y Usuario.roles → usuario_rol. Usuario–Plan se representa mediante Suscripcion porque la asociación tiene datos de negocio.</dd>
+<dt>¿Usuario autentica con contraseña?</dt><dd>No. Keycloak autentica; Usuario conserva el perfil asociado al sub y valida el JWT para sus rutas protegidas.</dd>
+<dt>¿Para qué Eureka si ya existe Gateway?</dt><dd>Gateway es la entrada y enruta; Eureka permite descubrir las instancias a las que enruta y a las que otros servicios consultan.</dd>
+<dt>¿Kafka reemplaza Feign?</dt><dd>No. Feign consulta datos que se necesitan inmediatamente; Kafka desacopla pasos que pueden completarse después.</dd>
+<dt>¿Qué compensación implementaste?</dt><dd>Liberar stock reservado cuando el pago es rechazado. El efecto confirmado se revierte mediante otra transacción y otro evento.</dd>
+<dt>¿Cancelar un estado basta para compensar?</dt><dd>No. Hay que deshacer el efecto correspondiente: por ejemplo, recuperar las unidades reservadas.</dd>
+<dt>¿Por qué el duplicado no libera dos veces?</dt><dd>Inbox detecta el eventId y la reserva por venta solo se libera si sigue RESERVADA. Una reserva LIBERADA no vuelve a sumar stock.</dd>
+<dt>¿Todo queda consistente de inmediato?</dt><dd>No. Hay estados intermedios y consistencia eventual. Se recupera el proceso y se diagnostican mensajes fallidos con logs, métricas y DLT.</dd>
+<dt>¿Qué demuestran los tests existentes?</dt><dd>La revisión cf3cede documenta 30 pruebas Java y 15 Angular más verificaciones de flujos y fallos. Esta entrega es documental: no vuelve a ejecutar ni certifica tu instalación Windows.</dd>
+</dl></section><section class="chapter" id="mapa"><p class="eyebrow">GUÍA DE ESTUDIO · GARRITAS STORE</p><h1>19. Mapa completo del código</h1><p>Rutas relativas a la raíz <code>Garritas-actualizado</code>. En Windows puedes usar Ctrl+P y pegar la ruta con las barras tal como aparece. La línea corresponde al commit <code>cf3cede</code>.</p><table><thead><tr><th>Qué buscar</th><th>Archivo exacto</th><th>Línea</th></tr></thead><tbody><tr><td>ProductoController: endpoints de productos</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/ProductoController.java#L16"><code class="path">services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/ProductoController.java</code></a></td><td>16</td></tr><tr><td>ProductoService.crear(): alta de productos</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java#L45"><code class="path">services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java</code></a></td><td>45</td></tr><tr><td>ProductoService.actualizar(): edición y categorías</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java#L53"><code class="path">services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java</code></a></td><td>53</td></tr><tr><td>ProductoService.eliminar(): baja lógica</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java#L64"><code class="path">services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java</code></a></td><td>64</td></tr><tr><td>ProductoRepository.buscar(): filtros y paginación</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/repository/ProductoRepository.java#L30"><code class="path">services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/repository/ProductoRepository.java</code></a></td><td>30</td></tr><tr><td>Producto: relación N:M con categorías</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/entity/Producto.java#L44"><code class="path">services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/entity/Producto.java</code></a></td><td>44</td></tr><tr><td>ProductoMapper: entidad a respuesta</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/mapper/ProductoMapper.java#L30"><code class="path">services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/mapper/ProductoMapper.java</code></a></td><td>30</td></tr><tr><td>CategoriaController: CRUD de categorías</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/CategoriaController.java#L16"><code class="path">services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/CategoriaController.java</code></a></td><td>16</td></tr><tr><td>CategoriaService: reglas y persistencia</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/CategoriaService.java#L16"><code class="path">services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/CategoriaService.java</code></a></td><td>16</td></tr><tr><td>InventarioEvents.consume(): entrada de Kafka</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L25"><code class="path">services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java</code></a></td><td>25</td></tr><tr><td>InventarioEvents.reservar(): reserva e idempotencia</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L37"><code class="path">services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java</code></a></td><td>37</td></tr><tr><td>Bloqueo de filas antes de cambiar stock</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L52"><code class="path">services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java</code></a></td><td>52</td></tr><tr><td>InventarioEvents.liberar(): compensación</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L76"><code class="path">services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java</code></a></td><td>76</td></tr><tr><td>UsuarioController: gestión administrativa de usuarios</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/UsuarioController.java#L16"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/UsuarioController.java</code></a></td><td>16</td></tr><tr><td>MiCuentaController: perfil y mascotas propias</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MiCuentaController.java#L14"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MiCuentaController.java</code></a></td><td>14</td></tr><tr><td>UsuarioService.guardarMe(): persistencia por sub</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/UsuarioService.java#L95"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/UsuarioService.java</code></a></td><td>95</td></tr><tr><td>UsuarioService.miUsuario(): identidad y perfil</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/UsuarioService.java#L128"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/UsuarioService.java</code></a></td><td>128</td></tr><tr><td>Usuario: relación N:M con Rol</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Usuario.java#L50"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Usuario.java</code></a></td><td>50</td></tr><tr><td>Usuario: relación 1:N con Mascota</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Usuario.java#L42"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Usuario.java</code></a></td><td>42</td></tr><tr><td>RolController: catálogo de roles internos</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/RolController.java#L15"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/RolController.java</code></a></td><td>15</td></tr><tr><td>RolService.eliminar(): protección de roles usados</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/RolService.java#L50"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/RolService.java</code></a></td><td>50</td></tr><tr><td>UsuarioController.asignarRol(): asociación usuario–rol</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/UsuarioController.java#L62"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/UsuarioController.java</code></a></td><td>62</td></tr><tr><td>MascotaController: mascotas por usuario</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MascotaController.java#L15"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MascotaController.java</code></a></td><td>15</td></tr><tr><td>MascotaService.crear(): alta y propiedad</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/MascotaService.java#L29"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/MascotaService.java</code></a></td><td>29</td></tr><tr><td>UsuarioRequest: validación del celular y DNI</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/dto/UsuarioRequest.java#L26"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/dto/UsuarioRequest.java</code></a></td><td>26</td></tr><tr><td>MascotaRequest: edad y unidad explícita</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/dto/MascotaRequest.java#L25"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/dto/MascotaRequest.java</code></a></td><td>25</td></tr><tr><td>SuscripcionController: planes y ciclo de suscripciones</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/SuscripcionController.java#L14"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/SuscripcionController.java</code></a></td><td>14</td></tr><tr><td>SuscripcionService.contratar(): proceso transaccional</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java#L64"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java</code></a></td><td>64</td></tr><tr><td>SuscripcionService.renovar(): período e idempotencia</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java#L98"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java</code></a></td><td>98</td></tr><tr><td>SuscripcionService.cancelar(): transición local</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java#L134"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java</code></a></td><td>134</td></tr><tr><td>Bloqueos de suscripción y clave de reintento</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java#L142"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java</code></a></td><td>142</td></tr><tr><td>Suscripcion: entidad de asociación Usuario–Plan</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Suscripcion.java#L18"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Suscripcion.java</code></a></td><td>18</td></tr><tr><td>PeriodoSuscripcion: clave y precio histórico</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/PeriodoSuscripcion.java#L28"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/PeriodoSuscripcion.java</code></a></td><td>28</td></tr><tr><td>UsuarioRepository: búsqueda por rol y DNI/nombre</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/repository/UsuarioRepository.java#L23"><code class="path">services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/repository/UsuarioRepository.java</code></a></td><td>23</td></tr><tr><td>SecurityConfiguration: protección de rutas</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SecurityConfiguration.java#L11"><code class="path">infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SecurityConfiguration.java</code></a></td><td>11</td></tr><tr><td>Conversión de roles reales del JWT</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SecurityConfiguration.java#L26"><code class="path">infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SecurityConfiguration.java</code></a></td><td>26</td></tr><tr><td>CurrentUser.requireOwner(): propiedad de recursos</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/CurrentUser.java#L18"><code class="path">infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/CurrentUser.java</code></a></td><td>18</td></tr><tr><td>Outbox.append(): cambio y evento en una transacción</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java#L35"><code class="path">infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java</code></a></td><td>35</td></tr><tr><td>Outbox.publish(): publicación posterior a Kafka</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java#L48"><code class="path">infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java</code></a></td><td>48</td></tr><tr><td>Inbox.claim(): deduplicación por eventId</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Inbox.java#L13"><code class="path">infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Inbox.java</code></a></td><td>13</td></tr><tr><td>SagaEvent: contrato del evento</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SagaEvent.java#L9"><code class="path">infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SagaEvent.java</code></a></td><td>9</td></tr><tr><td>MessagingConfiguration: topic y particiones</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/MessagingConfiguration.java#L31"><code class="path">infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/MessagingConfiguration.java</code></a></td><td>31</td></tr><tr><td>Reintentos y topic DLT</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/MessagingConfiguration.java#L41"><code class="path">infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/MessagingConfiguration.java</code></a></td><td>41</td></tr><tr><td>VentaService.crear(): validación, total y outbox</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/service/VentaService.java#L49"><code class="path">services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/service/VentaService.java</code></a></td><td>49</td></tr><tr><td>VentaEvents: estados de Saga y despacho pagado</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/messaging/VentaEvents.java#L22"><code class="path">services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/messaging/VentaEvents.java</code></a></td><td>22</td></tr><tr><td>ProductoClient: Feign por nombre lógico</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/ProductoClient.java#L7"><code class="path">services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/ProductoClient.java</code></a></td><td>7</td></tr><tr><td>CatalogoConsulta: Circuit Breaker y respuesta controlada</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/CatalogoConsulta.java#L18"><code class="path">services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/CatalogoConsulta.java</code></a></td><td>18</td></tr><tr><td>PagoEvents: pago simulado y rechazo</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/messaging/PagoEvents.java#L33"><code class="path">services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/messaging/PagoEvents.java</code></a></td><td>33</td></tr><tr><td>Rutas del Gateway hacia Catálogo y Usuario</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-gateway-dev.yml#L26"><code class="path">infra/garritas-config/config-repo/garritas-gateway-dev.yml</code></a></td><td>26</td></tr><tr><td>Configuración de Eureka DEV</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-eureka-dev.yml#L2"><code class="path">infra/garritas-config/config-repo/garritas-eureka-dev.yml</code></a></td><td>2</td></tr><tr><td>Registro de Catálogo en Eureka</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-catalogo-ms-dev.yml#L69"><code class="path">infra/garritas-config/config-repo/garritas-catalogo-ms-dev.yml</code></a></td><td>69</td></tr><tr><td>Registro de Usuario en Eureka</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml#L45"><code class="path">infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml</code></a></td><td>45</td></tr><tr><td>Emisor, claves públicas y audiencia del JWT</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml#L30"><code class="path">infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml</code></a></td><td>30</td></tr><tr><td>Timeouts Feign y configuración de los circuitos</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-venta-ms-dev.yml#L60"><code class="path">infra/garritas-config/config-repo/garritas-venta-ms-dev.yml</code></a></td><td>60</td></tr><tr><td>Kafka: direcciones internas y externas</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/kafka/compose-dev.yml#L16"><code class="path">kafka/compose-dev.yml</code></a></td><td>16</td></tr><tr><td>Grupo consumidor propio de Catálogo</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/infra/garritas-config/config-repo/garritas-catalogo-ms-dev.yml#L47"><code class="path">infra/garritas-config/config-repo/garritas-catalogo-ms-dev.yml</code></a></td><td>47</td></tr><tr><td>PostgreSQL de Catálogo: credenciales DEV</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/compose-dev.yml#L11"><code class="path">services/garritas-catalogo-ms/compose-dev.yml</code></a></td><td>11</td></tr><tr><td>PostgreSQL de Usuario: credenciales DEV</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/compose-dev.yml#L11"><code class="path">services/garritas-usuario-ms/compose-dev.yml</code></a></td><td>11</td></tr><tr><td>Usuario cliente de demostración en Keycloak</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/keycloak/garritas-realm.json#L47"><code class="path">keycloak/garritas-realm.json</code></a></td><td>47</td></tr><tr><td>Usuario administrador de la tienda</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/keycloak/garritas-realm.json#L65"><code class="path">keycloak/garritas-realm.json</code></a></td><td>65</td></tr><tr><td>Contraseña de administración inicial de Keycloak</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/keycloak/compose-dev.yml#L32"><code class="path">keycloak/compose-dev.yml</code></a></td><td>32</td></tr><tr><td>Contraseña inicial de Grafana DEV</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/obs/compose-dev.yml#L46"><code class="path">obs/compose-dev.yml</code></a></td><td>46</td></tr><tr><td>Auth de Angular: PKCE y sesión</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/src/app/core/auth.ts#L29"><code class="path">clients/garritas-frontend/src/app/core/auth.ts</code></a></td><td>29</td></tr><tr><td>Angular: dirección de la API del Gateway</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/public/config.json#L1"><code class="path">clients/garritas-frontend/public/config.json</code></a></td><td>1</td></tr><tr><td>Angular: formulario de producto y categorías</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/src/app/features/admin/productos.component.ts#L149"><code class="path">clients/garritas-frontend/src/app/features/admin/productos.component.ts</code></a></td><td>149</td></tr><tr><td>Angular: guardar y volver a consultar el perfil</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/src/app/features/cuenta/cuenta.component.ts#L61"><code class="path">clients/garritas-frontend/src/app/features/cuenta/cuenta.component.ts</code></a></td><td>61</td></tr><tr><td>Angular: asignación de roles internos</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/src/app/features/admin/usuarios-roles.component.ts#L16"><code class="path">clients/garritas-frontend/src/app/features/admin/usuarios-roles.component.ts</code></a></td><td>16</td></tr><tr><td>Angular: contratación de planes</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/clients/garritas-frontend/src/app/features/planes/planes.component.ts#L118"><code class="path">clients/garritas-frontend/src/app/features/planes/planes.component.ts</code></a></td><td>118</td></tr><tr><td>Migración producto_categoria</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-catalogo-ms/src/main/resources/db/migration/V5__producto_categorias_many_to_many.sql#L1"><code class="path">services/garritas-catalogo-ms/src/main/resources/db/migration/V5__producto_categorias_many_to_many.sql</code></a></td><td>1</td></tr><tr><td>Migración rol y usuario_rol</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/resources/db/migration/V5__create_roles_tables.sql#L1"><code class="path">services/garritas-usuario-ms/src/main/resources/db/migration/V5__create_roles_tables.sql</code></a></td><td>1</td></tr><tr><td>Migración de suscripciones y períodos</td><td><a href="https://github.com/Nikol235/Garritas-/blob/cf3cedec51da578248ce840fe03c4600bb7af593/services/garritas-usuario-ms/src/main/resources/db/migration/V4__suscripciones_periodos.sql#L2"><code class="path">services/garritas-usuario-ms/src/main/resources/db/migration/V4__suscripciones_periodos.sql</code></a></td><td>2</td></tr></tbody></table></section></main></body></html>

@@ -1,0 +1,40 @@
+digraph G { graph [rankdir=TB,bgcolor="transparent",pad="0.18",nodesep="0.35",ranksep="0.48",fontname="DejaVu Sans",fontsize=12]; node [shape=box,style="rounded,filled",fillcolor="#eef7f0",color="#729b84",fontname="DejaVu Sans",fontsize=12,margin="0.16,0.12"]; edge [color="#526777",fontname="DejaVu Sans",fontsize=10,arrowsize=0.7];
+rest [label="ProductoController
+CategoriaController
+[Componentes REST]"];
+security [label="SecurityConfiguration
+CurrentUser
+[Seguridad compartida]",fillcolor="#e2e8f0"];
+service [label="ProductoService
+CategoriaService
+[Reglas y transacciones]"];
+mapper [label="ProductoMapper
+CategoriaMapper + DTO
+[Conversión]"];
+repo [label="ProductoRepository
+CategoriaRepository
+[JPA y consultas]"];
+consumer [label="InventarioEvents
+[Consumidor Kafka]
+Reserva / libera stock",fillcolor="#fff1cc"];
+inbox [label="Inbox
+[Deduplicación]"];
+outbox [label="Outbox
+[Publicación durable]"];
+db [label="PostgreSQL Catálogo
+Productos, categorías,
+reservas, inbox y outbox",shape=cylinder];
+rest -> security [label="Petición protegida",style=dashed];
+rest -> service [label="Delega"];
+service -> repo [label="Consulta / guarda"];
+service -> mapper [label="Construye respuesta"];
+repo -> db [label="SQL vía JPA"];
+consumer -> inbox [label="claim(eventId)"];
+consumer -> db [label="JDBC + bloqueos de fila"];
+consumer -> outbox [label="Resultado de reserva / liberación"];
+inbox -> db [label="Misma transacción"];
+outbox -> db [label="Guarda evento"];
+
+subgraph cluster_boundary {label="Límite del contenedor: garritas-catalogo-ms"; color="#9db8a6"; style="rounded,dashed"; fontname="DejaVu Sans"; fontsize=12; rest; security; service; mapper; repo; consumer; inbox; outbox;}
+
+}

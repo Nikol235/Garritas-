@@ -1,0 +1,29 @@
+digraph G { graph [rankdir=TB,bgcolor="transparent",pad="0.18",nodesep="0.35",ranksep="0.48",fontname="DejaVu Sans",fontsize=12]; node [shape=box,style="rounded,filled",fillcolor="#eef7f0",color="#729b84",fontname="DejaVu Sans",fontsize=12,margin="0.16,0.12"]; edge [color="#526777",fontname="DejaVu Sans",fontsize=10,arrowsize=0.7];
+u [label="Usuario
+[Clase JPA]
+id Long + subject String
+Datos de contacto"];
+m [label="Mascota
+[Clase JPA]
+Edad + DIAS/MESES"];
+r [label="Rol
+[Clase JPA]
+Clasificación interna"];
+s [label="Suscripcion
+[Entidad de asociación]
+Estado y vigencia"];
+p [label="Plan
+[Clase JPA]
+Precio y duración"];
+period [label="PeriodoSuscripcion
+[Clase JPA]
+ALTA / RENOVACION
+Precio histórico + clave"];
+u -> m [label="1:N · mascotas"];
+u -> r [label="N:M vía usuario_rol",dir=both];
+u -> s [label="1:N (por id_usuario)"];
+p -> s [label="1:N (por id_plan)"];
+s -> period [label="1:N · periodos"];
+u -> period [label="1:N (por id_usuario)",style=dashed];
+
+}

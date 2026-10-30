@@ -150,3 +150,7 @@ La documentación puede construirse con `pip install -r docs/requirements.txt` y
 ### Integración de mejoras y reglas de negocio
 
 Consulta [la actualización de Catálogo, Usuario, delivery y paquetes](docs/integracion-fio-y-reglas-tienda.md) para conocer los cambios, las migraciones y sus límites.
+
+### Guía de estudio C4: Catálogo y Usuario
+
+[HTML, PDF, diagramas y mapa de código](docs/guia-estudio-catalogo-usuario/README.md). Incluye los cuatro niveles C4, responsabilidades, CRUD, Saga/Kafka, compensación, seguridad y credenciales de demostración.

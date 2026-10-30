@@ -1,0 +1,21 @@
+digraph G { graph [rankdir=TB,bgcolor="transparent",pad="0.18",nodesep="0.35",ranksep="0.48",fontname="DejaVu Sans",fontsize=12]; node [shape=box,style="rounded,filled",fillcolor="#eef7f0",color="#729b84",fontname="DejaVu Sans",fontsize=12,margin="0.16,0.12"]; edge [color="#526777",fontname="DejaVu Sans",fontsize=10,arrowsize=0.7];
+a [label="Cliente en Angular
+Inicia sesión"];
+b [label="Keycloak
+Authorization Code + PKCE
+Emite JWT firmado"];
+c [label="Gateway
+Valida JWT y enruta"];
+d [label="Usuario MS
+Valida JWT nuevamente
+CurrentUser.subject()"];
+e [label="Perfil propio
+Busca usuarios.subject = sub
+Valida propiedad de mascotas"];
+a -> b [label="Redirección OIDC"];
+b -> a [label="Código y canje PKCE"];
+a -> c [label="Authorization: Bearer JWT"];
+c -> d [label="HTTP con el token"];
+d -> e [label="Control de propiedad"];
+
+}

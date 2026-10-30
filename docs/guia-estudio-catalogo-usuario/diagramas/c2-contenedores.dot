@@ -1,0 +1,24 @@
+digraph G { graph [rankdir=TB,bgcolor="transparent",pad="0.18",nodesep="0.35",ranksep="0.48",fontname="DejaVu Sans",fontsize=12]; node [shape=box,style="rounded,filled",fillcolor="#eef7f0",color="#729b84",fontname="DejaVu Sans",fontsize=12,margin="0.16,0.12"]; edge [color="#526777",fontname="DejaVu Sans",fontsize=10,arrowsize=0.7];subgraph cluster_store {
+ label="Garritas Store · aplicaciones y bases enfocadas"; color="#9db8a6"; style="rounded,dashed";
+ angular [label="Angular :4200\n[SPA]\nCliente web"];
+ gateway [label="Gateway :18080\n[Spring Cloud Gateway MVC]\nEntrada de las APIs"];
+ venta [label="Venta :8081\n[Spring Boot]\nProceso de compra",fillcolor="#e2e8f0"];
+ citas [label="Citas :8084\n[Spring Boot]\nReservas",fillcolor="#e2e8f0"];
+ cat [label="Catálogo :8085\n[Spring Boot]\nProductos e inventario",fillcolor="#176b4d",fontcolor="white"];
+ usr [label="Usuario :8086\n[Spring Boot]\nPerfiles y suscripciones",fillcolor="#176b4d",fontcolor="white"];
+ dbc [label="PostgreSQL Catálogo\n:15445 → :5432\n[Base de datos]",shape=cylinder];
+ dbu [label="PostgreSQL Usuario\n:15446 → :5432\n[Base de datos]",shape=cylinder];
+ kafka [label="Kafka :19092 (host)\n[Broker]\nEventos de ventas",fillcolor="#fff1cc"];
+ angular -> gateway [label="REST + JWT"];
+ gateway -> cat [label="/productos y /categorias"];
+ gateway -> usr [label="/usuarios, /planes, etc."];
+ venta -> cat [label="Feign: precio y stock"];
+ citas -> usr [label="HTTP: mascota propia"];
+ cat -> dbc [label="JPA / JDBC"];
+ usr -> dbu [label="JPA / JDBC"];
+ cat -> kafka [label="Consume / produce",color="#b7791f"];
+ {rank=same;venta;gateway;citas;}
+ {rank=same;cat;usr;}
+ {rank=same;dbc;kafka;dbu;}
+}
+}

@@ -1,0 +1,32 @@
+digraph G { graph [rankdir=TB,bgcolor="transparent",pad="0.18",nodesep="0.35",ranksep="0.48",fontname="DejaVu Sans",fontsize=12]; node [shape=box,style="rounded,filled",fillcolor="#eef7f0",color="#729b84",fontname="DejaVu Sans",fontsize=12,margin="0.16,0.12"]; edge [color="#526777",fontname="DejaVu Sans",fontsize=10,arrowsize=0.7];
+p [label="Producto
+[Clase JPA]
+id, nombre, precio, stock
+activo, version"];
+c [label="Categoria
+[Clase JPA]
+id, nombre, descripcion"];
+j [label="producto_categoria
+[Tabla de unión]
+id_producto + id_categoria",shape=cylinder];
+r [label="reservas_stock
+[Tabla SQL]
+id_venta único
+NUEVA / RESERVADA /
+RECHAZADA / LIBERADA",shape=cylinder];
+i [label="InventarioEvents
+[Clase]
+consume()
+reservar()
+liberar()",fillcolor="#fff1cc"];
+p -> c [label="N:M · categorias
+@ManyToMany",dir=both];
+p -> c [label="N:1 · categoria
+Compatibilidad histórica",style=dashed];
+p -> j [label="@JoinTable"];
+c -> j [label="FK de categoría"];
+i -> p [label="JDBC modifica stock
+y aumenta version"];
+i -> r [label="Deduplicación por venta"];
+
+}

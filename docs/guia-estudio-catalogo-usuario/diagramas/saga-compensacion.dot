@@ -1,0 +1,25 @@
+digraph G { graph [rankdir=TB,bgcolor="transparent",pad="0.18",nodesep="0.35",ranksep="0.48",fontname="DejaVu Sans",fontsize=12]; node [shape=box,style="rounded,filled",fillcolor="#eef7f0",color="#729b84",fontname="DejaVu Sans",fontsize=12,margin="0.16,0.12"]; edge [color="#526777",fontname="DejaVu Sans",fontsize=10,arrowsize=0.7];
+a [label="1. Venta crea orden pendiente
+Guarda venta + outbox
+Evento: venta.creada"];
+b [label="2. Catálogo reserva stock
+10 → 8 unidades
+Evento: inventario.reservado"];
+c [label="3. Pago procesa el total
+TRANSFERENCIA simula rechazo
+Evento: pago.fallido"];
+d [label="4. Catálogo compensa
+8 → 10 unidades
+Evento: inventario.liberado",fillcolor="#fff1cc"];
+e [label="5. Venta termina CANCELADA
+Sin despacho"];
+ok [label="Pago aprobado
+pago.validado → PAGADA
+Despacho si incluyó delivery",fillcolor="#dcfce7"];
+a -> b [label="Kafka"];
+b -> c [label="Kafka"];
+c -> d [label="Rechazo",color="#b45309"];
+d -> e [label="Kafka"];
+c -> ok [label="Alternativa exitosa",style=dashed];
+
+}
