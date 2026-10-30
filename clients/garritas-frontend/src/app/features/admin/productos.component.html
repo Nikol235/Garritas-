@@ -1,110 +1,353 @@
 <div class="page-heading">
   <div>
     <p class="eyebrow">ADMINISTRACIÓN</p>
-    <h1>Productos</h1>
-    <p>Gestiona el catálogo y la disponibilidad de la tienda.</p>
+    <h1>Catálogo de Productos</h1>
+    <p>
+      Gestiona productos, asigna múltiples categorías (Muchos a Muchos), precios
+      y stock disponible.
+    </p>
   </div>
-  <button (click)="load()">Actualizar productos</button>
+  <div class="actions">
+    <button (click)="load()">Actualizar</button>
+    <button class="primary" (click)="openNewProductModal()">
+      + Nuevo Producto
+    </button>
+  </div>
 </div>
+
 @if (error()) {
   <p class="error" role="alert">{{ error() }}</p>
 }
 @if (message()) {
   <p class="notice">{{ message() }}</p>
 }
-<section class="panel">
-  <h2>{{ id ? "Editar producto" : "Nuevo producto" }}</h2>
-  <form #f="ngForm" (ngSubmit)="save()">
-    <div class="field-grid">
-      <label
-        >Nombre del producto<input
-          name="nombre"
-          [(ngModel)]="model.nombre"
-          required
-          maxlength="100" /></label
-      ><label
-        >Categoría del producto<select
-          name="categoria"
-          [(ngModel)]="model.categoriaId"
-          required
+
+<!-- Barra de Búsqueda y Filtros de Catálogo -->
+<section class="panel" style="margin-bottom: 1rem; padding: 1rem 1.5rem">
+  <div style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap">
+    <div style="flex: 2; min-width: 240px">
+      <label style="margin: 0">
+        <strong>Buscar productos:</strong>
+        <input
+          type="search"
+          placeholder="Nombre o descripción del producto…"
+          [ngModel]="search()"
+          (ngModelChange)="search.set($event); onFilterChange()"
+          style="margin-top: 0.35rem"
+        />
+      </label>
+    </div>
+    <div style="flex: 1; min-width: 180px">
+      <label style="margin: 0">
+        <strong>Filtrar por categoría:</strong>
+        <select
+          [ngModel]="selectedCatFilter()"
+          (ngModelChange)="selectedCatFilter.set(+$event); onFilterChange()"
+          style="margin-top: 0.35rem"
         >
-          <option [ngValue]="0">Selecciona categoría</option>
+          <option [ngValue]="0">Todas las categorías</option>
           @for (c of categorias(); track c.id) {
             <option [ngValue]="c.id">{{ c.nombre }}</option>
           }
-        </select></label
-      ><label
-        >Precio en soles<input
-          name="precio"
-          type="number"
-          min="0.01"
-          step="0.01"
-          [(ngModel)]="model.precio"
-          required /></label
-      ><label
-        >Stock disponible<input
-          name="stock"
-          type="number"
-          min="0"
-          step="1"
-          [(ngModel)]="model.stock"
-          required
-      /></label>
+        </select>
+      </label>
     </div>
-    <label
-      >Descripción del producto<input
-        name="descripcion"
-        [(ngModel)]="model.descripcion"
-        maxlength="255" /></label
-    ><label class="check"
-      ><input
-        type="checkbox"
-        name="activo"
-        [(ngModel)]="model.activo"
-      />Producto activo</label
-    >
-    <div class="actions">
-      <button
-        class="primary"
-        [disabled]="f.invalid || !model.categoriaId || busy()"
-      >
-        Guardar producto</button
-      ><button type="button" (click)="reset()">Cancelar edición</button>
+    <div style="display: flex; align-items: center; gap: 0.5rem">
+      <span class="badge" style="font-size: 0.85rem; padding: 0.55rem 0.9rem">
+        Total: {{ totalElements() }}
+      </span>
+      @if (search() || selectedCatFilter() > 0) {
+        <button
+          (click)="search.set(''); selectedCatFilter.set(0); onFilterChange()"
+          style="font-size: 0.85rem"
+        >
+          Limpiar
+        </button>
+      }
     </div>
-  </form>
+  </div>
 </section>
+
+<!-- Tabla de Productos -->
 <div class="table-wrap">
   <table>
     <thead>
       <tr>
         <th>Producto</th>
-        <th>Categoría</th>
+        <th>Categorías (Muchos a Muchos)</th>
         <th>Precio</th>
         <th>Stock</th>
-        <th>Activo</th>
-        <th>Acciones</th>
+        <th>Estado</th>
+        <th style="text-align: right">Acciones</th>
       </tr>
     </thead>
     <tbody>
       @for (p of productos(); track p.id) {
         <tr>
-          <td>{{ p.nombre }}</td>
-          <td>{{ p.categoria.nombre }}</td>
-          <td>{{ p.precio | currency: "PEN" : "S/ " }}</td>
-          <td>{{ p.stock }}</td>
-          <td>{{ p.activo ? "Sí" : "No" }}</td>
           <td>
+            <strong>{{ p.nombre }}</strong>
+            @if (p.descripcion) {
+              <div class="muted" style="font-size: 0.8rem; margin-top: 0.2rem">
+                {{ p.descripcion }}
+              </div>
+            }
+          </td>
+          <td>
+            <div class="tags" style="margin: 0; gap: 0.3rem">
+              @if (p.categorias && p.categorias.length > 0) {
+                @for (c of p.categorias; track c.id) {
+                  <span class="badge">{{ c.nombre }}</span>
+                }
+              } @else if (p.categoria) {
+                <span class="badge">{{ p.categoria.nombre }}</span>
+              } @else {
+                <span class="muted">Sin categoría</span>
+              }
+            </div>
+          </td>
+          <td>
+            <strong>{{ p.precio | currency: "PEN" : "S/ " }}</strong>
+          </td>
+          <td>
+            <span [class.waiting]="p.stock === 0" style="font-weight: 500">
+              {{ p.stock }} un.
+            </span>
+          </td>
+          <td>
+            <span
+              class="badge"
+              [style.background]="p.activo ? '#ebf2e3' : '#fff0ca'"
+            >
+              {{ p.activo ? "Activo" : "Inactivo" }}
+            </span>
+          </td>
+          <td style="text-align: right; white-space: nowrap">
             <button
-              (click)="edit(p)"
+              (click)="openEditProductModal(p)"
               [attr.aria-label]="'Editar producto ' + p.nombre"
             >
-              Editar</button
-            ><button [disabled]="!p.activo" (click)="deactivate(p)">
+              Editar
+            </button>
+            <button
+              (click)="deactivate(p)"
+              style="color: #9c4533"
+              [attr.aria-label]="'Desactivar producto ' + p.nombre"
+            >
               Desactivar
             </button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td
+            colspan="6"
+            style="text-align: center; padding: 2.5rem"
+            class="muted"
+          >
+            No hay productos que coincidan con la búsqueda o filtro
+            seleccionado.
           </td>
         </tr>
       }
     </tbody>
   </table>
 </div>
+
+<!-- Controles de Paginación -->
+@if (totalPages() > 1 || totalElements() > pageSize()) {
+  <div
+    style="
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    "
+  >
+    <span class="muted">
+      Mostrando página <strong>{{ page() + 1 }}</strong> de
+      <strong>{{ totalPages() }}</strong> ({{ totalElements() }} productos en
+      total)
+    </span>
+    <div class="actions">
+      <button [disabled]="page() === 0" (click)="goToPage(page() - 1)">
+        ← Anterior
+      </button>
+      @for (p of [].constructor(totalPages()); track $index) {
+        @if ($index >= page() - 2 && $index <= page() + 2) {
+          <button
+            [class.primary]="$index === page()"
+            (click)="goToPage($index)"
+            style="min-width: 2.4rem; padding: 0.5rem"
+          >
+            {{ $index + 1 }}
+          </button>
+        }
+      }
+      <button
+        [disabled]="page() >= totalPages() - 1"
+        (click)="goToPage(page() + 1)"
+      >
+        Siguiente →
+      </button>
+    </div>
+  </div>
+}
+
+<!-- MODAL FLOTANTE: CREAR / EDITAR PRODUCTO -->
+@if (showProductModal()) {
+  <div class="modal-backdrop" (click)="closeProductModal()">
+    <div
+      class="modal-card"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Formulario de gestión"
+      (click)="$event.stopPropagation()"
+    >
+      @if (error()) {
+        <p class="error" role="alert">{{ error() }}</p>
+      }
+      <div class="modal-header">
+        <h2>{{ id ? "Editar Producto" : "Nuevo Producto en Catálogo" }}</h2>
+        <button
+          type="button"
+          class="modal-close"
+          (click)="closeProductModal()"
+          aria-label="Cerrar modal"
+        >
+          ✕
+        </button>
+      </div>
+
+      <form #f="ngForm" (ngSubmit)="save()">
+        <div class="field-grid">
+          <label>
+            Nombre del producto
+            <input
+              name="nombre"
+              [(ngModel)]="model.nombre"
+              required
+              maxlength="100"
+              placeholder="Ej: Alimento Premium para Cachorros 3kg"
+            />
+          </label>
+          <label>
+            Precio en soles (S/)
+            <input
+              name="precio"
+              type="number"
+              min="0.01"
+              step="0.01"
+              [(ngModel)]="model.precio"
+              required
+              placeholder="0.00"
+            />
+          </label>
+          <label>
+            Stock disponible (unidades)
+            <input
+              name="stock"
+              type="number"
+              min="0"
+              step="1"
+              [(ngModel)]="model.stock"
+              required
+            />
+          </label>
+          <div style="display: flex; align-items: center; padding-top: 1.5rem">
+            <label class="check" style="margin: 0; cursor: pointer">
+              <input type="checkbox" name="activo" [(ngModel)]="model.activo" />
+              <strong>Producto activo en la tienda</strong>
+            </label>
+          </div>
+        </div>
+
+        <label>
+          Descripción del producto
+          <input
+            name="descripcion"
+            [(ngModel)]="model.descripcion"
+            maxlength="255"
+            placeholder="Breve detalle, beneficios o características"
+          />
+        </label>
+
+        <!-- Asignación de Categorías Muchos a Muchos -->
+        <fieldset
+          style="
+            margin: 1.2rem 0;
+            padding: 1.1rem;
+            border: 1px solid #d4ded0;
+            border-radius: 12px;
+            background: #fafbf9;
+          "
+        >
+          <legend style="font-weight: 600; color: #23523e; padding: 0 0.5rem">
+            Categorías del Producto (Muchos a Muchos: Producto ↔ Categoria)
+          </legend>
+          <p
+            class="muted"
+            style="margin: 0.2rem 0 0.8rem 0; font-size: 0.82rem"
+          >
+            Selecciona una o más categorías a las que pertenece este producto:
+          </p>
+          <div style="display: flex; gap: 0.8rem; flex-wrap: wrap">
+            @for (c of categorias(); track c.id) {
+              <label
+                class="check"
+                style="
+                  background: #fff;
+                  border: 1px solid #cfdcce;
+                  border-radius: 9px;
+                  padding: 0.65rem 1rem;
+                  cursor: pointer;
+                  transition: all 0.15s;
+                "
+                [style.borderColor]="
+                  model.categoriaIds.includes(c.id) ? '#24624a' : '#cfdcce'
+                "
+                [style.background]="
+                  model.categoriaIds.includes(c.id) ? '#edf5eb' : '#fff'
+                "
+              >
+                <input
+                  type="checkbox"
+                  [checked]="model.categoriaIds.includes(c.id)"
+                  (change)="toggleCategoria(c.id)"
+                  style="margin-right: 0.4rem"
+                />
+                <strong style="color: #23523e">{{ c.nombre }}</strong>
+                @if (c.descripcion) {
+                  <span class="muted" style="font-size: 0.8rem">
+                    ({{ c.descripcion }})</span
+                  >
+                }
+              </label>
+            } @empty {
+              <p class="muted">No hay categorías registradas aún.</p>
+            }
+          </div>
+          @if (model.categoriaIds.length === 0) {
+            <small style="color: #9c4533; display: block; margin-top: 0.5rem">
+              * Debes seleccionar al menos una categoría para el producto.
+            </small>
+          }
+        </fieldset>
+
+        <div
+          class="actions"
+          style="margin-top: 1.4rem; justify-content: flex-end"
+        >
+          <button type="button" (click)="closeProductModal()">Cancelar</button>
+          <button
+            class="primary"
+            [disabled]="f.invalid || model.categoriaIds.length === 0 || busy()"
+          >
+            {{ id ? "Guardar cambios" : "Crear producto" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

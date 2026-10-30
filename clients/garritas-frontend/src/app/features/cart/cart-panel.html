@@ -4,7 +4,7 @@
     <span class="badge">{{cart.count()}} unidades</span>
   </div>
   <label
-    >Sede de la compra<select
+    >Sede de la compra<select aria-label="Sede de la compra"
       [ngModel]="cart.sedeId()"
       (ngModelChange)="cart.selectSede(+$event)"
       [disabled]="busy()"
@@ -77,6 +77,53 @@
     <p>Añade alimentos, juguetes o accesorios para tu mascota.</p>
   </div>
   } @if(cart.lines().length){
+  <label
+    >Forma de entrega<select
+      aria-label="Forma de entrega"
+      [ngModel]="cart.tipoEntrega()"
+      (ngModelChange)="cart.tipoEntrega.set($event);cart.saveDraft()"
+      [disabled]="busy()"
+    >
+      <option value="RECOJO">Recojo en sede · Gratis</option>
+      <option value="ENVIO">Delivery a domicilio</option>
+    </select></label
+  >
+  @if(cart.tipoEntrega()==='ENVIO'){
+  <label
+    >Zona y transportista<select
+      aria-label="Zona y transportista"
+      [ngModel]="cart.coberturaId()"
+      (ngModelChange)="cart.coberturaId.set(+$event);cart.saveDraft()"
+      [disabled]="busy()"
+    >
+      <option [ngValue]="0">Selecciona una cobertura</option>
+      @for(c of cart.coberturas();track c.id){
+      <option [ngValue]="c.id">
+        {{c.zona}} · {{c.transportista}} · {{c.tarifa|currency:'PEN':'S/ '}} ·
+        {{c.diasEstimados}} días
+      </option>
+      }
+    </select></label
+  >
+  <label
+    >Dirección de entrega<input
+      aria-label="Dirección de entrega"
+      [ngModel]="cart.direccion()"
+      (ngModelChange)="cart.direccion.set($event);cart.saveDraft()"
+      minlength="10"
+      maxlength="255"
+      placeholder="Calle, número y referencia"
+      [disabled]="busy()"
+  /></label>
+  @if(shippingError()){
+  <p role="alert" class="error">{{shippingError()}}</p>
+  }
+  <button type="button" (click)="refreshShipping()" [disabled]="busy()">
+    Actualizar tarifas de envío
+  </button>
+  }
+  <p>Productos: {{cart.subtotal()|currency:'PEN':'S/ '}}</p>
+  <p>Envío: {{cart.costoEnvio()|currency:'PEN':'S/ '}}</p>
   <div class="cart-summary">
     <span>Total estimado</span
     ><strong data-testid="cart-total"
@@ -84,11 +131,11 @@
     >
   </div>
   <p class="muted">
-    Los precios y el stock se verifican al confirmar. No se agregan cargos
-    adicionales.
+    El total incluye el envío seleccionado. El servidor verifica los precios, el
+    stock y la tarifa antes de registrar el pedido.
   </p>
   <label
-    >Método de pago<select
+    >Método de pago<select aria-label="Método de pago"
       [ngModel]="cart.metodo()"
       (ngModelChange)="cart.setPayment($event)"
       [disabled]="busy()"

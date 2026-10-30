@@ -23,7 +23,7 @@
     <form #f="ngForm" (ngSubmit)="save()">
       <div class="field-grid">
         <label
-          >Mascota para la cita<select
+          >Mascota para la cita<select aria-label="Mascota para la cita"
             name="mascota"
             [(ngModel)]="model.idMascota"
             required
@@ -34,7 +34,7 @@
             }
           </select></label
         ><label
-          >Sede para la cita<select
+          >Sede para la cita<select aria-label="Sede para la cita"
             name="sede"
             [(ngModel)]="model.idSede"
             (ngModelChange)="changeSede()"
@@ -46,7 +46,7 @@
             }
           </select></label
         ><label
-          >Profesional<select
+          >Profesional<select aria-label="Profesional"
             name="profesional"
             [(ngModel)]="model.profesionalId"
             required
@@ -77,12 +77,25 @@
               type="checkbox"
               [checked]="model.prestacionIds.includes(o.prestacionId)"
               (change)="toggle(o.prestacionId)"
-            />{{ o.nombre }} · S/ {{ o.precio }} ·
-            {{ o.duracionMinutos }} min</label
-          >
+            />{{ o.nombre }} · S/ {{ o.precio }} · {{ o.duracionMinutos }} min
+            @if (o.componentes?.length) {
+              <small>
+                · Incluye:
+                @for (c of o.componentes; track c.id) {
+                  {{ c.nombre }};
+                }
+              </small>
+            }
+          </label>
         }
         @if (!ofertas().length) {
           <p>Selecciona una sede con prestaciones disponibles.</p>
+        }
+        @if (repetidos()) {
+          <p role="alert" class="error">
+            Un paquete ya incluye alguno de los servicios seleccionados. No los
+            dupliques.
+          </p>
         }
         <p>
           Total referencial: S/ {{ total().toFixed(2) }} · Duración:
@@ -103,6 +116,7 @@
           !model.idMascota ||
           !model.profesionalId ||
           !model.prestacionIds.length ||
+          repetidos() ||
           duration() > 480 ||
           busy()
         "
@@ -131,7 +145,12 @@
             #{{ c.id }}<br />{{ c.motivo }}
             <ul>
               @for (d of c.detalles; track d.prestacionId) {
-                <li>{{ d.nombre }} · S/ {{ d.precio }}</li>
+                <li>
+                  {{ d.nombre }} · S/ {{ d.precio }}
+                  @if (d.componentes) {
+                    <small>Incluye: {{ d.componentes }}</small>
+                  }
+                </li>
               }
             </ul>
             <small>S/ {{ c.total }} · {{ c.duracionMinutos }} min</small>

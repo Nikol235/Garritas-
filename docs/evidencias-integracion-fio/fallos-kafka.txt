@@ -1,0 +1,3 @@
+PASS: replay Kafka y duplicado semántico no restauran stock dos veces
+PASS: Pago detenido, venta pendiente y recuperación sin perder el evento
+PASS: Kafka detenido, outbox duradero y recuperación del pago

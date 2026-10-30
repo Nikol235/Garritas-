@@ -76,4 +76,29 @@ class PrestacionesIntegrationTests {
         () ->
             service.guardarOferta(s.getId(), new OfertaRequest(p.id(), BigDecimal.ONE, 45, true)));
   }
+
+  @Test
+  void packageUsesItsOwnPriceAndBecomesUnavailableWhenAComponentIsDisabled() {
+    auth("prueba");
+    var sede = sede("Paquete " + UUID.randomUUID());
+    var a = service.guardar(null, new PrestacionRequest("Baño " + UUID.randomUUID(), "", true));
+    var b = service.guardar(null, new PrestacionRequest("Corte " + UUID.randomUUID(), "", true));
+    var pack =
+        service.guardar(
+            null,
+            new PrestacionRequest("Pack " + UUID.randomUUID(), "", true, Set.of(a.id(), b.id())));
+    assertEquals(2, pack.componentes().size());
+    var oferta =
+        service.guardarOferta(
+            sede.getId(), new OfertaRequest(pack.id(), new BigDecimal("65.00"), 60, true));
+    assertEquals(new BigDecimal("65.00"), oferta.precio());
+    assertTrue(oferta.activo());
+    service.desactivar(a.id());
+    assertFalse(service.ofertas(sede.getId()).get(0).activo());
+    assertThrows(
+        org.springframework.web.server.ResponseStatusException.class,
+        () ->
+            service.guardar(
+                null, new PrestacionRequest("Nested", "", true, Set.of(pack.id(), b.id()))));
+  }
 }

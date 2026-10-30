@@ -22,5 +22,12 @@ public class VentaResponse {
   private Instant fecha;
   private EstadoVenta estado;
   private BigDecimal total;
+  private BigDecimal subtotal;
+  private BigDecimal costoEnvio;
+  private String tipoEntrega;
+  private String direccionEntrega;
+  private Long zonaId;
+  private Long transportistaId;
+
   private List<DetalleVentaResponse> detalles;
 }

@@ -23,6 +23,7 @@ public class VentaService {
   private final VentaRepository repository;
   private final VentaMapper mapper;
   private final CatalogoConsulta catalogo;
+  private final pe.edu.upeu.garritas.venta.client.LogisticaConsulta logistica;
   private final Outbox outbox;
   private final JdbcTemplate jdbc;
   private final ServiceClient services;
@@ -46,6 +47,10 @@ public class VentaService {
 
   @Transactional
   public VentaResponse crear(VentaRequest request, UUID key) {
+    if (CurrentUser.admin())
+      throw new org.springframework.security.access.AccessDeniedException(
+          "El administrador gestiona la tienda; utiliza una cuenta de cliente para comprar");
+    validarEntrega(request);
     String owner = CurrentUser.subject();
     // Serialize equal request keys across instances without holding a distributed transaction.
     jdbc.queryForObject(
@@ -62,7 +67,11 @@ public class VentaService {
           .forEach(d -> incoming.merge(d.getIdProducto(), d.getCantidad(), Integer::sum));
       if (!Objects.equals(old.getSedeId(), request.getSedeId())
           || !old.getMetodoPago().equals(request.getMetodoPago())
-          || !original.equals(incoming))
+          || !original.equals(incoming)
+          || !Objects.equals(old.getTipoEntrega(), request.getTipoEntrega())
+          || !Objects.equals(old.getZonaId(), request.getZonaId())
+          || !Objects.equals(old.getTransportistaId(), request.getTransportistaId())
+          || !Objects.equals(old.getDireccionEntrega(), direccion(request)))
         throw new ResponseStatusException(
             HttpStatus.CONFLICT, "Idempotency-Key ya utilizado con otros datos");
       return mapper.toResponse(old);
@@ -86,6 +95,25 @@ public class VentaService {
             .estado(EstadoVenta.PENDIENTE_STOCK)
             .total(BigDecimal.ZERO)
             .build();
+    venta.setTipoEntrega(request.getTipoEntrega());
+    if ("ENVIO".equals(request.getTipoEntrega())) {
+      var cobertura = logistica.obtener(request.getTransportistaId(), request.getZonaId());
+      if (!Boolean.TRUE.equals(cobertura.activo())
+          || cobertura.tarifa() == null
+          || cobertura.tarifa().signum() < 0
+          || cobertura.diasEstimados() < 1)
+        throw new ResponseStatusException(HttpStatus.CONFLICT, "Cobertura no disponible");
+      if (cobertura.tarifa().compareTo(request.getTarifaCotizada()) != 0)
+        throw new ResponseStatusException(
+            HttpStatus.CONFLICT,
+            "La tarifa de envío cambió. Actualiza las opciones y confirma el nuevo total");
+      venta.setCostoEnvio(cobertura.tarifa());
+      venta.setDireccionEntrega(direccion(request));
+      venta.setZonaId(request.getZonaId());
+      venta.setTransportistaId(request.getTransportistaId());
+      venta.setTransportistaNombre(cobertura.transportista());
+      venta.setDiasEntrega(cobertura.diasEstimados());
+    }
     for (var item : quantities.entrySet()) {
       var producto = catalogo.obtener(item.getKey());
       if (!Boolean.TRUE.equals(producto.activo()) || producto.stock() < item.getValue())
@@ -104,6 +132,7 @@ public class VentaService {
                   .build());
       venta.setTotal(venta.getTotal().add(subtotal));
     }
+    venta.setTotal(venta.getTotal().add(venta.getCostoEnvio()));
     if (venta.getTotal().signum() <= 0
         || venta.getTotal().compareTo(new BigDecimal("99999999.99")) > 0)
       throw new ResponseStatusException(
@@ -127,6 +156,28 @@ public class VentaService {
                 .toList(),
             Instant.now()));
     return mapper.toResponse(venta);
+  }
+
+  private static String direccion(VentaRequest r) {
+    return r.getDireccionEntrega() == null ? null : r.getDireccionEntrega().strip();
+  }
+
+  private void validarEntrega(VentaRequest r) {
+    if ("ENVIO".equals(r.getTipoEntrega())) {
+      if (r.getZonaId() == null
+          || r.getTransportistaId() == null
+          || r.getTarifaCotizada() == null
+          || direccion(r) == null
+          || direccion(r).length() < 10)
+        throw new ResponseStatusException(
+            HttpStatus.BAD_REQUEST,
+            "Selecciona zona, transportista y una dirección de al menos 10 caracteres");
+    } else if (r.getZonaId() != null
+        || r.getTransportistaId() != null
+        || r.getDireccionEntrega() != null
+        || r.getTarifaCotizada() != null)
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, "El recojo en sede no lleva datos ni cargos de envío");
   }
 
   private Venta owned(Long id) {

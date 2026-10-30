@@ -82,6 +82,7 @@ describe("Carrito de compras", () => {
     expect(restored.total()).toBe(15.5);
     expect(restored.metodo()).toBe("YAPE");
     expect(restored.payload()).toEqual({
+      tipoEntrega: "RECOJO",
       sedeId: 1,
       metodoPago: "YAPE",
       detalles: [{ idProducto: 1, cantidad: 1 }],
@@ -157,4 +158,81 @@ it("no confirma una compra sin sede activa y cambia la clave cuando cambia la se
   cart.selectSede(2);
   expect(cart.valid()).toBe(false);
   expect(cart.checkoutKey()).not.toBe(key);
+});
+
+describe("Delivery incluido en la compra", () => {
+  beforeEach(() => localStorage.clear());
+  it("exige cobertura y dirección y suma la tarifa una sola vez", () => {
+    const cart = ready(new CartStore());
+    cart.reconcile(catalog);
+    cart.add(food);
+    cart.tipoEntrega.set("ENVIO");
+    expect(cart.valid()).toBe(false);
+    cart.coberturas.set([
+      {
+        id: 1,
+        zonaId: 3,
+        transportistaId: 2,
+        zona: "Lima",
+        transportista: "Courier",
+        tarifa: 12.5,
+        diasEstimados: 2,
+        activo: true,
+      },
+    ]);
+    cart.coberturaId.set(1);
+    cart.direccion.set("Av. Perú 123, Lima");
+    expect(cart.valid()).toBe(true);
+    expect(cart.total()).toBe(22.6);
+    expect(cart.payload()).toMatchObject({
+      tipoEntrega: "ENVIO",
+      tarifaCotizada: 12.5,
+      zonaId: 3,
+      transportistaId: 2,
+    });
+    const key = cart.checkoutKey();
+    expect(cart.checkoutKey()).toBe(key);
+    cart.coberturas.set([]);
+    expect(cart.valid()).toBe(false);
+    cart.tipoEntrega.set("RECOJO");
+    expect(cart.total()).toBe(10.1);
+    expect(cart.payload()).not.toHaveProperty("direccionEntrega");
+  });
+});
+
+describe("Reintento de delivery en la misma pestaña", () => {
+  beforeEach(() => {
+    localStorage.clear();
+    sessionStorage.clear();
+  });
+  it("recupera la dirección y la clave al recargar sin guardar tokens", () => {
+    const cart = ready(new CartStore());
+    cart.reconcile(catalog);
+    cart.add(food);
+    const coverage = {
+      id: 1,
+      zonaId: 3,
+      transportistaId: 2,
+      zona: "Lima",
+      transportista: "Courier",
+      tarifa: 10,
+      diasEstimados: 2,
+      activo: true,
+    };
+    cart.coberturas.set([coverage]);
+    cart.tipoEntrega.set("ENVIO");
+    cart.coberturaId.set(1);
+    cart.direccion.set("Av. Perú 123, Lima");
+    const key = cart.checkoutKey();
+    const restored = new CartStore();
+    restored.setSedes(sedes);
+    restored.reconcile(catalog);
+    restored.coberturas.set([coverage]);
+    expect(restored.valid()).toBe(true);
+    expect(restored.payload()).toEqual(cart.payload());
+    expect(restored.checkoutKey()).toBe(key);
+    expect(localStorage.getItem(CART_STORAGE_KEY)).not.toContain("Av. Perú");
+    restored.clear();
+    expect(sessionStorage.getItem("garritas-delivery-draft")).toBeNull();
+  });
 });

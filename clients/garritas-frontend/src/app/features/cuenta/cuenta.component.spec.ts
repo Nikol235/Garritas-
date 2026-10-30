@@ -68,6 +68,7 @@ describe("Cuenta: carga del perfil antes de editar", () => {
       .expectOne("/api/v1/usuarios/me")
       .flush({}, { status: 404, statusText: "Not Found" });
     fixture.componentInstance.model = {
+      dni: "",
       nombre: "Ana",
       email: "ocupado@example.test",
       telefono: "",

@@ -1,7 +1,7 @@
 <div class="page-heading">
   <div>
     <p class="eyebrow">ATENCIÓN CERCA DE TI</p>
-    <h1>Servicios por sede</h1>
+    <h1>Servicios y paquetes por sede</h1>
     <p>Consulta precios y duración de las prestaciones disponibles.</p>
   </div>
   <button (click)="load()">Actualizar servicios</button>
@@ -13,11 +13,13 @@
   <p class="notice" role="status">{{ message() }}</p>
 }
 <label
-  >Sede de atención<select [(ngModel)]="sedeId" (ngModelChange)="loadOfertas()">
+  >Sede de atención<select aria-label="Sede de atención" [(ngModel)]="sedeId" (ngModelChange)="loadOfertas()">
     @for (s of sedes(); track s.id) {
-      <option [ngValue]="s.id">
-        {{ s.nombre }} · {{ s.ciudad }}{{ s.activo ? "" : " (inactiva)" }}
-      </option>
+      @if (s.activo || auth.admin()) {
+        <option [ngValue]="s.id">
+          {{ s.nombre }} · {{ s.ciudad }}{{ s.activo ? "" : " (inactiva)" }}
+        </option>
+      }
     }
   </select></label
 >
@@ -25,13 +27,26 @@
   @for (o of ofertas(); track o.id) {
     <article>
       <h2>{{ o.nombre }}</h2>
+      @if (o.componentes?.length) {
+        <span class="badge">Paquete de servicios</span>
+        <p>Incluye:</p>
+        <ul>
+          @for (c of o.componentes; track c.id) {
+            <li>{{ c.nombre }}</li>
+          }
+        </ul>
+        <p>
+          Precio del paquete completo en esta sede; no se cobra cada componente
+          por separado.
+        </p>
+      }
       <p>
         {{ o.precio | currency: "PEN" : "S/ " }} ·
         {{ o.duracionMinutos }} minutos
       </p>
       <span class="badge">{{ o.activo ? "Disponible" : "No disponible" }}</span>
       <div class="actions">
-        @if (auth.loggedIn() && o.activo) {
+        @if (!auth.admin() && o.activo) {
           <button
             class="primary"
             (click)="
@@ -56,7 +71,7 @@
     <form #o="ngForm" (ngSubmit)="saveOferta()">
       <div class="field-grid">
         <label
-          >Prestación para la sede<select
+          >Prestación para la sede<select aria-label="Prestación para la sede"
             name="prestacion"
             [(ngModel)]="oferta.prestacionId"
             required
@@ -129,8 +144,33 @@
           />Prestación activa</label
         >
       </div>
+      <fieldset>
+        <legend>Componentes del paquete (opcional)</legend>
+        <p>
+          Sin selección: servicio individual. Para crear un paquete, selecciona
+          entre 2 y 8 servicios; luego configura su precio y duración en cada
+          sede.
+        </p>
+        @for (c of individuales(); track c.id) {
+          <label class="check"
+            ><input
+              type="checkbox"
+              [checked]="model.componenteIds.includes(c.id)"
+              (change)="toggleComponente(c.id)"
+            />{{ c.nombre }}</label
+          >
+        }
+      </fieldset>
       <div class="actions">
-        <button class="primary" [disabled]="p.invalid || busy()">
+        <button
+          class="primary"
+          [disabled]="
+            p.invalid ||
+            model.componenteIds.length === 1 ||
+            model.componenteIds.length > 8 ||
+            busy()
+          "
+        >
           Guardar prestación</button
         ><button type="button" (click)="reset()">Limpiar prestación</button>
       </div>

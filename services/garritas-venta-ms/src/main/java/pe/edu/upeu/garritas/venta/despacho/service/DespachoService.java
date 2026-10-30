@@ -42,26 +42,22 @@ public class DespachoService {
     if (!"PAGADA".equals(venta.getEstado().name()))
       throw new ResponseStatusException(
           HttpStatus.CONFLICT, "Solo se puede solicitar envío para una venta pagada");
-    Cobertura cobertura =
-        services.get(
-            "garritas-envio-ms",
-            "/api/v1/transportistas/" + r.getTransportistaId() + "/zonas/" + r.getZonaId(),
-            Cobertura.class);
-    if (!Boolean.TRUE.equals(cobertura.activo()))
+    if (!"ENVIO".equals(venta.getTipoEntrega())
+        || !Objects.equals(venta.getZonaId(), r.getZonaId())
+        || !Objects.equals(venta.getTransportistaId(), r.getTransportistaId())
+        || !Objects.equals(venta.getDireccionEntrega(), r.getDireccionEntrega().strip()))
       throw new ResponseStatusException(
-          HttpStatus.CONFLICT, "No existe cobertura activa para esa entrega");
-    Despacho e = mapper.toEntity(r);
-    e.setZonaId(r.getZonaId());
-    e.setTransportistaId(r.getTransportistaId());
-    e.setTarifa(cobertura.tarifa());
-    e.setTransportista(cobertura.transportista());
-    e.setFechaEntregaEstimada(
-        java.time.Instant.now()
-            .plus(cobertura.diasEstimados(), java.time.temporal.ChronoUnit.DAYS));
-    e.setIdCliente(venta.getIdCliente());
-
-    e.setFechaEnvio(null);
-    return mapper.toResponse(repository.saveAndFlush(e));
+          HttpStatus.CONFLICT,
+          "El delivery debe seleccionarse y pagarse al confirmar la compra. Esta venta no incluye"
+              + " ese envío");
+    return repository.findByIdVenta(venta.getId()).stream()
+        .findFirst()
+        .map(mapper::toResponse)
+        .orElseThrow(
+            () ->
+                new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "El despacho pagado se está preparando; actualiza en unos segundos"));
   }
 
   public DespachoResponse marcarEnTransito(Long id) {
@@ -83,6 +79,11 @@ public class DespachoService {
 
   public DespachoResponse cancelar(Long id) {
     Despacho e = owned(id);
+    if (ventas.findById(e.getIdVenta()).map(v -> "ENVIO".equals(v.getTipoEntrega())).orElse(false))
+      throw new ResponseStatusException(
+          HttpStatus.CONFLICT,
+          "Este envío forma parte del pago. La cancelación con devolución requiere atención del"
+              + " administrador; no se ha realizado ningún reembolso");
     if (e.getEstado() == EstadoDespacho.ENTREGADO
         || (!CurrentUser.admin() && e.getEstado() == EstadoDespacho.EN_TRANSITO))
       throw new ResponseStatusException(HttpStatus.CONFLICT, "Este envío ya no se puede cancelar");

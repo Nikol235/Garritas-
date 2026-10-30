@@ -2,6 +2,7 @@ import { Injectable, inject, signal } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Config } from "./config";
+
 export interface Sede {
   id: number;
   nombre: string;
@@ -10,12 +11,14 @@ export interface Sede {
   telefono: string;
   activo: boolean;
 }
+
 export interface Especialidad {
   id: number;
   nombre: string;
   descripcion: string;
   activo: boolean;
 }
+
 export interface Profesional {
   id: number;
   nombre: string;
@@ -25,13 +28,34 @@ export interface Profesional {
   activo: boolean;
   especialidades: Especialidad[];
 }
+
+export interface Rol {
+  id: number;
+  nombre: string;
+  descripcion: string;
+}
+
 export interface Perfil {
   id: number;
   nombre: string;
   email: string;
   telefono: string;
   direccion: string;
+  dni?: string;
+  roles?: Rol[];
+  mascotas?: Mascota[];
 }
+
+export interface PageResponse<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+  first: boolean;
+  last: boolean;
+}
+
 export interface Mascota {
   id: number;
   nombre: string;
@@ -40,11 +64,13 @@ export interface Mascota {
   edad: number | null;
   edadUnidad: "DIAS" | "MESES";
 }
+
 export interface Cita {
   total: number;
   duracionMinutos: number;
   detalles: {
     prestacionId: number;
+    componentes?: string;
     nombre: string;
     precio: number;
     duracionMinutos: number;
@@ -60,6 +86,7 @@ export interface Cita {
   motivo: string;
   estado: string;
 }
+
 export interface Envio {
   zonaId: number | null;
   transportistaId: number | null;
@@ -72,6 +99,7 @@ export interface Envio {
   fechaEnvio: string;
   fechaEntregaEstimada: string;
 }
+
 export interface PagoDetalle {
   id: number;
   idVenta: number;
@@ -80,10 +108,12 @@ export interface PagoDetalle {
   estado: string;
   fechaPago: string;
 }
+
 @Injectable({ providedIn: "root" })
 export class DomainApi {
   private readonly http = inject(HttpClient);
   private readonly config = inject(Config);
+
   get<T>(path: string) {
     return this.http.get<T>(this.config.value.apiUrl + path);
   }
@@ -94,13 +124,16 @@ export class DomainApi {
       key ? { headers: { "Idempotency-Key": key } } : {},
     );
   }
+
   put<T>(path: string, body: unknown) {
     return this.http.put<T>(this.config.value.apiUrl + path, body);
   }
+
   delete(path: string) {
     return this.http.delete<void>(this.config.value.apiUrl + path);
   }
 }
+
 export function errorMessage(e: HttpErrorResponse) {
   return (
     e.error?.detail ??
@@ -114,10 +147,12 @@ export function errorMessage(e: HttpErrorResponse) {
           : "Revisa los datos e inténtalo de nuevo.")
   );
 }
+
 export class Feedback {
   readonly error = signal("");
   readonly message = signal("");
   readonly busy = signal(false);
+
   send<T>(operation: Observable<T>, done: (value: T) => void) {
     if (this.busy()) return;
     this.error.set("");
@@ -135,11 +170,13 @@ export class Feedback {
       },
     });
   }
+
   report(e: HttpErrorResponse) {
     this.message.set("");
     this.error.set(errorMessage(e));
   }
 }
+
 export function stateLabel(state: string) {
   return (
     (
@@ -164,12 +201,14 @@ export function stateLabel(state: string) {
 }
 
 export interface Prestacion {
+  componentes?: { id: number; nombre: string }[];
   id: number;
   nombre: string;
   descripcion: string;
   activo: boolean;
 }
 export interface Oferta {
+  componentes?: { id: number; nombre: string }[];
   id: number;
   sedeId: number;
   prestacionId: number;

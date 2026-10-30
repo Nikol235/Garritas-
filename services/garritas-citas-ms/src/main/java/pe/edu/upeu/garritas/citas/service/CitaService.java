@@ -67,6 +67,7 @@ public class CitaService {
           HttpStatus.BAD_REQUEST, "No repitas prestaciones en la cita");
     Cita c = mapper.toEntity(r);
     int duracion = 0;
+    var incluidos = new HashSet<Long>();
     for (Long id : ids) {
       var oferta =
           Arrays.stream(ofertas)
@@ -76,7 +77,27 @@ public class CitaService {
                   () ->
                       new ResponseStatusException(
                           HttpStatus.CONFLICT, "La prestación no está disponible en esa sede"));
+      var componentes =
+          oferta.componentes() == null
+              ? java.util.List.<OfertaReferencia.Componente>of()
+              : oferta.componentes();
+      var efectivos =
+          componentes.isEmpty()
+              ? java.util.List.of(id)
+              : componentes.stream().map(OfertaReferencia.Componente::id).toList();
+      for (Long efectivo : efectivos)
+        if (!incluidos.add(efectivo))
+          throw new ResponseStatusException(
+              HttpStatus.BAD_REQUEST,
+              "No combines un paquete con servicios que ya incluye, ni paquetes con servicios"
+                  + " repetidos");
       DetalleCita d = new DetalleCita();
+      d.setComponentes(
+          componentes.isEmpty()
+              ? null
+              : componentes.stream()
+                  .map(OfertaReferencia.Componente::nombre)
+                  .collect(java.util.stream.Collectors.joining(", ")));
       d.setCita(c);
       d.setPrestacionId(id);
       d.setNombre(oferta.nombre());

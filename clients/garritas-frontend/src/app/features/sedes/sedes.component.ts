@@ -14,6 +14,7 @@ export class SedesComponent extends Feedback {
   private readonly api = inject(DomainApi);
   readonly sedes = signal<Sede[]>([]);
   readonly order = output<void>();
+  readonly servicios = output<number>();
   id: number | undefined;
   model = { nombre: "", ciudad: "", direccion: "", telefono: "", activo: true };
   constructor() {

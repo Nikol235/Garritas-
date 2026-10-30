@@ -7,6 +7,7 @@ nav:
   - Inicio: index.md
   - Arquitectura: arquitectura.md
   - Validación: validacion.md
+  - Delivery, paquetes e integración: integracion-fio-y-reglas-tienda.md
   - Guía de ejecución: ejecucion.md
   - Asignación y sustentación: asignacion-y-sustentacion.md
   - Alineación con Pagatu: alineacion-pagatu.md

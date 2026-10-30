@@ -87,6 +87,11 @@ app:
 resilience4j:
   circuitbreaker:
     instances:
+      logistica:
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
       catalogo:
         sliding-window-size: 10
         minimum-number-of-calls: 5
@@ -95,4 +100,6 @@ resilience4j:
   timelimiter:
     instances:
       catalogo:
+        timeout-duration: 4s
+      logistica:
         timeout-duration: 4s

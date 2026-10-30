@@ -2,7 +2,9 @@ package pe.edu.upeu.garritas.usuario.entity;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.*;
 
 @Entity
@@ -33,6 +35,9 @@ public class Usuario {
   @Column(name = "direccion", length = 255)
   private String direccion;
 
+  @Column(name = "dni", length = 20)
+  private String dni;
+
   @Builder.Default
   @OneToMany(
       mappedBy = "usuario",
@@ -40,4 +45,12 @@ public class Usuario {
       orphanRemoval = true,
       fetch = FetchType.LAZY)
   private List<Mascota> mascotas = new ArrayList<>();
+
+  @Builder.Default
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+      name = "usuario_rol",
+      joinColumns = @JoinColumn(name = "id_usuario"),
+      inverseJoinColumns = @JoinColumn(name = "id_rol"))
+  private Set<Rol> roles = new HashSet<>();
 }

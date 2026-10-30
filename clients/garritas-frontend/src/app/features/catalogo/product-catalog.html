@@ -1,51 +1,118 @@
 <div class="catalog-filters">
-  <label
-    >Buscar productos<input
+  <label>
+    Buscar productos
+    <input
       type="search"
       placeholder="Alimento para gato, correa, champú…"
       [ngModel]="search()"
-      (ngModelChange)="search.set($event)" /></label
-  ><label
-    >Categoría<select
-      [ngModel]="category()"
-      (ngModelChange)="category.set(+$event)"
-    >
+      (ngModelChange)="onSearchChange($event)"
+    />
+  </label>
+  <label>
+    Categoría
+    <select aria-label="Categoría" [ngModel]="category()" (ngModelChange)="onCategoryChange(+$event)">
       <option [ngValue]="0">Todas las categorías</option>
-      @for(c of categorias();track c.id){
-      <option [ngValue]="c.id">{{c.nombre}}</option>
+      @for (c of categorias(); track c.id) {
+      <option [ngValue]="c.id">{{ c.nombre }}</option>
       }
-    </select></label
-  >
+    </select>
+  </label>
 </div>
-<p class="muted" aria-live="polite">
-  {{filtered().length}} productos encontrados
-</p>
+
+<div
+  style="
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.8rem 0;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  "
+>
+  <p class="muted" aria-live="polite" style="margin: 0">
+    {{ filtered().length }} productos disponibles
+  </p>
+  @if (totalPages() > 1) {
+  <span class="muted"> Página {{ page() + 1 }} de {{ totalPages() }} </span>
+  }
+</div>
+
 <section class="grid product-grid">
-  @for(p of filtered();track p.id){
+  @for (p of paginated(); track p.id) {
   <article class="product-card">
-    <div class="product-icon" aria-hidden="true">{{icon(p)}}</div>
-    <small>{{p.categoria.nombre}}</small>
-    <h3>{{p.nombre}}</h3>
-    <p class="description">{{p.descripcion}}</p>
-    <div class="heading">
-      <strong>{{p.precio|currency:'PEN':'S/ '}}</strong
-      ><span [class.stock-warning]="p.stock===0"
-        >{{p.stock>0?p.stock+' disponibles':'Agotado'}}</span
+    <div class="product-icon" aria-hidden="true">{{ icon(p) }}</div>
+
+    <!-- Etiquetas de Categorías (Muchos a Muchos) -->
+    <div class="tags" style="margin: 0; gap: 0.25rem">
+      @if (p.categorias && p.categorias.length > 0) { @for (c of p.categorias;
+      track c.id) {
+      <span class="badge" style="font-size: 0.7rem; padding: 0.2rem 0.5rem"
+        >{{ c.nombre }}</span
       >
+      } } @else if (p.categoria) {
+      <span class="badge" style="font-size: 0.7rem; padding: 0.2rem 0.5rem"
+        >{{ p.categoria.nombre }}</span
+      >
+      }
     </div>
+
+    <h3 style="margin-top: 0.2rem">{{ p.nombre }}</h3>
+    <p class="description">{{ p.descripcion }}</p>
+
+    <div class="heading">
+      <strong>{{ p.precio | currency: 'PEN' : 'S/ ' }}</strong>
+      <span [class.stock-warning]="p.stock === 0">
+        {{ p.stock > 0 ? p.stock + ' disponibles' : 'Agotado' }}
+      </span>
+    </div>
+
+    @if(purchasable()){
     <button
       class="primary"
-      [disabled]="busy()||p.stock<1"
+      [disabled]="busy() || p.stock < 1"
       (click)="add.emit(p)"
-      [attr.aria-label]="'Añadir '+p.nombre+' al carrito'"
+      [attr.aria-label]="'Añadir ' + p.nombre + ' al carrito'"
     >
-      {{p.stock>0?'Añadir al carrito':'Sin stock'}}
+      {{ p.stock > 0 ? 'Añadir al carrito' : 'Sin stock' }}
     </button>
+    }
   </article>
-  }@empty{
+  } @empty {
   <div class="empty-state">
     <h3>No encontramos productos</h3>
-    <p>Prueba con otro nombre o cambia la categoría.</p>
+    <p>Prueba con otro nombre o selecciona otra categoría.</p>
   </div>
   }
 </section>
+
+<!-- Paginación de la Tienda -->
+@if (totalPages() > 1) {
+<div
+  style="
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0;
+    gap: 0.5rem;
+  "
+>
+  <button [disabled]="page() === 0" (click)="goToPage(page() - 1)">
+    ← Anterior
+  </button>
+  @for (p of [].constructor(totalPages()); track $index) {
+  <button
+    [class.primary]="$index === page()"
+    (click)="goToPage($index)"
+    style="min-width: 2.4rem; padding: 0.5rem"
+  >
+    {{ $index + 1 }}
+  </button>
+  }
+  <button
+    [disabled]="page() >= totalPages() - 1"
+    (click)="goToPage(page() + 1)"
+  >
+    Siguiente →
+  </button>
+</div>
+}

@@ -21,6 +21,16 @@
     <form #f="ngForm" (ngSubmit)="save()">
       <div class="field-grid">
         <label
+          >DNI<input
+            inputmode="numeric"
+            pattern="[0-9]{8}"
+            maxlength="8"
+            title="DNI de 8 dígitos"
+            name="dni"
+            [(ngModel)]="model.dni"
+            placeholder="8 dígitos (opcional)"
+        /></label>
+        <label
           >Nombre completo<input
             name="nombre"
             [(ngModel)]="model.nombre"
@@ -36,9 +46,13 @@
             maxlength="150" /></label
         ><label
           >Teléfono de contacto<input
+            type="tel"
+            inputmode="numeric"
+            pattern="9[0-9]{8}"
+            maxlength="9"
+            title="Celular peruano: 9 dígitos, comienza con 9"
             name="telefono"
-            [(ngModel)]="model.telefono"
-            maxlength="20" /></label
+            [(ngModel)]="model.telefono" /></label
         ><label
           >Dirección de contacto<input
             name="direccion"
@@ -112,7 +126,7 @@
             required
             maxlength="100" /></label
         ><label
-          >Especie<select name="especie" [(ngModel)]="pet.especie">
+          >Especie<select aria-label="Especie" name="especie" [(ngModel)]="pet.especie">
             <option>Perro</option>
             <option>Gato</option>
             <option>Ave</option>
@@ -135,7 +149,7 @@
             [(ngModel)]="pet.edad"
         /></label>
         <label
-          >Unidad de edad<select
+          >Unidad de edad<select aria-label="Unidad de edad"
             name="edadUnidad"
             [(ngModel)]="pet.edadUnidad"
             required

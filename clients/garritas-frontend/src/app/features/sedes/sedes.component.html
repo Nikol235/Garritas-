@@ -24,16 +24,21 @@
         s.activo ? "Activa" : "Inactiva"
       }}</span>
       <div class="actions">
-        <button
-          class="primary"
-          [disabled]="!s.activo"
-          (click)="choose(s)"
-          [attr.aria-label]="'Seleccionar ' + s.nombre"
-        >
-          {{
-            cart.sedeId() === s.id ? "Sede seleccionada" : "Seleccionar sede"
-          }}
+        <button [disabled]="!s.activo" (click)="servicios.emit(s.id)">
+          Ver servicios y paquetes
         </button>
+        @if (!auth.admin()) {
+          <button
+            class="primary"
+            [disabled]="!s.activo"
+            (click)="choose(s)"
+            [attr.aria-label]="'Seleccionar ' + s.nombre"
+          >
+            {{
+              cart.sedeId() === s.id ? "Sede seleccionada" : "Seleccionar sede"
+            }}
+          </button>
+        }
         @if (auth.admin()) {
           <button (click)="edit(s)" [attr.aria-label]="'Editar ' + s.nombre">
             Editar</button
@@ -72,9 +77,13 @@
             maxlength="255" /></label
         ><label
           >Teléfono<input
+            type="tel"
+            inputmode="numeric"
+            pattern="9[0-9]{8}"
+            maxlength="9"
+            title="Celular peruano: 9 dígitos, comienza con 9"
             name="telefono"
             [(ngModel)]="model.telefono"
-            maxlength="20"
         /></label>
       </div>
       <label class="check"

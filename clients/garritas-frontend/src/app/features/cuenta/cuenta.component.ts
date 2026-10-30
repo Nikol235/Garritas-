@@ -14,7 +14,7 @@ export class CuentaComponent extends Feedback {
   readonly guardado = signal(false);
   readonly perfil = signal<Perfil | null>(null);
   readonly mascotas = signal<Mascota[]>([]);
-  model = { nombre: "", email: "", telefono: "", direccion: "" };
+  model = { nombre: "", email: "", telefono: "", direccion: "", dni: "" };
   pet = {
     nombre: "",
     especie: "Perro",
@@ -38,6 +38,7 @@ export class CuentaComponent extends Feedback {
           email: p.email,
           telefono: p.telefono ?? "",
           direccion: p.direccion ?? "",
+          dni: p.dni ?? "",
         };
         this.loading.set(false);
         this.loadPets();
@@ -77,6 +78,7 @@ export class CuentaComponent extends Feedback {
           email: p.email,
           telefono: p.telefono ?? "",
           direccion: p.direccion ?? "",
+          dni: p.dni ?? "",
         };
         this.guardado.set(true);
         this.message.set(

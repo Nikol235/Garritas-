@@ -27,9 +27,13 @@
           maxlength="100" /></label
       ><label
         >Teléfono del transportista<input
+          type="tel"
+          inputmode="numeric"
+          pattern="9[0-9]{8}"
+          maxlength="9"
+          title="Celular peruano: 9 dígitos, comienza con 9"
           name="telefono"
-          [(ngModel)]="t.telefono"
-          maxlength="20" /></label
+          [(ngModel)]="t.telefono" /></label
       ><label class="check"
         ><input
           name="activo"
@@ -128,7 +132,7 @@
   <form #cf="ngForm" (ngSubmit)="saveC()">
     <div class="field-grid">
       <label
-        >Transportista de cobertura<select
+        >Transportista de cobertura<select aria-label="Transportista de cobertura"
           name="transportista"
           [(ngModel)]="c.transportistaId"
           required
@@ -139,7 +143,7 @@
           }
         </select></label
       ><label
-        >Zona de cobertura<select name="zona" [(ngModel)]="c.zonaId" required>
+        >Zona de cobertura<select aria-label="Zona de cobertura" name="zona" [(ngModel)]="c.zonaId" required>
           <option [ngValue]="0">Selecciona</option>
           @for (z of zonas(); track z.id) {
             <option [ngValue]="z.id">{{ z.nombre }}</option>

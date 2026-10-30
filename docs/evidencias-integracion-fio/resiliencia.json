@@ -1,0 +1,14 @@
+{
+  "fallos_controlados_503": 6,
+  "segundos_por_peticion": [
+    3.061,
+    3.053,
+    3.042,
+    3.041,
+    3.082,
+    0.03
+  ],
+  "sin_venta_ni_cobro_durante_fallo": true,
+  "circuito_abierto_ultima_peticion": true,
+  "recuperacion_pagada": 54
+}

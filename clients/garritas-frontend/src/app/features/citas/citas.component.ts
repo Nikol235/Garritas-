@@ -73,10 +73,12 @@ export class CitasComponent extends Feedback {
     this.ofertas.set([]);
     this.model.prestacionIds = [];
     if (!this.model.idSede) return;
+    const sede = this.model.idSede;
     this.api
       .get<Oferta[]>("/sedes/" + this.model.idSede + "/prestaciones")
       .subscribe({
         next: (ofertas) => {
+          if (this.model.idSede !== sede) return;
           this.ofertas.set(ofertas.filter((o) => o.activo));
           const selected = Number(
             sessionStorage.getItem("garritas-cita-prestacion") ?? 0,
@@ -102,6 +104,17 @@ export class CitasComponent extends Feedback {
     return this.ofertas().filter((o) =>
       this.model.prestacionIds.includes(o.prestacionId),
     );
+  }
+  repetidos() {
+    const ids = new Set<number>();
+    for (const o of this.selected())
+      for (const id of o.componentes?.length
+        ? o.componentes.map((c) => c.id)
+        : [o.prestacionId]) {
+        if (ids.has(id)) return true;
+        ids.add(id);
+      }
+    return false;
   }
   total() {
     return this.selected().reduce((n, o) => n + o.precio, 0);
@@ -129,6 +142,12 @@ export class CitasComponent extends Feedback {
       date.getMinutes() % 30 !== 0
     ) {
       this.error.set("Elige una fecha futura a las :00 o :30.");
+      return;
+    }
+    if (this.repetidos()) {
+      this.error.set(
+        "El paquete ya incluye uno de los servicios seleccionados. Evita repetirlo.",
+      );
       return;
     }
     if (this.duration() > 480) {

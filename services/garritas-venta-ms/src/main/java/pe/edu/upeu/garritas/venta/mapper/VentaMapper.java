@@ -19,6 +19,12 @@ public class VentaMapper {
         .fecha(venta.getFecha())
         .estado(venta.getEstado())
         .total(venta.getTotal())
+        .subtotal(venta.getTotal().subtract(venta.getCostoEnvio()))
+        .costoEnvio(venta.getCostoEnvio())
+        .tipoEntrega(venta.getTipoEntrega())
+        .direccionEntrega(venta.getDireccionEntrega())
+        .zonaId(venta.getZonaId())
+        .transportistaId(venta.getTransportistaId())
         .detalles(venta.getDetalles().stream().map(detalleVentaMapper::toResponse).toList())
         .build();
   }

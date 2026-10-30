@@ -1,3 +1,5 @@
+import { RolesComponent } from "./features/admin/roles.component";
+import { UsuariosRolesComponent } from "./features/admin/usuarios-roles.component";
 import { PrestacionesComponent } from "./features/prestaciones/prestaciones.component";
 import { LogisticaComponent } from "./features/logistica/logistica.component";
 import { PlanesComponent } from "./features/planes/planes.component";
@@ -41,6 +43,8 @@ import { ProductCatalog } from "./features/catalogo/product-catalog";
     PagosComponent,
     ProductosComponent,
     ClientesComponent,
+    RolesComponent,
+    UsuariosRolesComponent,
   ],
   templateUrl: "./app.html",
 })
@@ -72,9 +76,21 @@ export class App {
   constructor() {
     if (
       !this.auth.admin() &&
-      ["productos", "categorias", "clientes", "logistica"].includes(this.view())
+      [
+        "productos",
+        "categorias",
+        "clientes",
+        "logistica",
+        "roles",
+        "usuarios-roles",
+      ].includes(this.view())
     )
       this.view.set("catalogo");
+    if (this.auth.admin()) {
+      this.cart.clear();
+      if (["nueva-orden", "carrito"].includes(this.view()))
+        this.view.set("catalogo");
+    }
     this.refreshCatalogo();
     this.refreshSedes();
     effect(() => sessionStorage.setItem("garritas-view", this.view()));
@@ -109,12 +125,18 @@ export class App {
     });
   }
   openPrestacion(event: { sedeId: number; prestacionId: number }) {
+    if (this.auth.admin()) return;
     sessionStorage.setItem("garritas-cita-sede", String(event.sedeId));
     sessionStorage.setItem(
       "garritas-cita-prestacion",
       String(event.prestacionId),
     );
     this.view.set("citas");
+    if (!this.auth.loggedIn()) this.auth.login();
+  }
+  openServicios(id: number) {
+    sessionStorage.setItem("garritas-servicios-sede", String(id));
+    this.view.set("prestaciones");
   }
   openCitas(id: number) {
     sessionStorage.setItem("garritas-profesional", String(id));
@@ -151,7 +173,7 @@ export class App {
     });
   }
   add(producto: Producto) {
-    if (this.busy()) return;
+    if (this.busy() || this.auth.admin()) return;
     this.error.set("");
     if (this.cart.add(producto))
       this.notice.set(producto.nombre + " añadido al carrito.");
@@ -161,7 +183,7 @@ export class App {
       );
   }
   checkout() {
-    if (this.busy()) return;
+    if (this.busy() || this.auth.admin()) return;
     this.error.set("");
     if (!this.auth.loggedIn()) {
       this.auth.login();
@@ -195,6 +217,13 @@ export class App {
           if (e.status === 409) {
             this.refreshCatalogo();
             this.refreshSedes();
+            this.domain
+              .get<import("./core/domain-api").Cobertura[]>("/coberturas")
+              .subscribe({
+                next: (c) =>
+                  this.cart.coberturas.set(c.filter((x) => x.activo)),
+                error: () => this.cart.coberturas.set([]),
+              });
           }
         },
       });

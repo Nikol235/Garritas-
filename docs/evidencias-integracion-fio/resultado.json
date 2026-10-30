@@ -1,0 +1,20 @@
+{
+  "multicategoria": true,
+  "seguridad_directa_dos_servicios": true,
+  "replay_pago_sin_duplicar_despacho": true,
+  "roles_sin_escalada": true,
+  "admin_no_compra": true,
+  "celular_y_dni": true,
+  "delivery_cobrado": 58,
+  "total": 30.0,
+  "pago": 30.0,
+  "despacho_automatico": 18,
+  "reintento_misma_venta": true,
+  "rechazo_compensa_stock": 60,
+  "compra_delivery_navegador": 61,
+  "paquete_cita": 20,
+  "precio_historico": true,
+  "solapamiento_rechazado": true,
+  "paquete_sin_duplicar_componentes": true,
+  "mobile_sin_desborde": true
+}

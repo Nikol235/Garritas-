@@ -9,4 +9,5 @@ public record OfertaResponse(
     String nombre,
     BigDecimal precio,
     Integer duracionMinutos,
-    Boolean activo) {}
+    Boolean activo,
+    java.util.List<ComponenteResponse> componentes) {}

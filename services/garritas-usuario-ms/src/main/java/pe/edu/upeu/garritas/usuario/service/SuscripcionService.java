@@ -62,6 +62,9 @@ public class SuscripcionService {
   }
 
   public SuscripcionResponse contratar(SuscripcionRequest r, UUID key) {
+    if (CurrentUser.admin())
+      throw new org.springframework.security.access.AccessDeniedException(
+          "Utiliza una cuenta de cliente para contratar un plan");
     Usuario u = usuarios.miUsuario();
     lock(u, key);
     var old = periodos.findByUsuarioIdAndIdempotencyKey(u.getId(), key);

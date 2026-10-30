@@ -68,11 +68,15 @@
             maxlength="150" /></label
         ><label
           >Teléfono del profesional<input
+            type="tel"
+            inputmode="numeric"
+            pattern="9[0-9]{8}"
+            maxlength="9"
+            title="Celular peruano: 9 dígitos, comienza con 9"
             name="telefono"
-            [(ngModel)]="model.telefono"
-            maxlength="20" /></label
+            [(ngModel)]="model.telefono" /></label
         ><label
-          >Sede de atención<select name="sedeId" [(ngModel)]="model.sedeId">
+          >Sede de atención<select aria-label="Sede de atención" name="sedeId" [(ngModel)]="model.sedeId">
             <option [ngValue]="0">Todas las sedes</option>
             @for (s of sedes(); track s.id) {
               @if (s.activo) {

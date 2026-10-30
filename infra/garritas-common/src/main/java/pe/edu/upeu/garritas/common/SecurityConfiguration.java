@@ -73,6 +73,14 @@ public class SecurityConfiguration {
                         "/api/v1/especialistas/**",
                         "/api/v1/especialidades/**")
                     .permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/v1/ventas")
+                    .access(
+                        (authentication, context) ->
+                            new org.springframework.security.authorization.AuthorizationDecision(
+                                authentication.get().getAuthorities().stream()
+                                        .anyMatch(a1 -> a1.getAuthority().equals("ROLE_CLIENTE"))
+                                    && authentication.get().getAuthorities().stream()
+                                        .noneMatch(a1 -> a1.getAuthority().equals("ROLE_ADMIN"))))
                     .requestMatchers(
                         HttpMethod.POST,
                         "/api/v1/citas/*/confirmar",

@@ -32,7 +32,7 @@
       </p>
       <span class="badge">{{ p.activo ? "Disponible" : "Inactivo" }}</span>
       <div class="actions">
-        @if (p.activo && !needsProfile()) {
+        @if (p.activo && !needsProfile() && !auth.admin()) {
           <button
             class="primary"
             [disabled]="busy() || active(p)"

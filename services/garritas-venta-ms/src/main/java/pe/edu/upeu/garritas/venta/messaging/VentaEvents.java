@@ -46,6 +46,17 @@ public class VentaEvents {
       int changed =
           jdbc.update(
               "UPDATE ventas SET estado=? WHERE id=? AND estado=?", state, e.ventaId(), expected);
+      if (changed == 1 && "pago.validado".equals(e.type())) {
+        // Same local transaction as inbox and sale transition: no paid order without its dispatch.
+        jdbc.update(
+            """
+            INSERT INTO despachos(id_venta,id_cliente,direccion_entrega,transportista,estado,fecha_entrega_estimada,id_zona,id_transportista,tarifa)
+            SELECT id,id_cliente,direccion_entrega,transportista_nombre,'PENDIENTE',CURRENT_TIMESTAMP + dias_entrega * interval '1 day',zona_id,transportista_id,costo_envio
+            FROM ventas WHERE id=? AND tipo_entrega='ENVIO'
+            ON CONFLICT(id_venta) DO NOTHING
+            """,
+            e.ventaId());
+      }
       log.info(
           "component=saga ventaId={} eventType={} estado={} changed={}",
           e.ventaId(),

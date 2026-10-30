@@ -11,19 +11,21 @@
       >
         Catálogo
       </button>
+      @if(!auth.admin()){
       <button
-        [class.selected]="view()==='nueva-orden'"
+        [class.selected]="view()==='nueva-orden' && !auth.admin()"
         (click)="view.set('nueva-orden')"
       >
         Nueva orden
       </button>
       <button
-        [class.selected]="view()==='carrito'"
+        [class.selected]="view()==='carrito' && !auth.admin()"
         (click)="view.set('carrito')"
         [attr.aria-label]="'Carrito, '+cart.count()+' unidades'"
       >
         Carrito <span class="cart-count">{{cart.count()}}</span>
       </button>
+      }
       <button [class.selected]="view()==='sedes'" (click)="view.set('sedes')">
         Sedes
       </button>
@@ -88,7 +90,9 @@
       >
         Clientes
       </button>
-      }
+      } @if(auth.admin()){<button (click)="view.set('roles')">
+        Roles de personal</button
+      ><button (click)="view.set('usuarios-roles')">Usuarios y roles</button>}
     </nav>
     <div class="sidebar-note">
       Todo para su bienestar.<br />En cada etapa de su vida.
@@ -130,9 +134,12 @@
         <p>
           Alimentos, higiene, juguetes y accesorios para cada etapa de su vida.
         </p>
-        <button class="primary" (click)="view.set('nueva-orden')">
-          Crear nueva orden
-        </button>
+        @if(!auth.admin()){<button
+          class="primary"
+          (click)="view.set('nueva-orden')"
+        >
+          Crear nueva orden</button
+        >}
       </section>
       <div class="heading">
         <h2>Encuentra su próximo favorito</h2>
@@ -143,11 +150,12 @@
       }
       <app-product-catalog
         [productos]="productos()"
+        [purchasable]="!auth.admin()"
         [categorias]="categorias()"
         [busy]="busy()"
         (add)="add($event)"
       />
-      } @if(view()==='nueva-orden'){
+      } @if(view()==='nueva-orden' && !auth.admin()){
       <div class="heading">
         <div>
           <p class="eyebrow">PREPARA SU PRÓXIMA ENTREGA</p>
@@ -165,6 +173,7 @@
           <p role="status">Cargando productos…</p>
           }<app-product-catalog
             [productos]="productos()"
+            [purchasable]="!auth.admin()"
             [categorias]="categorias()"
             [busy]="busy()"
             (add)="add($event)"
@@ -179,7 +188,7 @@
           />
         </aside>
       </div>
-      } @if(view()==='carrito'){
+      } @if(view()==='carrito' && !auth.admin()){
       <div class="heading">
         <h1>Carrito de compras</h1>
         <button (click)="view.set('nueva-orden')">Seguir comprando</button>
@@ -194,7 +203,7 @@
       </div>
       } @if(view()==='pedidos'){
       <div class="heading">
-        <h1>Mis pedidos</h1>
+        <h1>{{auth.admin() ? "Pedidos de clientes" : "Mis pedidos"}}</h1>
         <button (click)="refreshVentas()">Actualizar</button>
       </div>
       <p>
@@ -208,6 +217,11 @@
           <p>{{v.fecha|date:'medium'}}</p>
           <p>{{v.detalles.length}} tipos de producto</p>
         </div>
+        <p>
+          Productos: {{(v.subtotal ?? v.total)|currency:'PEN':'S/ '}} ·
+          {{v.tipoEntrega === 'ENVIO' ? 'Delivery: S/ ' + v.costoEnvio : 'Recojo
+          en sede sin costo'}}
+        </p>
         <strong>{{v.total|currency:'PEN':'S/ '}}</strong
         ><span class="badge" [class.waiting]="pending(v.estado)"
           >{{label(v.estado)}}</span
@@ -219,9 +233,12 @@
       }@empty{
       <div class="empty-state">
         <h2>Todavía no tienes pedidos</h2>
-        <button class="primary" (click)="view.set('nueva-orden')">
-          Crear nueva orden
-        </button>
+        @if(!auth.admin()){<button
+          class="primary"
+          (click)="view.set('nueva-orden')"
+        >
+          Crear nueva orden</button
+        >}
       </div>
       } } @if(view()==='categorias' && auth.admin()){
       <h1>Administrar categorías</h1>
@@ -253,17 +270,26 @@
       </section>
       } @if(view()==='prestaciones'){<app-prestaciones
         (reservar)="openPrestacion($event)"
-      />} @if(view()==='sedes'){<app-sedes (order)="view.set('nueva-orden')" />}
-      @if(view()==='especialistas'){<app-especialistas
+      />} @if(view()==='sedes'){<app-sedes
+        (servicios)="openServicios($event)"
+        (order)="view.set('nueva-orden')"
+      />} @if(view()==='especialistas'){<app-especialistas
         (reservar)="openCitas($event)"
-      />} @if(auth.loggedIn()){ @if(view()==='cuenta'){<app-cuenta />}
-      @if(view()==='planes'){<app-planes (cuenta)="view.set('cuenta')" />}
-      @if(view()==='citas'){<app-citas (cuenta)="view.set('cuenta')" />}
+      />} @if(auth.loggedIn()){ @if(view()==='cuenta'){<button
+        (click)="auth.manageAccount()"
+      >
+        Cambiar contraseña en Keycloak</button
+      ><app-cuenta />} @if(view()==='planes'){<app-planes
+        (cuenta)="view.set('cuenta')"
+      />} @if(view()==='citas'){<app-citas (cuenta)="view.set('cuenta')" />}
       @if(view()==='envios'){<app-envios [initialVenta]="shippingSaleId" />}
       @if(view()==='pagos'){<app-pagos />} } @if(auth.admin()){
       @if(view()==='logistica'){<app-logistica />}
       @if(view()==='productos'){<app-admin-productos />}
-      @if(view()==='clientes'){<app-clientes />} } @if(!auth.loggedIn() &&
+      @if(view()==='clientes'){<app-clientes />}
+      @if(view()==='roles'){<app-roles />}
+      @if(view()==='usuarios-roles'){<app-usuarios-roles />} }
+      @if(!auth.loggedIn() &&
       (view()==='planes'||view()==='cuenta'||view()==='citas'||view()==='envios'||view()==='pagos'||view()==='pedidos')){
       <section class="empty-state">
         <h1>Inicia sesión para continuar</h1>

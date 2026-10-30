@@ -1,0 +1,7 @@
+{
+  "crear_paquete_desde_angular": true,
+  "asignar_precio_y_sede_desde_angular": true,
+  "reservar_paquete_desde_angular": 21,
+  "precio_y_componentes_guardados": true,
+  "celular_invalido_bloquea_guardar": true
+}

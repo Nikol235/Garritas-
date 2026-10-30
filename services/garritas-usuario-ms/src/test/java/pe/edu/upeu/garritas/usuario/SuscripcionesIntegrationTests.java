@@ -27,7 +27,7 @@ class SuscripcionesIntegrationTests {
     SecurityContextHolder.getContext()
         .setAuthentication(
             new UsernamePasswordAuthenticationToken(
-                sub, "", List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))));
+                sub, "", List.of(new SimpleGrantedAuthority("ROLE_CLIENTE"))));
   }
 
   @AfterEach

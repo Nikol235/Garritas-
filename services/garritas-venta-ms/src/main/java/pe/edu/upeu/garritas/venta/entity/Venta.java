@@ -33,6 +33,20 @@ public class Venta {
   @Column(name = "total", nullable = false, precision = 10, scale = 2)
   private BigDecimal total;
 
+  @Builder.Default
+  @Column(name = "tipo_entrega", nullable = false)
+  private String tipoEntrega = "RECOJO";
+
+  @Builder.Default
+  @Column(name = "costo_envio", nullable = false)
+  private BigDecimal costoEnvio = BigDecimal.ZERO;
+
+  private String direccionEntrega;
+  private Long zonaId;
+  private Long transportistaId;
+  private String transportistaNombre;
+  private Integer diasEntrega;
+
   @Column(name = "id_sede")
   private Long sedeId;
 

@@ -16,3 +16,5 @@ test-results/
 site/
 
 **/.venv/
+restart-usuario.ps1
+run-*.bat

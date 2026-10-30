@@ -1,0 +1,558 @@
+<p class="notice">
+  Estos roles organizan al personal dentro de Garritas. Los permisos de acceso
+  CLIENTE y ADMIN se administran en Keycloak; asignar un rol interno no cambia
+  el token ni convierte una cuenta en administradora.
+</p>
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">PERSONAL Y ACCESOS DEL SISTEMA</p>
+    <h1>Usuarios del Sistema y Asignación de Roles</h1>
+    <p>
+      Administra el personal del sistema (Secretaria, Ventas, Compras,
+      Administrador, etc.) y asigna múltiples roles por usuario (Muchos a
+      Muchos: <code>USUARIOS ↔ USUARIO_ROL ↔ ROL</code>).
+    </p>
+  </div>
+  <div class="actions">
+    <button (click)="load()">Actualizar</button>
+    <button class="primary" (click)="openNewUserModal()">
+      + Nuevo Usuario del Sistema
+    </button>
+  </div>
+</div>
+
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+@if (message()) {
+  <p class="notice">{{ message() }}</p>
+}
+
+<!-- Panel Explicativo de la Relación Muchos a Muchos -->
+<div
+  class="panel"
+  style="
+    background: linear-gradient(100deg, #f0f7ed, #fafcf7);
+    border: 1px solid #d4e5ce;
+    margin-bottom: 1.2rem;
+    padding: 1rem 1.25rem;
+  "
+>
+  <div
+    style="
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    "
+  >
+    <div>
+      <strong style="color: #23523e; font-size: 0.95rem">
+        🔗 Estructura de Muchos a Muchos Activa:
+      </strong>
+      <span class="muted" style="margin-left: 0.5rem; font-size: 0.85rem">
+        Un usuario puede tener varios roles a la vez (ej: Secretaria + Ventas +
+        Reportes). Cada asignación se almacena en la tabla intermedia
+        <code>USUARIO_ROL</code>.
+      </span>
+    </div>
+    <div class="tags" style="margin: 0; gap: 0.4rem">
+      <span class="badge">Total: {{ totalElements() }} usuarios</span>
+      <span class="badge waiting">Roles activos: {{ roles().length }}</span>
+    </div>
+  </div>
+</div>
+
+<!-- Filtro de Búsqueda -->
+<section class="panel" style="margin-bottom: 1.2rem; padding: 0.9rem 1.25rem">
+  <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap">
+    <div style="flex: 1; min-width: 260px">
+      <label style="margin: 0">
+        <strong>Buscar usuario por DNI, Nombre o Correo:</strong>
+        <input
+          type="search"
+          placeholder="Ej: 74839201, fiorella, admin@garritas.com…"
+          [ngModel]="search()"
+          (ngModelChange)="onSearchChange($event)"
+          style="margin-top: 0.35rem"
+        />
+      </label>
+    </div>
+    @if (search()) {
+      <div style="padding-top: 1.3rem">
+        <button
+          (click)="onSearchChange('')"
+          style="font-size: 0.85rem; padding: 0.45rem 0.8rem"
+        >
+          Limpiar filtro
+        </button>
+      </div>
+    }
+  </div>
+</section>
+
+@if (loading()) {
+  <p role="status">Cargando usuarios y roles…</p>
+} @else {
+  <!-- Tabla de Usuarios y sus Roles -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 70px">ID</th>
+          <th style="width: 120px">DNI</th>
+          <th>Nombre y Correo</th>
+          <th>Teléfono / Dirección</th>
+          <th>Roles Asignados (USUARIO_ROL)</th>
+          <th style="text-align: right; width: 260px">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (u of usuarios(); track u.id) {
+          <tr>
+            <td>
+              <code>#{{ u.id }}</code>
+            </td>
+            <td>
+              <strong>{{ u.dni || "—" }}</strong>
+            </td>
+            <td>
+              <strong>{{ u.nombre }}</strong>
+              <div class="muted" style="font-size: 0.82rem">{{ u.email }}</div>
+            </td>
+            <td>
+              <div>{{ u.telefono || "—" }}</div>
+              @if (u.direccion) {
+                <div class="muted" style="font-size: 0.78rem">
+                  📍 {{ u.direccion }}
+                </div>
+              }
+            </td>
+            <td>
+              <div class="tags" style="margin: 0; gap: 0.35rem">
+                @for (r of u.roles; track r.id) {
+                  <span
+                    class="badge"
+                    [class.waiting]="
+                      r.nombre === 'ADMIN' || r.nombre === 'Secretaria'
+                    "
+                    style="font-size: 0.85rem"
+                  >
+                    @if (r.nombre === "ADMIN") {
+                      🛡️ {{ r.nombre }}
+                    } @else if (r.nombre === "CLIENTE") {
+                      🐾 {{ r.nombre }}
+                    } @else if (r.nombre === "Secretaria") {
+                      📋 {{ r.nombre }}
+                    } @else if (r.nombre === "Ventas") {
+                      🛒 {{ r.nombre }}
+                    } @else if (r.nombre === "Compras") {
+                      📦 {{ r.nombre }}
+                    } @else if (r.nombre === "Reportes") {
+                      📊 {{ r.nombre }}
+                    } @else if (r.nombre === "RRHH") {
+                      👥 {{ r.nombre }}
+                    } @else {
+                      💼 {{ r.nombre }}
+                    }
+                  </span>
+                } @empty {
+                  <span class="muted" style="font-size: 0.85rem"
+                    >Sin roles asignados</span
+                  >
+                }
+              </div>
+            </td>
+            <td style="text-align: right; white-space: nowrap">
+              <button
+                class="primary"
+                (click)="openAssignModal(u)"
+                style="padding: 0.4rem 0.75rem; font-size: 0.85rem"
+                title="Asignar o modificar roles de este usuario"
+              >
+                🛡️ Asignar Roles
+              </button>
+              <button
+                (click)="openEditUserModal(u)"
+                style="padding: 0.4rem 0.7rem; font-size: 0.85rem"
+                title="Editar datos del usuario"
+              >
+                Editar
+              </button>
+              <button
+                (click)="remove(u)"
+                style="
+                  color: #9c4533;
+                  padding: 0.4rem 0.65rem;
+                  font-size: 0.85rem;
+                "
+                title="Eliminar usuario"
+              >
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td
+              colspan="6"
+              style="text-align: center; padding: 2.5rem"
+              class="muted"
+            >
+              No se encontraron usuarios registrados.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación -->
+  @if (totalPages() > 1 || totalElements() > pageSize()) {
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 1.2rem 0;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+      "
+    >
+      <span class="muted">
+        Página <strong>{{ page() + 1 }}</strong> de
+        <strong>{{ totalPages() }}</strong> ({{ totalElements() }} usuarios en
+        total)
+      </span>
+      <div class="actions">
+        <button [disabled]="page() === 0" (click)="goToPage(page() - 1)">
+          ← Anterior
+        </button>
+        @for (p of [].constructor(totalPages()); track $index) {
+          @if ($index >= page() - 2 && $index <= page() + 2) {
+            <button
+              [class.primary]="$index === page()"
+              (click)="goToPage($index)"
+              style="min-width: 2.4rem; padding: 0.5rem"
+            >
+              {{ $index + 1 }}
+            </button>
+          }
+        }
+        <button
+          [disabled]="page() >= totalPages() - 1"
+          (click)="goToPage(page() + 1)"
+        >
+          Siguiente →
+        </button>
+      </div>
+    </div>
+  }
+}
+
+<!-- MODAL FLOTANTE 1: CREAR O EDITAR USUARIO DEL SISTEMA -->
+@if (showUserModal()) {
+  <div class="modal-backdrop" (click)="closeUserModal()">
+    <div
+      class="modal-card"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Formulario de gestión"
+      style="max-width: 680px"
+      (click)="$event.stopPropagation()"
+    >
+      @if (error()) {
+        <p class="error" role="alert">{{ error() }}</p>
+      }
+      <div class="modal-header">
+        <h2>
+          {{
+            editingUserId
+              ? "Editar Usuario del Sistema"
+              : "Nuevo Usuario del Sistema"
+          }}
+        </h2>
+        <button
+          type="button"
+          class="modal-close"
+          (click)="closeUserModal()"
+          aria-label="Cerrar modal"
+        >
+          ✕
+        </button>
+      </div>
+
+      <form #fu="ngForm" (ngSubmit)="saveUser()">
+        <div class="field-grid">
+          <label>
+            DNI / Identificación
+            <input
+              inputmode="numeric"
+              pattern="[0-9]{8}"
+              maxlength="8"
+              title="DNI de 8 dígitos"
+              name="dni"
+              [(ngModel)]="userModel.dni"
+              placeholder="Ej: 74839201"
+            />
+          </label>
+          <label>
+            Nombre completo
+            <input
+              name="nombre"
+              [(ngModel)]="userModel.nombre"
+              required
+              maxlength="100"
+              placeholder="Ej: Kevin Flores"
+            />
+          </label>
+          <label>
+            Correo electrónico
+            <input
+              name="email"
+              type="email"
+              [(ngModel)]="userModel.email"
+              required
+              email
+              maxlength="150"
+              placeholder="kevin@garritas.pe"
+            />
+          </label>
+          <label>
+            Teléfono
+            <input
+              type="tel"
+              inputmode="numeric"
+              pattern="9[0-9]{8}"
+              maxlength="9"
+              title="Celular peruano: 9 dígitos, comienza con 9"
+              name="telefono"
+              [(ngModel)]="userModel.telefono"
+              placeholder="Ej: 987654321"
+            />
+          </label>
+        </div>
+
+        <label>
+          Dirección
+          <input
+            name="direccion"
+            [(ngModel)]="userModel.direccion"
+            maxlength="255"
+            placeholder="Ej: Av. Brasil 450, Lima"
+          />
+        </label>
+
+        <!-- Selector de Roles -->
+        <fieldset
+          style="
+            margin: 1.2rem 0;
+            padding: 1.1rem;
+            border: 1px solid #d4ded0;
+            border-radius: 12px;
+            background: #fafbf9;
+          "
+        >
+          <legend style="font-weight: 600; color: #23523e; padding: 0 0.5rem">
+            Asignar Roles Iniciales (Muchos a Muchos: USUARIO_ROL)
+          </legend>
+          <p
+            class="muted"
+            style="margin: 0.2rem 0 0.8rem 0; font-size: 0.82rem"
+          >
+            Selecciona los roles asignados a este usuario (puedes marcar
+            múltiples opciones):
+          </p>
+          <div style="display: flex; gap: 0.6rem; flex-wrap: wrap">
+            @for (r of roles(); track r.id) {
+              <label
+                class="check"
+                style="
+                  background: #fff;
+                  border: 1px solid #cfdcce;
+                  border-radius: 9px;
+                  padding: 0.55rem 0.9rem;
+                  cursor: pointer;
+                  transition: all 0.15s;
+                "
+                [style.borderColor]="
+                  userModel.roleIds.includes(r.id) ? '#24624a' : '#cfdcce'
+                "
+                [style.background]="
+                  userModel.roleIds.includes(r.id) ? '#edf5eb' : '#fff'
+                "
+              >
+                <input
+                  type="checkbox"
+                  [checked]="userModel.roleIds.includes(r.id)"
+                  (change)="toggleUserModelRole(r.id)"
+                  style="margin-right: 0.4rem"
+                />
+                <strong style="color: #23523e">{{ r.nombre }}</strong>
+              </label>
+            }
+          </div>
+        </fieldset>
+
+        <div
+          class="actions"
+          style="justify-content: flex-end; margin-top: 1.5rem"
+        >
+          <button type="button" (click)="closeUserModal()">Cancelar</button>
+          <button class="primary" [disabled]="fu.invalid || busy()">
+            {{ editingUserId ? "Guardar cambios" : "Crear Usuario" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+<!-- MODAL FLOTANTE 2: ASIGNACIÓN DEDICADA DE ROLES (USUARIO_ROL) -->
+@if (showAssignModal() && assigningUser(); as usr) {
+  <div class="modal-backdrop" (click)="closeAssignModal()">
+    <div
+      class="modal-card"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Formulario de gestión"
+      style="max-width: 620px"
+      (click)="$event.stopPropagation()"
+    >
+      @if (error()) {
+        <p class="error" role="alert">{{ error() }}</p>
+      }
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow" style="margin: 0 0 0.2rem 0">
+            TABLA INTERMEDIA: USUARIO_ROL
+          </p>
+          <h2>Asignar Roles a {{ usr.nombre }}</h2>
+        </div>
+        <button
+          type="button"
+          class="modal-close"
+          (click)="closeAssignModal()"
+          aria-label="Cerrar modal"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div
+        style="
+          margin-bottom: 1.2rem;
+          padding: 0.8rem 1rem;
+          background: #f6f8f5;
+          border-radius: 10px;
+          font-size: 0.88rem;
+        "
+      >
+        <strong>Usuario:</strong> {{ usr.nombre }} (<code>ID: {{ usr.id }}</code
+        >) · <strong>Correo:</strong> {{ usr.email }}
+      </div>
+
+      <p class="muted" style="margin-bottom: 1rem; font-size: 0.88rem">
+        Marca o desmarca los roles que este usuario debe desempeñar. Los cambios
+        actualizarán directamente las filas en la tabla intermedia
+        <code>USUARIO_ROL</code>:
+      </p>
+
+      <div
+        style="
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+          gap: 0.8rem;
+        "
+      >
+        @for (r of roles(); track r.id) {
+          <div
+            (click)="toggleAssignRole(r.id)"
+            style="
+              border: 2px solid #cfdcce;
+              border-radius: 12px;
+              padding: 0.85rem 1rem;
+              cursor: pointer;
+              transition: all 0.15s;
+              background: #fff;
+            "
+            [style.borderColor]="
+              selectedRoleIds().includes(r.id) ? '#24624a' : '#dbe5da'
+            "
+            [style.background]="
+              selectedRoleIds().includes(r.id) ? '#eef6ec' : '#fff'
+            "
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 0.35rem;
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <input
+                  type="checkbox"
+                  [checked]="selectedRoleIds().includes(r.id)"
+                  (click)="$event.stopPropagation()"
+                  (change)="toggleAssignRole(r.id)"
+                />
+                <strong style="color: #1e4534; font-size: 0.95rem">
+                  @if (r.nombre === "ADMIN") {
+                    🛡️ {{ r.nombre }}
+                  } @else if (r.nombre === "CLIENTE") {
+                    🐾 {{ r.nombre }}
+                  } @else if (r.nombre === "Secretaria") {
+                    📋 {{ r.nombre }}
+                  } @else if (r.nombre === "Ventas") {
+                    🛒 {{ r.nombre }}
+                  } @else if (r.nombre === "Compras") {
+                    📦 {{ r.nombre }}
+                  } @else if (r.nombre === "Reportes") {
+                    📊 {{ r.nombre }}
+                  } @else if (r.nombre === "RRHH") {
+                    👥 {{ r.nombre }}
+                  } @else {
+                    💼 {{ r.nombre }}
+                  }
+                </strong>
+              </div>
+              @if (selectedRoleIds().includes(r.id)) {
+                <span
+                  class="badge"
+                  style="
+                    background: #24624a;
+                    color: #fff;
+                    font-size: 0.72rem;
+                    padding: 0.2rem 0.5rem;
+                  "
+                >
+                  Asignado
+                </span>
+              }
+            </div>
+            <p style="margin: 0; font-size: 0.8rem; color: #5a7061">
+              {{ r.descripcion || "Sin descripción detallada" }}
+            </p>
+          </div>
+        }
+      </div>
+
+      <div
+        class="actions"
+        style="justify-content: flex-end; margin-top: 1.6rem"
+      >
+        <button type="button" (click)="closeAssignModal()">Cancelar</button>
+        <button
+          class="primary"
+          [disabled]="busy()"
+          (click)="saveRoleAssignment()"
+        >
+          Guardar Asignaciones en USUARIO_ROL
+        </button>
+      </div>
+    </div>
+  </div>
+}

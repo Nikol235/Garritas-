@@ -1,0 +1,164 @@
+<p class="notice">
+  Estos roles organizan al personal dentro de Garritas. Los permisos de acceso
+  CLIENTE y ADMIN se administran en Keycloak; asignar un rol interno no cambia
+  el token ni convierte una cuenta en administradora.
+</p>
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">ADMINISTRACIÓN DE PERSONAL</p>
+    <h1>Roles internos de personal</h1>
+    <p>
+      Crea, edita y administra el catálogo de roles disponibles (Secretaria,
+      Ventas, Compras, Reportes, RRHH, Administrador, etc.).
+    </p>
+  </div>
+  <div class="actions">
+    <button (click)="load()">Actualizar</button>
+    <button class="primary" (click)="openNewModal()">+ Nuevo Rol</button>
+  </div>
+</div>
+
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+@if (message()) {
+  <p class="notice">{{ message() }}</p>
+}
+
+@if (loading()) {
+  <p role="status">Cargando roles…</p>
+} @else {
+  <!-- Tabla de Roles -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 80px">ID</th>
+          <th style="width: 220px">Nombre del Rol</th>
+          <th>Descripción y Alcance</th>
+          <th style="text-align: right; width: 180px">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (r of roles(); track r.id) {
+          <tr>
+            <td>
+              <code>#{{ r.id }}</code>
+            </td>
+            <td>
+              <span
+                class="badge"
+                [class.waiting]="
+                  r.nombre === 'ADMIN' || r.nombre === 'Secretaria'
+                "
+                style="font-size: 0.95rem; font-weight: 600"
+              >
+                {{
+                  r.nombre === "ADMIN"
+                    ? "🛡️ " + r.nombre
+                    : r.nombre === "CLIENTE"
+                      ? "🐾 " + r.nombre
+                      : "📋 " + r.nombre
+                }}
+              </span>
+            </td>
+            <td>
+              <span>{{ r.descripcion || "Sin descripción detallada" }}</span>
+            </td>
+            <td style="text-align: right; white-space: nowrap">
+              <button
+                (click)="openEditModal(r)"
+                title="Editar información del rol"
+              >
+                Editar
+              </button>
+              @if (r.nombre !== "ADMIN" && r.nombre !== "CLIENTE") {
+                <button
+                  (click)="remove(r)"
+                  style="color: #9c4533"
+                  title="Eliminar este rol"
+                >
+                  Eliminar
+                </button>
+              }
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td
+              colspan="4"
+              style="text-align: center; padding: 2.5rem"
+              class="muted"
+            >
+              No hay roles registrados en el sistema.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+
+<!-- MODAL FLOTANTE: CREAR O EDITAR ROL -->
+@if (showModal()) {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <div
+      class="modal-card"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Formulario de gestión"
+      style="max-width: 520px"
+      (click)="$event.stopPropagation()"
+    >
+      @if (error()) {
+        <p class="error" role="alert">{{ error() }}</p>
+      }
+      <div class="modal-header">
+        <h2>{{ editingRol() ? "Editar Rol" : "Nuevo Rol de Usuario" }}</h2>
+        <button
+          type="button"
+          class="modal-close"
+          (click)="closeModal()"
+          aria-label="Cerrar modal"
+        >
+          ✕
+        </button>
+      </div>
+
+      <form #f="ngForm" (ngSubmit)="save()">
+        <label>
+          Nombre del Rol
+          <input
+            name="nombre"
+            [(ngModel)]="model.nombre"
+            required
+            maxlength="50"
+            placeholder="Ej: Secretaria, Ventas, Compras, RRHH…"
+            autofocus
+          />
+        </label>
+
+        <label>
+          Descripción de Funciones
+          <textarea
+            name="descripcion"
+            [(ngModel)]="model.descripcion"
+            rows="3"
+            maxlength="255"
+            placeholder="Describe las responsabilidades y permisos que otorga este rol…"
+          ></textarea>
+        </label>
+
+        <div
+          class="actions"
+          style="margin-top: 1.5rem; justify-content: flex-end"
+        >
+          <button type="button" (click)="closeModal()">Cancelar</button>
+          <button class="primary" [disabled]="f.invalid || busy()">
+            {{ editingRol() ? "Guardar cambios" : "Crear Rol" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

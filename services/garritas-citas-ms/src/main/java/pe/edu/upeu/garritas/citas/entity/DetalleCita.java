@@ -21,6 +21,9 @@ public class DetalleCita {
   @Column(name = "id_prestacion", nullable = false)
   private Long prestacionId;
 
+  @Column(length = 1000)
+  private String componentes;
+
   @Column(nullable = false, length = 100)
   private String nombre;
 

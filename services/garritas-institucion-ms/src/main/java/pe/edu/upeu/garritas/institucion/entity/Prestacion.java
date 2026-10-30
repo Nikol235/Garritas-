@@ -21,4 +21,11 @@ public class Prestacion {
 
   @Column(nullable = false)
   private Boolean activo = true;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+      name = "prestacion_componentes",
+      joinColumns = @JoinColumn(name = "id_paquete"),
+      inverseJoinColumns = @JoinColumn(name = "id_componente"))
+  private java.util.Set<Prestacion> componentes = new java.util.HashSet<>();
 }

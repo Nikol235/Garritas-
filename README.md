@@ -146,3 +146,7 @@ La documentación puede construirse con `pip install -r docs/requirements.txt` y
 ## Guía para la sustentación
 
 [Guía completa en PDF](docs/sustentacion/Guia-de-sustentacion-Garritas.pdf), [resumen oral de dos páginas](docs/sustentacion/Resumen-para-exponer.pdf) y [mapa de código con rutas/líneas exactas](docs/sustentacion/Mapa-de-codigo.txt). Incluye once diagramas, fichas de los ocho servicios y respuestas a las siete preguntas S6–S11. [Índice y verificación](docs/sustentacion/README.md).
+
+### Integración de mejoras y reglas de negocio
+
+Consulta [la actualización de Catálogo, Usuario, delivery y paquetes](docs/integracion-fio-y-reglas-tienda.md) para conocer los cambios, las migraciones y sus límites.

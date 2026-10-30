@@ -2,7 +2,7 @@
   <div>
     <p class="eyebrow">HASTA TU PUERTA</p>
     <h1>Envíos</h1>
-    <p>Solicita el envío de tus compras pagadas y sigue su entrega.</p>
+    <p>Consulta los envíos pagados y sigue su entrega.</p>
   </div>
   <button (click)="load()">Actualizar envíos</button>
 </div>
@@ -12,72 +12,11 @@
 @if (message()) {
   <p class="notice">{{ message() }}</p>
 }
-<section class="panel">
-  <h2>Solicitar envío</h2>
-  <form #f="ngForm" (ngSubmit)="save()">
-    <div class="field-grid">
-      <label
-        >Pedido pagado<select name="venta" [(ngModel)]="model.idVenta" required>
-          <option [ngValue]="0">Selecciona un pedido</option>
-          @for (v of available(); track v.id) {
-            <option [ngValue]="v.id">
-              Pedido #{{ v.id }} · S/ {{ v.total }}
-            </option>
-          }
-        </select></label
-      ><label
-        >Dirección de entrega<input
-          name="direccion"
-          [(ngModel)]="model.direccionEntrega"
-          required
-          maxlength="255"
-      /></label>
-      <label
-        >Zona de entrega<select
-          name="zona"
-          [(ngModel)]="model.zonaId"
-          (ngModelChange)="model.transportistaId = 0"
-          required
-        >
-          <option [ngValue]="0">Selecciona una zona</option>
-          @for (z of zonas(); track z.id) {
-            <option [ngValue]="z.id">{{ z.nombre }}</option>
-          }
-        </select></label
-      >
-      <label
-        >Transportista de entrega<select
-          name="transportista"
-          [(ngModel)]="model.transportistaId"
-          required
-        >
-          <option [ngValue]="0">Selecciona un transportista</option>
-          @for (c of carriers(); track c.transportistaId) {
-            <option [ngValue]="c.transportistaId">
-              {{ c.transportista }} · S/ {{ c.tarifa }}
-            </option>
-          }
-        </select></label
-      >
-    </div>
-    @if (cobertura(); as c) {
-      <p class="muted">
-        Tarifa informativa: S/ {{ c.tarifa }} · {{ c.diasEstimados }} días. No
-        está incluida en el pago original de productos.
-      </p>
-    }
-    <p class="muted">
-      Cada pedido admite un único envío. Los pedidos sin pago confirmado aún no
-      se pueden enviar.
-    </p>
-    <button
-      class="primary"
-      [disabled]="f.invalid || !model.idVenta || !cobertura() || busy()"
-    >
-      Solicitar envío
-    </button>
-  </form>
-</section>
+<p class="notice">
+  Elige el delivery al confirmar tu carrito. Su tarifa se incluye en el pago y
+  el envío aparece aquí automáticamente cuando la compra queda pagada. Los
+  pedidos con recojo no generan envío.
+</p>
 <div class="grid">
   @for (e of envios(); track e.id) {
     <article>
@@ -86,7 +25,7 @@
       <p>{{ e.direccionEntrega }}</p>
       <p>{{ e.transportista || "Histórico: por asignar" }}</p>
       @if (e.tarifa !== null) {
-        <p>Tarifa registrada: S/ {{ e.tarifa }}</p>
+        <p>Tarifa de envío: S/ {{ e.tarifa }}</p>
       }
       <span class="badge">{{ label(e.estado) }}</span>
       @if (e.fechaEnvio) {
@@ -102,12 +41,6 @@
           <button class="primary" (click)="action(e, 'entregado')">
             Marcar entregado
           </button>
-        }
-        @if (
-          e.estado === "PENDIENTE" ||
-          (auth.admin() && e.estado === "EN_TRANSITO")
-        ) {
-          <button (click)="action(e, 'cancelar')">Cancelar envío</button>
         }
       </div>
     </article>

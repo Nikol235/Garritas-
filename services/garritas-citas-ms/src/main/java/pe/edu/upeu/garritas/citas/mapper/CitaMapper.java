@@ -34,7 +34,8 @@ public class CitaMapper {
                             d.getPrestacionId(),
                             d.getNombre(),
                             d.getPrecio(),
-                            d.getDuracionMinutos()))
+                            d.getDuracionMinutos(),
+                            d.getComponentes()))
                 .toList())
         .profesionalId(cita.getProfesionalId())
         .nombreMascota(cita.getNombreMascota())

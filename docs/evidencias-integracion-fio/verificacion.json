@@ -1,0 +1,14 @@
+{
+  "fecha": "2026-10-30T06:36:33.207357-05:00",
+  "java": {
+    "tests": 30,
+    "errores": 0,
+    "fallos": 0
+  },
+  "angular_tests": 15,
+  "angular_build": "correcto",
+  "documentacion_mkdocs_strict": "correcta",
+  "pago": "simulado",
+  "windows_nativo": "No ejecutado en este entorno Linux; scripts revisados y portables",
+  "origen_aportes_fio": "5d9c754dd2fe5e5e15d3f05e05ed78f1c559f141"
+}

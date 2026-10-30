@@ -1,82 +1,516 @@
 <div class="page-heading">
   <div>
-    <p class="eyebrow">ADMINISTRACIÓN</p>
-    <h1>Clientes</h1>
+    <p class="eyebrow">DIRECTORIO DE CLIENTES</p>
+    <h1>Gestión de Clientes y Mascotas</h1>
     <p>
-      Perfiles de negocio. Las credenciales de acceso se gestionan en Keycloak.
+      Registra clientes de la tienda veterinaria y administra sus mascotas
+      familiares para citas y compras.
     </p>
   </div>
-  <button (click)="load()">Actualizar clientes</button>
+  <div class="actions">
+    <button (click)="load()">Actualizar</button>
+    <button class="primary" (click)="openNewClientModal()">
+      + Nuevo Cliente
+    </button>
+  </div>
 </div>
+
 @if (error()) {
   <p class="error" role="alert">{{ error() }}</p>
 }
 @if (message()) {
   <p class="notice">{{ message() }}</p>
 }
-<div class="table-wrap">
-  <table>
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Correo</th>
-        <th>Teléfono</th>
-        <th>Dirección</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (p of clientes(); track p.id) {
-        <tr>
-          <td>{{ p.nombre }}</td>
-          <td>{{ p.email }}</td>
-          <td>{{ p.telefono }}</td>
-          <td>{{ p.direccion }}</td>
-          <td>
-            <button (click)="edit(p)">Editar cliente</button
-            ><button (click)="remove(p)">Eliminar cliente</button>
-          </td>
-        </tr>
-      } @empty {
-        <tr>
-          <td colspan="5">No hay perfiles registrados.</td>
-        </tr>
-      }
-    </tbody>
-  </table>
-</div>
-<section class="panel">
-  <h2>{{ id ? "Editar cliente" : "Nuevo perfil de cliente" }}</h2>
-  <form #f="ngForm" (ngSubmit)="save()">
-    <div class="field-grid">
-      <label
-        >Nombre del cliente<input
-          name="nombre"
-          [(ngModel)]="model.nombre"
-          required
-          maxlength="100" /></label
-      ><label
-        >Correo del cliente<input
-          name="email"
-          type="email"
-          [(ngModel)]="model.email"
-          required
-          email
-          maxlength="150" /></label
-      ><label
-        >Teléfono del cliente<input
-          name="telefono"
-          [(ngModel)]="model.telefono"
-          maxlength="20" /></label
-      ><label
-        >Dirección del cliente<input
-          name="direccion"
-          [(ngModel)]="model.direccion"
-          maxlength="255"
-      /></label>
+
+<!-- Barra de Búsqueda y Filtros -->
+<section class="panel" style="margin-bottom: 1.2rem; padding: 1rem 1.25rem">
+  <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap">
+    <div style="flex: 1; min-width: 260px">
+      <label style="margin: 0">
+        <strong>Buscar cliente por DNI, Nombre o Correo:</strong>
+        <input
+          type="search"
+          placeholder="Ej: 72345678, María, cliente@gmail.com…"
+          [ngModel]="search()"
+          (ngModelChange)="onSearchChange($event)"
+          style="margin-top: 0.35rem"
+        />
+      </label>
     </div>
-    <button class="primary" [disabled]="f.invalid || busy()">
-      Guardar cliente
-    </button>
-  </form>
+    <div
+      style="
+        display: flex;
+        align-items: flex-end;
+        gap: 0.5rem;
+        padding-top: 1.2rem;
+      "
+    >
+      <span class="badge" style="font-size: 0.85rem; padding: 0.5rem 0.9rem">
+        Total: {{ totalElements() }} clientes
+      </span>
+      @if (search()) {
+        <button
+          (click)="onSearchChange('')"
+          style="font-size: 0.85rem; padding: 0.5rem 0.8rem"
+        >
+          Limpiar filtro
+        </button>
+      }
+    </div>
+  </div>
 </section>
+
+<!-- Tabla de Clientes -->
+@if (loading()) {
+  <p role="status">Cargando clientes…</p>
+} @else {
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 120px">DNI</th>
+          <th>Nombre del Cliente</th>
+          <th>Correo Electrónico</th>
+          <th>Teléfono</th>
+          <th>Dirección</th>
+          <th style="text-align: right; width: 240px">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of clientes(); track c.id) {
+          <tr>
+            <td>
+              <strong>{{ c.dni || "Sin DNI" }}</strong>
+            </td>
+            <td>
+              <strong>{{ c.nombre }}</strong>
+              <div class="tags" style="margin: 0.2rem 0 0 0">
+                <span class="badge" style="font-size: 0.75rem">🐾 CLIENTE</span>
+              </div>
+            </td>
+            <td>{{ c.email }}</td>
+            <td>{{ c.telefono || "—" }}</td>
+            <td>{{ c.direccion || "—" }}</td>
+            <td style="text-align: right; white-space: nowrap">
+              <button
+                class="primary"
+                (click)="openPetModal(c)"
+                style="
+                  background: #24624a;
+                  color: #fff;
+                  padding: 0.4rem 0.75rem;
+                  font-size: 0.85rem;
+                "
+                title="Administrar mascotas de este cliente"
+              >
+                🐾 Mascotas
+              </button>
+              <button
+                (click)="openEditClientModal(c)"
+                style="padding: 0.4rem 0.7rem; font-size: 0.85rem"
+                title="Editar datos del cliente"
+              >
+                Editar
+              </button>
+              <button
+                (click)="remove(c)"
+                style="
+                  color: #9c4533;
+                  padding: 0.4rem 0.65rem;
+                  font-size: 0.85rem;
+                "
+                title="Eliminar cliente"
+              >
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td
+              colspan="6"
+              style="text-align: center; padding: 2.5rem"
+              class="muted"
+            >
+              No se encontraron clientes registrados con ese criterio.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Controles de Paginación -->
+  @if (totalPages() > 1 || totalElements() > pageSize()) {
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 1.2rem 0;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+      "
+    >
+      <span class="muted">
+        Página <strong>{{ page() + 1 }}</strong> de
+        <strong>{{ totalPages() }}</strong> ({{ totalElements() }} clientes en
+        total)
+      </span>
+      <div class="actions">
+        <button [disabled]="page() === 0" (click)="goToPage(page() - 1)">
+          ← Anterior
+        </button>
+        @for (p of [].constructor(totalPages()); track $index) {
+          @if ($index >= page() - 2 && $index <= page() + 2) {
+            <button
+              [class.primary]="$index === page()"
+              (click)="goToPage($index)"
+              style="min-width: 2.4rem; padding: 0.5rem"
+            >
+              {{ $index + 1 }}
+            </button>
+          }
+        }
+        <button
+          [disabled]="page() >= totalPages() - 1"
+          (click)="goToPage(page() + 1)"
+        >
+          Siguiente →
+        </button>
+      </div>
+    </div>
+  }
+}
+
+<!-- MODAL FLOTANTE 1: CREAR O EDITAR CLIENTE -->
+@if (showClientModal()) {
+  <div class="modal-backdrop" (click)="closeClientModal()">
+    <div
+      class="modal-card"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Formulario de gestión"
+      style="max-width: 640px"
+      (click)="$event.stopPropagation()"
+    >
+      @if (error()) {
+        <p class="error" role="alert">{{ error() }}</p>
+      }
+      <div class="modal-header">
+        <h2>
+          {{ id ? "Editar Datos del Cliente" : "Registrar Nuevo Cliente" }}
+        </h2>
+        <button
+          type="button"
+          class="modal-close"
+          (click)="closeClientModal()"
+          aria-label="Cerrar modal"
+        >
+          ✕
+        </button>
+      </div>
+
+      <form #fc="ngForm" (ngSubmit)="save()">
+        <div class="field-grid">
+          <label>
+            DNI / Documento de Identidad
+            <input
+              inputmode="numeric"
+              pattern="[0-9]{8}"
+              maxlength="8"
+              title="DNI de 8 dígitos"
+              name="dni"
+              [(ngModel)]="model.dni"
+              placeholder="Ej: 74839201"
+              autofocus
+            />
+          </label>
+          <label>
+            Nombre completo
+            <input
+              name="nombre"
+              [(ngModel)]="model.nombre"
+              required
+              maxlength="100"
+              placeholder="Ej: María Rodríguez"
+            />
+          </label>
+          <label>
+            Correo electrónico
+            <input
+              name="email"
+              type="email"
+              [(ngModel)]="model.email"
+              required
+              email
+              maxlength="150"
+              placeholder="cliente@garritas.pe"
+            />
+          </label>
+          <label>
+            Teléfono de contacto
+            <input
+              type="tel"
+              inputmode="numeric"
+              pattern="9[0-9]{8}"
+              maxlength="9"
+              title="Celular peruano: 9 dígitos, comienza con 9"
+              name="telefono"
+              [(ngModel)]="model.telefono"
+              placeholder="Ej: 987654321"
+            />
+          </label>
+        </div>
+
+        <label>
+          Dirección de entrega / domicilio
+          <input
+            name="direccion"
+            [(ngModel)]="model.direccion"
+            maxlength="255"
+            placeholder="Ej: Av. Las Palmeras 123, Urb. Los Rosales"
+          />
+        </label>
+
+        <div
+          class="actions"
+          style="justify-content: flex-end; margin-top: 1.5rem"
+        >
+          <button type="button" (click)="closeClientModal()">Cancelar</button>
+          <button class="primary" [disabled]="fc.invalid || busy()">
+            {{ id ? "Guardar cambios" : "Registrar Cliente" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+<!-- MODAL FLOTANTE 2: GESTIÓN DE MASCOTAS DEL CLIENTE -->
+@if (showPetModal() && activeClient(); as cli) {
+  <div class="modal-backdrop" (click)="closePetModal()">
+    <div
+      class="modal-card"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Formulario de gestión"
+      style="max-width: 750px"
+      (click)="$event.stopPropagation()"
+    >
+      @if (error()) {
+        <p class="error" role="alert">{{ error() }}</p>
+      }
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow" style="margin: 0 0 0.2rem 0">
+            MASCOTAS FAMILIARES
+          </p>
+          <h2>Mascotas de {{ cli.nombre }}</h2>
+        </div>
+        <button
+          type="button"
+          class="modal-close"
+          (click)="closePetModal()"
+          aria-label="Cerrar modal"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div
+        style="
+          margin-bottom: 1.2rem;
+          padding: 0.8rem 1rem;
+          background: #f6f8f5;
+          border-radius: 10px;
+          font-size: 0.88rem;
+        "
+      >
+        <strong>Cliente:</strong> {{ cli.nombre }} · <strong>DNI:</strong>
+        {{ cli.dni || "Sin DNI" }} · <strong>Correo:</strong> {{ cli.email }}
+      </div>
+
+      <!-- Formulario para Añadir / Editar Mascota -->
+      <form
+        #fp="ngForm"
+        (ngSubmit)="savePet()"
+        style="
+          background: #fafcf9;
+          border: 1px solid #dbe6d6;
+          border-radius: 12px;
+          padding: 1.2rem;
+          margin-bottom: 1.5rem;
+        "
+      >
+        <h3 style="margin-top: 0; color: #23523e; font-size: 1.05rem">
+          {{ editingPetId ? "Editar Mascota" : "+ Registrar Nueva Mascota" }}
+        </h3>
+        <div class="field-grid">
+          <label>
+            Nombre de la mascota
+            <input
+              name="petNombre"
+              [(ngModel)]="petModel.nombre"
+              required
+              maxlength="100"
+              placeholder="Ej: Firulais, Michi, Rocky…"
+            />
+          </label>
+          <label>
+            Especie
+            <select
+              aria-label="Especie"
+              name="petEspecie"
+              [(ngModel)]="petModel.especie"
+              required
+            >
+              <option value="Perro">Perro</option>
+              <option value="Gato">Gato</option>
+              <option value="Ave">Ave</option>
+              <option value="Conejo">Conejo</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </label>
+          <label>
+            Raza
+            <input
+              name="petRaza"
+              [(ngModel)]="petModel.raza"
+              maxlength="100"
+              placeholder="Ej: Golden Retriever, Siames…"
+            />
+          </label>
+          <label>
+            Edad (años)
+            <input
+              name="petEdad"
+              type="number"
+              min="0"
+              max="50"
+              step="1"
+              max="36500"
+              [(ngModel)]="petModel.edad"
+              placeholder="Ej: 3"
+            /> </label
+          ><label
+            >Unidad de edad<select
+              aria-label="Unidad de edad"
+              name="edadUnidad"
+              [(ngModel)]="petModel.edadUnidad"
+            >
+              <option value="MESES">Meses</option>
+              <option value="DIAS">Días</option>
+            </select></label
+          >
+        </div>
+        <div
+          class="actions"
+          style="margin-top: 1rem; justify-content: flex-end"
+        >
+          @if (editingPetId) {
+            <button type="button" (click)="cancelEditPet()">
+              Cancelar edición
+            </button>
+          }
+          <button class="primary" [disabled]="fp.invalid || busy()">
+            {{ editingPetId ? "Actualizar Mascota" : "Guardar Mascota" }}
+          </button>
+        </div>
+      </form>
+
+      <!-- Lista de Mascotas del Cliente -->
+      <h3 style="margin-bottom: 0.6rem; color: #23523e">
+        Mascotas registradas ({{ clientPets().length }})
+      </h3>
+      <div
+        style="
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+          gap: 0.8rem;
+          max-height: 260px;
+          overflow-y: auto;
+        "
+      >
+        @for (m of clientPets(); track m.id) {
+          <div
+            style="
+              border: 1px solid #d4ded0;
+              border-radius: 10px;
+              padding: 0.9rem;
+              background: #fff;
+            "
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+              "
+            >
+              <strong style="color: #1e4534; font-size: 1.05rem"
+                >🐾 {{ m.nombre }}</strong
+              >
+              <span class="badge">{{ m.especie }}</span>
+            </div>
+            <p class="muted" style="margin: 0.4rem 0; font-size: 0.82rem">
+              {{ m.raza || "Raza no especificada" }} · {{ m.edad }}
+              {{
+                m.edadUnidad === "DIAS"
+                  ? m.edad === 1
+                    ? "día"
+                    : "días"
+                  : m.edad === 1
+                    ? "mes"
+                    : "meses"
+              }}
+            </p>
+            <div
+              class="actions"
+              style="margin-top: 0.6rem; justify-content: flex-end; gap: 0.3rem"
+            >
+              <button
+                (click)="editPet(m)"
+                style="font-size: 0.78rem; padding: 0.25rem 0.5rem"
+              >
+                Editar
+              </button>
+              <button
+                (click)="removePet(m)"
+                style="
+                  color: #9c4533;
+                  font-size: 0.78rem;
+                  padding: 0.25rem 0.5rem;
+                "
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        } @empty {
+          <p
+            class="muted"
+            style="
+              grid-column: 1 / -1;
+              text-align: center;
+              padding: 1.5rem;
+              background: #fdfdfd;
+              border-radius: 8px;
+            "
+          >
+            Este cliente aún no tiene mascotas registradas.
+          </p>
+        }
+      </div>
+
+      <div
+        class="actions"
+        style="margin-top: 1.5rem; justify-content: flex-end"
+      >
+        <button type="button" class="primary" (click)="closePetModal()">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+}

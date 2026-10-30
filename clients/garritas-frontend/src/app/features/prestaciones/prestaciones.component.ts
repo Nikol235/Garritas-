@@ -22,9 +22,14 @@ export class PrestacionesComponent extends Feedback {
   readonly sedes = signal<Sede[]>([]);
   readonly prestaciones = signal<Prestacion[]>([]);
   readonly ofertas = signal<Oferta[]>([]);
-  sedeId = 0;
+  sedeId = Number(sessionStorage.getItem("garritas-servicios-sede") ?? 0);
   id: number | undefined;
-  model = { nombre: "", descripcion: "", activo: true };
+  model = {
+    nombre: "",
+    descripcion: "",
+    activo: true,
+    componenteIds: [] as number[],
+  };
   oferta = { prestacionId: 0, precio: 60, duracionMinutos: 30, activo: true };
   constructor() {
     super();
@@ -38,6 +43,13 @@ export class PrestacionesComponent extends Feedback {
       next: (r) => {
         this.sedes.set(r.s);
         this.prestaciones.set(r.p);
+        sessionStorage.removeItem("garritas-servicios-sede");
+        if (
+          !r.s.some(
+            (s) => s.id === this.sedeId && (s.activo || this.auth.admin()),
+          )
+        )
+          this.sedeId = 0;
         if (!this.sedeId) this.sedeId = r.s.find((s) => s.activo)?.id ?? 0;
         this.loadOfertas();
       },
@@ -46,11 +58,14 @@ export class PrestacionesComponent extends Feedback {
   }
   loadOfertas() {
     this.ofertas.set([]);
+    const selected = this.sedeId;
     if (this.sedeId)
       this.api
         .get<Oferta[]>("/sedes/" + this.sedeId + "/prestaciones")
         .subscribe({
-          next: (o) => this.ofertas.set(o),
+          next: (o) => {
+            if (this.sedeId === selected) this.ofertas.set(o);
+          },
           error: (e) => this.report(e),
         });
   }
@@ -60,11 +75,27 @@ export class PrestacionesComponent extends Feedback {
       nombre: p.nombre,
       descripcion: p.descripcion ?? "",
       activo: p.activo,
+      componenteIds: (p.componentes ?? []).map((c) => c.id),
     };
   }
   reset() {
     this.id = undefined;
-    this.model = { nombre: "", descripcion: "", activo: true };
+    this.model = {
+      nombre: "",
+      descripcion: "",
+      activo: true,
+      componenteIds: [] as number[],
+    };
+  }
+  individuales() {
+    return this.prestaciones().filter(
+      (p) => p.id !== this.id && !p.componentes?.length && p.activo,
+    );
+  }
+  toggleComponente(id: number) {
+    this.model.componenteIds = this.model.componenteIds.includes(id)
+      ? this.model.componenteIds.filter((x) => x !== id)
+      : [...this.model.componenteIds, id];
   }
   save() {
     this.send(
