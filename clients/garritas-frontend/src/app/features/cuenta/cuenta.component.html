@@ -1,121 +1,253 @@
 <div class="page-heading">
   <div>
-    <p class="eyebrow">TU FAMILIA, TUS MASCOTAS</p>
-    <h1>Mi cuenta y mascotas</h1>
-    <p>Completa tus datos para reservar citas para tus mascotas.</p>
+    <p class="eyebrow">TU PERFIL PERSONAL</p>
+    <h1>Mi Cuenta</h1>
+    <p>Consulta tus roles asignados y mantén tu información de contacto actualizada.</p>
   </div>
 </div>
+
 @if (error()) {
   <p class="error" role="alert">{{ error() }}</p>
 }
 @if (message()) {
   <p class="notice" role="status">{{ message() }}</p>
 }
+
 @if (loading()) {
-  <p role="status">Cargando tu perfil…</p>
+  <p role="status">Cargando tu información…</p>
 } @else {
-<section class="panel">
-  <h2>Mi perfil</h2>
-  <form #f="ngForm" (ngSubmit)="save()">
-    <div class="field-grid">
-      <label
-        >Nombre completo<input
-          name="nombre"
-          [(ngModel)]="model.nombre"
-          required
-          maxlength="100" /></label
-      ><label
-        >Correo de contacto<input
-          name="email"
-          type="email"
-          [(ngModel)]="model.email"
-          required
-          email
-          maxlength="150" /></label
-      ><label
-        >Teléfono de contacto<input
-          name="telefono"
-          [(ngModel)]="model.telefono"
-          maxlength="20" /></label
-      ><label
-        >Dirección de contacto<input
+  <!-- Tarjeta Resumen del Usuario -->
+  <section class="panel" style="background: linear-gradient(105deg, #eef5e9, #fbfbf6); border: 1px solid #d9e6d3; margin-bottom: 1.5rem;">
+    <div style="display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap;">
+      <div class="avatar" style="width: 64px; height: 64px; font-size: 2rem;">
+        👤
+      </div>
+      <div style="flex: 1; min-width: 220px;">
+        <h2 style="margin: 0; color: #1e4534;">{{ perfil()?.nombre || auth.name() || 'Usuario Garritas' }}</h2>
+        <p style="margin: 0.35rem 0; color: #526c59;">
+          <strong>Usuario:</strong> {{ auth.name() || 'Registrado' }} |
+          <strong>DNI:</strong> {{ perfil()?.dni || 'No registrado' }} |
+          <strong>Correo:</strong> {{ perfil()?.email || 'Sin correo' }}
+        </p>
+        <div class="tags" style="margin: 0.4rem 0 0 0; gap: 0.4rem;">
+          <span class="muted" style="font-size: 0.8rem; align-self: center;">Roles asignados:</span>
+          @for (r of perfil()?.roles; track r.id) {
+            <span class="badge" [class.waiting]="r.nombre === 'ADMIN' || r.nombre === 'Secretaria'">
+              {{ r.nombre === 'ADMIN' ? '🛡️ ' + r.nombre : (r.nombre === 'CLIENTE' ? '🐾 ' + r.nombre : '💼 ' + r.nombre) }}
+            </span>
+          } @empty {
+            <span class="badge" [class.waiting]="auth.admin()">
+              {{ auth.admin() ? '🛡️ ADMIN' : '🐾 CLIENTE' }}
+            </span>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección: Mis Roles -->
+  <section class="panel" style="border-left: 4px solid #24624a;">
+    <h2 style="margin-top: 0; color: #23523e;">🛡️ Mis Roles en el Sistema</h2>
+    <p class="muted">Tus permisos y capacidades en Garritas Store según los roles asignados a tu cuenta:</p>
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem;">
+      @for (r of perfil()?.roles; track r.id) {
+        <article style="border: 1px solid #dbe6d6; background: #fafcf9; border-radius: 12px; padding: 1.2rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+            <strong style="color: #1e4534; font-size: 1.1rem;">
+              {{ r.nombre === 'ADMIN' ? '🛡️ ' + r.nombre : (r.nombre === 'CLIENTE' ? '🐾 ' + r.nombre : '💼 ' + r.nombre) }}
+            </strong>
+            <span class="badge" [class.waiting]="r.nombre === 'ADMIN' || r.nombre === 'Secretaria'">Activo</span>
+          </div>
+          <p style="margin: 0; font-size: 0.85rem; color: #556b5a;">
+            {{ r.descripcion || (r.nombre === 'ADMIN' ? 'Acceso a administración de clientes, catálogo, citas y almacén.' : 'Acceso como cliente: compras en línea, reserva de citas y registro de mascotas familiares.') }}
+          </p>
+        </article>
+      } @empty {
+        @if (auth.admin()) {
+          <article style="border: 1px solid #dbe6d6; background: #fafcf9; border-radius: 12px; padding: 1.2rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+              <strong style="color: #1e4534; font-size: 1.1rem;">🛡️ ADMINISTRADOR</strong>
+              <span class="badge waiting">Activo</span>
+            </div>
+            <p style="margin: 0; font-size: 0.85rem; color: #556b5a;">
+              Acceso total de administración: gestión de usuarios, roles, catálogo, categorías, clientes y citas de la tienda.
+            </p>
+          </article>
+        } @else {
+          <article style="border: 1px solid #dbe6d6; background: #fafcf9; border-radius: 12px; padding: 1.2rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+              <strong style="color: #1e4534; font-size: 1.1rem;">🐾 CLIENTE</strong>
+              <span class="badge">Activo</span>
+            </div>
+            <p style="margin: 0; font-size: 0.85rem; color: #556b5a;">
+              Acceso como cliente: compras en línea, reserva de citas veterinarias y registro de mascotas familiares.
+            </p>
+          </article>
+        }
+      }
+    </div>
+  </section>
+
+  <!-- Panel: Datos Personales -->
+  <section class="panel">
+    <h2>Mis Datos Personales</h2>
+    <p class="muted">Mantén tus datos actualizados para agilizar tus gestiones y pedidos.</p>
+    <form #f="ngForm" (ngSubmit)="save()">
+      <div class="field-grid">
+        <label>
+          DNI / Identificación
+          <input
+            name="dni"
+            [(ngModel)]="model.dni"
+            maxlength="20"
+            placeholder="Ej: 71234567"
+          />
+        </label>
+        <label>
+          Nombre completo
+          <input
+            name="nombre"
+            [(ngModel)]="model.nombre"
+            required
+            maxlength="100"
+            placeholder="Tu nombre y apellidos"
+          />
+        </label>
+        <label>
+          Correo de contacto
+          <input
+            name="email"
+            type="email"
+            [(ngModel)]="model.email"
+            required
+            email
+            maxlength="150"
+            placeholder="correo@ejemplo.com"
+          />
+        </label>
+        <label>
+          Teléfono celular
+          <input
+            name="telefono"
+            [(ngModel)]="model.telefono"
+            maxlength="20"
+            placeholder="Ej: 987654321"
+          />
+        </label>
+      </div>
+      <label>
+        Dirección de domicilio
+        <input
           name="direccion"
           [(ngModel)]="model.direccion"
           maxlength="255"
-      /></label>
-    </div>
-    <button class="primary" [disabled]="f.invalid || busy()">
-      Guardar perfil
-    </button>
-  </form>
-</section>
-}
-@if (perfil()) {
-  <div class="page-heading"><h2>Mis mascotas</h2></div>
-  <div class="grid">
-    @for (p of mascotas(); track p.id) {
-      <article>
-        <span class="location-icon">🐾</span>
-        <h3>{{ p.nombre }}</h3>
-        <p>
-          {{ p.especie }} · {{ p.raza || "Sin raza indicada" }} ·
-          {{ p.edad ?? 0 }} años
-        </p>
-        <div class="actions">
-          <button
-            (click)="edit(p)"
-            [attr.aria-label]="'Editar mascota ' + p.nombre"
-          >
-            Editar</button
-          ><button
-            (click)="remove(p)"
-            [attr.aria-label]="'Eliminar mascota ' + p.nombre"
-          >
-            Eliminar
-          </button>
-        </div>
-      </article>
-    } @empty {
-      <p>Todavía no has registrado mascotas.</p>
-    }
-  </div>
-  <section class="panel">
-    <h2>{{ petId ? "Editar mascota" : "Registrar mascota" }}</h2>
-    <form #pf="ngForm" (ngSubmit)="savePet()">
-      <div class="field-grid">
-        <label
-          >Nombre de mascota<input
-            name="nombreMascota"
-            [(ngModel)]="pet.nombre"
-            required
-            maxlength="100" /></label
-        ><label
-          >Especie<select name="especie" [(ngModel)]="pet.especie">
-            <option>Perro</option>
-            <option>Gato</option>
-            <option>Ave</option>
-            <option>Conejo</option>
-            <option>Otro</option>
-          </select></label
-        ><label
-          >Raza<input
-            name="raza"
-            [(ngModel)]="pet.raza"
-            maxlength="100" /></label
-        ><label
-          >Edad en años<input
-            name="edad"
-            type="number"
-            min="0"
-            step="1"
-            [(ngModel)]="pet.edad"
-        /></label>
+          placeholder="Ej: Jr. Los Pinos 456, Lima"
+        />
+      </label>
+      <div class="actions" style="margin-top: 1rem;">
+        <button class="primary" [disabled]="f.invalid || busy()">
+          Guardar cambios en mi perfil
+        </button>
       </div>
-      <button class="primary" [disabled]="pf.invalid || busy()">
-        Guardar mascota
-      </button>
     </form>
   </section>
-} @else {
-  <p class="empty-state">Guarda tu perfil para añadir tus mascotas.</p>
+
+  <!-- Panel: Mis Mascotas (Solo si el usuario tiene rol de Cliente) -->
+  @if (esCliente()) {
+    <div class="page-heading" style="margin-top: 2rem;">
+      <div>
+        <p class="eyebrow">TUS COMPAÑEROS DE VIDA</p>
+        <h2>Mis Mascotas</h2>
+        <p>Registra y administra las mascotas de tu familia para asociarlas a servicios y citas veterinarias.</p>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-bottom: 1.5rem;">
+      @for (p of mascotas(); track p.id) {
+        <article>
+          <span class="location-icon">🐾</span>
+          <h2>{{ p.nombre }}</h2>
+          <p>
+            <strong>Especie:</strong> {{ p.especie }}<br />
+            <strong>Raza:</strong> {{ p.raza || 'No especificada' }}<br />
+            <strong>Edad:</strong> {{ p.edad }} {{ p.edad === 1 ? 'año' : 'años' }}
+          </p>
+          <div class="actions">
+            <button (click)="edit(p)">Editar datos</button>
+            <button (click)="remove(p)" style="color: #9c4533;">Eliminar</button>
+          </div>
+        </article>
+      } @empty {
+        <div class="empty-state" style="grid-column: 1 / -1;">
+          <h2>No tienes mascotas registradas</h2>
+          <p class="muted">Agrega tus perritos, gatitos u otros compañeros para gestionar sus citas y cuidados.</p>
+        </div>
+      }
+    </div>
+
+    <!-- Formulario Agregar / Editar Mascota en Mi Cuenta -->
+    <section class="panel">
+      <h2>{{ petId ? "Editar Mascota" : "+ Agregar Nueva Mascota" }}</h2>
+      <form #fp="ngForm" (ngSubmit)="savePet()">
+        <div class="field-grid">
+          <label>
+            Nombre de la mascota
+            <input
+              name="petNombre"
+              [(ngModel)]="pet.nombre"
+              required
+              maxlength="100"
+              placeholder="Ej: Max"
+            />
+          </label>
+          <label>
+            Especie
+            <select name="petEspecie" [(ngModel)]="pet.especie" required>
+              <option value="Perro">Perro</option>
+              <option value="Gato">Gato</option>
+              <option value="Ave">Ave</option>
+              <option value="Conejo">Conejo</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </label>
+          <label>
+            Raza
+            <input
+              name="petRaza"
+              [(ngModel)]="pet.raza"
+              maxlength="100"
+              placeholder="Ej: Labrador"
+            />
+          </label>
+          <label>
+            Edad (años)
+            <input
+              name="petEdad"
+              type="number"
+              min="0"
+              max="50"
+              [(ngModel)]="pet.edad"
+              placeholder="Ej: 2"
+            />
+          </label>
+        </div>
+        <div class="actions" style="margin-top: 1rem;">
+          @if (petId) {
+            <button type="button" (click)="cancelPet()">Cancelar edición</button>
+          }
+          <button class="primary" [disabled]="fp.invalid || busy()">
+            {{ petId ? "Guardar cambios" : "Guardar Mascota" }}
+          </button>
+        </div>
+      </form>
+    </section>
+  } @else {
+    <!-- Aviso Informativo para Personal / Administradores -->
+    <section class="panel" style="background: #fafbf9; border-left: 4px solid #4a7c59; margin-top: 2rem;">
+      <h3 style="margin-top: 0; color: #23523e;">💼 Perfil de Administrador / Personal</h3>
+      <p class="muted" style="margin: 0.3rem 0;">
+        Tu cuenta tiene asignado el rol de <strong>ADMINISTRADOR / PERSONAL</strong>. La gestión y registro de mascotas personales está reservada para clientes. Como personal del sistema, gestionas las mascotas de los clientes desde la pestaña <strong>Clientes</strong> y las citas médicas desde <strong>Citas</strong>.
+      </p>
+    </section>
+  }
 }

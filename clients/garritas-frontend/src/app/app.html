@@ -36,7 +36,7 @@
       @if(auth.loggedIn()){
       <p class="nav-section">MI ESPACIO</p>
       <button [class.selected]="view()==='cuenta'" (click)="view.set('cuenta')">
-        Mi cuenta y mascotas
+        Mi cuenta
       </button>
       <button
         [class.selected]="view()==='pedidos'"
@@ -71,7 +71,19 @@
         [class.selected]="view()==='clientes'"
         (click)="view.set('clientes')"
       >
-        Clientes
+        Clientes y Mascotas
+      </button>
+      <button
+        [class.selected]="view()==='usuarios-roles'"
+        (click)="view.set('usuarios-roles')"
+      >
+        Usuarios y Roles
+      </button>
+      <button
+        [class.selected]="view()==='roles'"
+        (click)="view.set('roles')"
+      >
+        Gestión de Roles
       </button>
       }
     </nav>
@@ -244,7 +256,9 @@
       @if(view()==='envios'){<app-envios [initialVenta]="shippingSaleId" />}
       @if(view()==='pagos'){<app-pagos />} } @if(auth.admin()){
       @if(view()==='productos'){<app-admin-productos />}
-      @if(view()==='clientes'){<app-clientes />} } @if(!auth.loggedIn() &&
+      @if(view()==='clientes'){<app-clientes />}
+      @if(view()==='usuarios-roles'){<app-usuarios-roles />}
+      @if(view()==='roles'){<app-roles />} } @if(!auth.loggedIn() &&
       (view()==='cuenta'||view()==='citas'||view()==='envios'||view()==='pagos'||view()==='pedidos')){
       <section class="empty-state">
         <h1>Inicia sesión para continuar</h1>

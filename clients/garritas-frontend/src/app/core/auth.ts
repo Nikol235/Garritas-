@@ -1,6 +1,7 @@
 import { Injectable, inject, signal } from "@angular/core";
 import Keycloak from "keycloak-js";
 import { Config } from "./config";
+
 @Injectable({ providedIn: "root" })
 export class Auth {
   private readonly config = inject(Config);
@@ -8,6 +9,7 @@ export class Auth {
   readonly loggedIn = signal(false);
   readonly name = signal("");
   readonly admin = signal(false);
+
   async init() {
     await this.config.load();
     const c = this.config.value;
@@ -31,17 +33,33 @@ export class Auth {
     });
     this.sync();
   }
+
   private sync() {
     this.loggedIn.set(!!this.kc.authenticated);
     this.name.set(this.kc.tokenParsed?.["preferred_username"] ?? "");
     this.admin.set(this.kc.hasRealmRole("ADMIN"));
   }
+
   login() {
     return this.kc.login({ redirectUri: location.origin + "/" });
   }
+
   logout() {
     return this.kc.logout({ redirectUri: location.origin + "/" });
   }
+
+  accountUrl() {
+    return `${this.config.value.keycloakUrl}/realms/${this.config.value.realm}/account/#/security/signing-in`;
+  }
+
+  manageAccount() {
+    if (this.kc) {
+      this.kc.accountManagement();
+    } else {
+      window.open(this.accountUrl(), "_blank");
+    }
+  }
+
   async token() {
     if (!this.kc.authenticated) return undefined;
     try {

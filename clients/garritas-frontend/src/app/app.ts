@@ -7,6 +7,8 @@ import { EnviosComponent } from "./features/envios/envios.component";
 import { PagosComponent } from "./features/pagos/pagos.component";
 import { ProductosComponent } from "./features/admin/productos.component";
 import { ClientesComponent } from "./features/admin/clientes.component";
+import { RolesComponent } from "./features/admin/roles.component";
+import { UsuariosRolesComponent } from "./features/admin/usuarios-roles.component";
 import { Component, DestroyRef, inject, signal, effect } from "@angular/core";
 import { CurrencyPipe, DatePipe } from "@angular/common";
 import { FormsModule } from "@angular/forms";
@@ -35,6 +37,8 @@ import { ProductCatalog } from "./features/catalogo/product-catalog";
     PagosComponent,
     ProductosComponent,
     ClientesComponent,
+    RolesComponent,
+    UsuariosRolesComponent,
   ],
   templateUrl: "./app.html",
 })
@@ -64,7 +68,7 @@ export class App {
   categoriaId: number | undefined;
 
   constructor() {
-    if(!this.auth.admin() && ["productos","categorias","clientes"].includes(this.view())) this.view.set("catalogo");
+    if(!this.auth.admin() && ["productos","categorias","clientes","usuarios-roles","roles"].includes(this.view())) this.view.set("catalogo");
     this.refreshCatalogo();
     this.refreshSedes();
     effect(() => sessionStorage.setItem("garritas-view", this.view()));
@@ -91,13 +95,14 @@ export class App {
         if (!ventas.some((v) => pending(v.estado))) this.refreshCatalogo();
       });
   }
-
   refreshSedes() {
     this.domain
       .get<Sede[]>("/sedes")
       .subscribe({
         next: (s) => this.cart.setSedes(s),
-        error: (e) => this.fail(e),
+        error: (e) => {
+          if (e instanceof HttpErrorResponse) this.fail(e);
+        },
       });
   }
   openCitas(id: number) {
