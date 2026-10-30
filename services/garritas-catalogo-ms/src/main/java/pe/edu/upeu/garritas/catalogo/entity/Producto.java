@@ -2,6 +2,8 @@ package pe.edu.upeu.garritas.catalogo.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.*;
 
 @Entity
@@ -35,6 +37,14 @@ public class Producto {
   private Boolean activo;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "id_categoria", nullable = false)
+  @JoinColumn(name = "id_categoria")
   private Categoria categoria;
+
+  @Builder.Default
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+      name = "producto_categoria",
+      joinColumns = @JoinColumn(name = "id_producto"),
+      inverseJoinColumns = @JoinColumn(name = "id_categoria"))
+  private Set<Categoria> categorias = new HashSet<>();
 }
