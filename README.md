@@ -142,3 +142,7 @@ La documentación puede construirse con `pip install -r docs/requirements.txt` y
 3. [Entender arquitectura, clases, tecnologías y conexiones](docs/manuales/03-Arquitectura-clases-y-conexiones.pdf).
 
 [Índice y evidencias de los manuales](docs/manuales/README.md). Se incluye un ZIP de fuentes sin dependencias/binarios, con manifiesto SHA-256; fue extraído y compilado en una carpeta nueva.
+
+## Guía para la sustentación
+
+[Guía completa en PDF](docs/sustentacion/Guia-de-sustentacion-Garritas.pdf), [resumen oral de dos páginas](docs/sustentacion/Resumen-para-exponer.pdf) y [mapa de código con rutas/líneas exactas](docs/sustentacion/Mapa-de-codigo.txt). Incluye once diagramas, fichas de los ocho servicios y respuestas a las siete preguntas S6–S11. [Índice y verificación](docs/sustentacion/README.md).

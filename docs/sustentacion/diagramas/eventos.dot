@@ -1,0 +1,7 @@
+digraph G {graph [fontname="DejaVu Sans",bgcolor="white",pad="0.15",ranksep="0.35"];node [fontname="DejaVu Sans",fontsize=11,shape=box,style="rounded,filled",fillcolor="#edf4ee",color="#47735e"];edge [fontname="DejaVu Sans",fontsize=9,color="#48685a"];rankdir=TB;{rank=same;v;o;k;}{rank=same;ca;pa;ve;}v[label="Venta
+Tx: venta + outbox"];o[label="Outbox.publish
+KafkaTemplate.send"];k[label="Kafka: garritas.ventas.v1
+clave ventaId / 3 particiones"];ca[label="Grupo Catálogo
+filtra eventos de inventario"];pa[label="Grupo Pago
+filtra inventario.reservado"];ve[label="Grupo Venta
+filtra resultados"];v->o->k;k->ca;k->pa;k->ve;}

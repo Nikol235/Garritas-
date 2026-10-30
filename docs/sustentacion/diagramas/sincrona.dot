@@ -1,0 +1,7 @@
+digraph G {graph [fontname="DejaVu Sans",bgcolor="white",pad="0.15",ranksep="0.35"];node [fontname="DejaVu Sans",fontsize=11,shape=box,style="rounded,filled",fillcolor="#edf4ee",color="#47735e"];edge [fontname="DejaVu Sans",fontsize=9,color="#48685a"];rankdir=TB;{rank=same;v;cb;f;}{rank=same;fb;e;c;}v[label="VentaService"];cb[label="CatalogoConsulta
+Circuit Breaker catalogo"];f[label="ProductoClient
+@FeignClient(nombre lógico)"];e[label="Eureka + LoadBalancer
+eligen instancia"];c[label="Catálogo
+GET /productos/{id}"];fb[label="Fallback: error controlado
+503 si no disponible
+No inventa precio"];v->cb->f->e->c;cb->fb[label="fallo / circuito abierto",style=dashed];}

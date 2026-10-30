@@ -1,0 +1,717 @@
+GARRITAS STORE - MAPA EXACTO DE CÓDIGO
+Commit: ed74c90d288a8bc68a55b699a76314967c73c870
+Ctrl+P: pegar ruta; Ctrl+G: saltar a la línea.
+
+2. Quién se conecta con quién
+Rutas Path y destinos lb://
+infra/garritas-config/config-repo/garritas-gateway-dev.yml
+Línea: 8
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-gateway-dev.yml#L8
+
+2. Quién se conecta con quién
+Selección de instancia, JWT y correlación
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/ServiceClient.java
+Línea: 24
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/ServiceClient.java#L24
+
+4. Dónde demostrar los muchos a muchos
+Tu N:M: observa los dos @ManyToOne
+services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/entity/SedePrestacion.java
+Línea: 17
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/entity/SedePrestacion.java#L17
+
+4. Dónde demostrar los muchos a muchos
+N:M de tu compañera: transportista y zona
+services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/entity/Cobertura.java
+Línea: 17
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/entity/Cobertura.java#L17
+
+4. Dónde demostrar los muchos a muchos
+N:M de Fio: usuario y plan; además sus períodos
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Suscripcion.java
+Línea: 18
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Suscripcion.java#L18
+
+4. Dónde demostrar los muchos a muchos
+Ejemplo adicional con @ManyToMany literal
+services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/entity/Profesional.java
+Línea: 32
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/entity/Profesional.java#L32
+
+5. Venta · compra y despacho
+Entrada HTTP de la compra y clave de reintento
+services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/controller/VentaController.java
+Línea: 12
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/controller/VentaController.java#L12
+
+5. Venta · compra y despacho
+Reglas, precios, propietario e idempotencia
+services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/service/VentaService.java
+Línea: 48
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/service/VentaService.java#L48
+
+5. Venta · compra y despacho
+Persistencia de cabecera y consulta por propietario/clave
+services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/repository/VentaRepository.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/repository/VentaRepository.java#L1
+
+5. Venta · compra y despacho
+Cabecera y relación con DetalleVenta
+services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/entity/Venta.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/entity/Venta.java#L1
+
+5. Venta · compra y despacho
+Consumo y transiciones protegidas por estado previo
+services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/messaging/VentaEvents.java
+Línea: 22
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/messaging/VentaEvents.java#L22
+
+5. Venta · compra y despacho
+API de entrega; /envios es alias de /despachos
+services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/despacho/controller/DespachoController.java
+Línea: 13
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/despacho/controller/DespachoController.java#L13
+
+5. Venta · compra y despacho
+Venta pagada, propietario y cobertura logística
+services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/despacho/service/DespachoService.java
+Línea: 35
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/despacho/service/DespachoService.java#L35
+
+5. Venta · compra y despacho
+Conexión JDBC, puerto, Eureka y emisor JWT del servicio
+infra/garritas-config/config-repo/garritas-venta-ms-dev.yml
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-venta-ms-dev.yml#L1
+
+5. Venta · compra y despacho
+Angular: vista y llamadas API relacionadas
+clients/garritas-frontend/src/app/app.ts
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/app.ts#L1
+
+5. Venta · compra y despacho
+Angular: vista y llamadas API relacionadas
+clients/garritas-frontend/src/app/features/envios/envios.component.ts
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/envios/envios.component.ts#L1
+
+6. Institución · sedes y prestaciones
+CRUD de sedes: GET/POST/PUT/DELETE
+services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/controller/SedeController.java
+Línea: 14
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/controller/SedeController.java#L14
+
+6. Institución · sedes y prestaciones
+Filtro de activas, validación y baja lógica
+services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/service/SedeService.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/service/SedeService.java#L1
+
+6. Institución · sedes y prestaciones
+CRUD de prestaciones y asignación por sede
+services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/controller/PrestacionController.java
+Línea: 12
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/controller/PrestacionController.java#L12
+
+6. Institución · sedes y prestaciones
+guardarOferta y precio/duración por asociación
+services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/service/PrestacionService.java
+Línea: 56
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/service/PrestacionService.java#L56
+
+6. Institución · sedes y prestaciones
+N:M real: sede + prestación + atributos
+services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/entity/SedePrestacion.java
+Línea: 17
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/entity/SedePrestacion.java#L17
+
+6. Institución · sedes y prestaciones
+Buscar/reutilizar la pareja, evitando duplicados
+services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/repository/SedePrestacionRepository.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-institucion-ms/src/main/java/pe/edu/upeu/garritas/institucion/repository/SedePrestacionRepository.java#L1
+
+6. Institución · sedes y prestaciones
+Conexión JDBC, puerto, Eureka y emisor JWT del servicio
+infra/garritas-config/config-repo/garritas-institucion-ms-dev.yml
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-institucion-ms-dev.yml#L1
+
+6. Institución · sedes y prestaciones
+Angular: vista y llamadas API relacionadas
+clients/garritas-frontend/src/app/features/sedes/sedes.component.ts
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/sedes/sedes.component.ts#L1
+
+6. Institución · sedes y prestaciones
+Angular: vista y llamadas API relacionadas
+clients/garritas-frontend/src/app/features/prestaciones/prestaciones.component.ts
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/prestaciones/prestaciones.component.ts#L1
+
+6. Institución · sedes y prestaciones
+Migración real: tablas y restricciones
+services/garritas-institucion-ms/src/main/resources/db/migration/V2__prestaciones_sede.sql
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-institucion-ms/src/main/resources/db/migration/V2__prestaciones_sede.sql#L1
+
+7. Envío · maestro logístico
+Todos los endpoints de los maestros
+services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/controller/LogisticaController.java
+Línea: 13
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/controller/LogisticaController.java#L13
+
+7. Envío · maestro logístico
+Reglas de actividad y mantenimiento de coberturas
+services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/service/LogisticaService.java
+Línea: 79
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/service/LogisticaService.java#L79
+
+7. Envío · maestro logístico
+N:M: transportista ↔ zona con tarifa y plazo
+services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/entity/Cobertura.java
+Línea: 17
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/entity/Cobertura.java#L17
+
+7. Envío · maestro logístico
+Maestro transportista
+services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/entity/Transportista.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/entity/Transportista.java#L1
+
+7. Envío · maestro logístico
+Maestro zona
+services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/entity/Zona.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/entity/Zona.java#L1
+
+7. Envío · maestro logístico
+Lectura de una pareja transportista/zona
+services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/repository/CoberturaRepository.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-envio-ms/src/main/java/pe/edu/upeu/garritas/envio/repository/CoberturaRepository.java#L1
+
+7. Envío · maestro logístico
+Conexión JDBC, puerto, Eureka y emisor JWT del servicio
+infra/garritas-config/config-repo/garritas-envio-ms-dev.yml
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-envio-ms-dev.yml#L1
+
+7. Envío · maestro logístico
+Angular: vista y llamadas API relacionadas
+clients/garritas-frontend/src/app/features/logistica/logistica.component.ts
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/logistica/logistica.component.ts#L1
+
+7. Envío · maestro logístico
+Migración real: tablas y restricciones
+services/garritas-envio-ms/src/main/resources/db/migration/V3__maestros_logisticos.sql
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-envio-ms/src/main/resources/db/migration/V3__maestros_logisticos.sql#L1
+
+8. Citas · reserva con cabecera y detalle
+Entrada y acciones de estado
+services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/controller/CitaController.java
+Línea: 14
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/controller/CitaController.java#L14
+
+8. Citas · reserva con cabecera y detalle
+Validaciones remotas, total y detección de cruces
+services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/service/CitaService.java
+Línea: 38
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/service/CitaService.java#L38
+
+8. Citas · reserva con cabecera y detalle
+Cabecera: dueño, mascota, sede, profesional y estado
+services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/entity/Cita.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/entity/Cita.java#L1
+
+8. Citas · reserva con cabecera y detalle
+Detalle: snapshot de prestación/precio/duración
+services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/entity/DetalleCita.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/entity/DetalleCita.java#L1
+
+8. Citas · reserva con cabecera y detalle
+Identidad del JWT y proyección del detalle
+services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/mapper/CitaMapper.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/mapper/CitaMapper.java#L1
+
+8. Citas · reserva con cabecera y detalle
+Lecturas por cliente y persistencia
+services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/repository/CitaRepository.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-citas-ms/src/main/java/pe/edu/upeu/garritas/citas/repository/CitaRepository.java#L1
+
+8. Citas · reserva con cabecera y detalle
+Conexión JDBC, puerto, Eureka y emisor JWT del servicio
+infra/garritas-config/config-repo/garritas-citas-ms-dev.yml
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-citas-ms-dev.yml#L1
+
+8. Citas · reserva con cabecera y detalle
+Angular: vista y llamadas API relacionadas
+clients/garritas-frontend/src/app/features/citas/citas.component.ts
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/citas/citas.component.ts#L1
+
+8. Citas · reserva con cabecera y detalle
+Migración real: tablas y restricciones
+services/garritas-citas-ms/src/main/resources/db/migration/V3__cita_cabecera_detalle.sql
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-citas-ms/src/main/resources/db/migration/V3__cita_cabecera_detalle.sql#L1
+
+9. Catálogo · productos, categorías e inventario
+CRUD HTTP de productos
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/ProductoController.java
+Línea: 14
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/ProductoController.java#L14
+
+9. Catálogo · productos, categorías e inventario
+CRUD HTTP de categorías
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/CategoriaController.java
+Línea: 14
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/controller/CategoriaController.java#L14
+
+9. Catálogo · productos, categorías e inventario
+Reglas de producto y métricas de negocio
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/service/ProductoService.java#L1
+
+9. Catálogo · productos, categorías e inventario
+Persistencia y relación con categoría
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/repository/ProductoRepository.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/repository/ProductoRepository.java#L1
+
+9. Catálogo · productos, categorías e inventario
+Entidad y versión para detectar edición obsoleta
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/entity/Producto.java
+Línea: 16
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/entity/Producto.java#L16
+
+9. Catálogo · productos, categorías e inventario
+Reservar/liberar; Inbox y reserva única por venta
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java
+Línea: 37
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L37
+
+9. Catálogo · productos, categorías e inventario
+Conexión JDBC, puerto, Eureka y emisor JWT del servicio
+infra/garritas-config/config-repo/garritas-catalogo-ms-dev.yml
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-catalogo-ms-dev.yml#L1
+
+9. Catálogo · productos, categorías e inventario
+Angular: vista y llamadas API relacionadas
+clients/garritas-frontend/src/app/features/admin/productos.component.ts
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/admin/productos.component.ts#L1
+
+10. Usuario · perfil, mascotas y suscripciones
+CRUD administrativo de perfiles
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/UsuarioController.java
+Línea: 14
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/UsuarioController.java#L14
+
+10. Usuario · perfil, mascotas y suscripciones
+Perfil propio y CRUD de mascotas propias
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MiCuentaController.java
+Línea: 12
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/MiCuentaController.java#L12
+
+10. Usuario · perfil, mascotas y suscripciones
+Guardar mi perfil, vínculo sub y conflictos de correo
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/UsuarioService.java
+Línea: 57
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/UsuarioService.java#L57
+
+10. Usuario · perfil, mascotas y suscripciones
+CRUD de planes y operaciones de suscripción
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/SuscripcionController.java
+Línea: 12
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/controller/SuscripcionController.java#L12
+
+10. Usuario · perfil, mascotas y suscripciones
+Idempotencia y reglas de contratación/renovación
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java
+Línea: 64
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java#L64
+
+10. Usuario · perfil, mascotas y suscripciones
+N:M cliente ↔ plan; cabecera con períodos
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Suscripcion.java
+Línea: 18
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/Suscripcion.java#L18
+
+10. Usuario · perfil, mascotas y suscripciones
+Detalle con precio, fechas y clave por operación
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/PeriodoSuscripcion.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/PeriodoSuscripcion.java#L1
+
+10. Usuario · perfil, mascotas y suscripciones
+Conexión JDBC, puerto, Eureka y emisor JWT del servicio
+infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml#L1
+
+10. Usuario · perfil, mascotas y suscripciones
+Angular: vista y llamadas API relacionadas
+clients/garritas-frontend/src/app/features/cuenta/cuenta.component.ts
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/cuenta/cuenta.component.ts#L1
+
+10. Usuario · perfil, mascotas y suscripciones
+Angular: vista y llamadas API relacionadas
+clients/garritas-frontend/src/app/features/planes/planes.component.ts
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/planes/planes.component.ts#L1
+
+10. Usuario · perfil, mascotas y suscripciones
+Validación de edad entera antes de convertirla
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/dto/MascotaRequest.java
+Línea: 34
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/dto/MascotaRequest.java#L34
+
+10. Usuario · perfil, mascotas y suscripciones
+Unidades admitidas: DIAS y MESES
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/UnidadEdad.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/entity/UnidadEdad.java#L1
+
+10. Usuario · perfil, mascotas y suscripciones
+Migración real: tablas y restricciones
+services/garritas-usuario-ms/src/main/resources/db/migration/V4__suscripciones_periodos.sql
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/resources/db/migration/V4__suscripciones_periodos.sql#L1
+
+11. Pago · resultado simulado de la compra
+API de lectura de pagos
+services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/controller/PagoController.java
+Línea: 10
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/controller/PagoController.java#L10
+
+11. Pago · resultado simulado de la compra
+Filtrado por sub y comprobación de propietario
+services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/service/PagoService.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/service/PagoService.java#L1
+
+11. Pago · resultado simulado de la compra
+Consumir inventario.reservado y emitir resultado
+services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/messaging/PagoEvents.java
+Línea: 28
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/messaging/PagoEvents.java#L28
+
+11. Pago · resultado simulado de la compra
+Registro del pago simulado
+services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/entity/Pago.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/entity/Pago.java#L1
+
+11. Pago · resultado simulado de la compra
+Consulta por venta/cliente
+services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/repository/PagoRepository.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/repository/PagoRepository.java#L1
+
+11. Pago · resultado simulado de la compra
+Conexión JDBC, puerto, Eureka y emisor JWT del servicio
+infra/garritas-config/config-repo/garritas-pago-ms-dev.yml
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-pago-ms-dev.yml#L1
+
+11. Pago · resultado simulado de la compra
+Angular: vista y llamadas API relacionadas
+clients/garritas-frontend/src/app/features/pagos/pagos.component.ts
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/pagos/pagos.component.ts#L1
+
+12. Bienestar · profesionales y especialidades
+CRUD de ambos recursos
+services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/controller/BienestarController.java
+Línea: 13
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/controller/BienestarController.java#L13
+
+12. Bienestar · profesionales y especialidades
+Validación, asignación y bloqueo de borrado vinculado
+services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/service/BienestarService.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/service/BienestarService.java#L1
+
+12. Bienestar · profesionales y especialidades
+@ManyToMany y @JoinTable profesional_especialidad
+services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/entity/Profesional.java
+Línea: 32
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/entity/Profesional.java#L32
+
+12. Bienestar · profesionales y especialidades
+Extremo compartido de la asociación
+services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/entity/Especialidad.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/entity/Especialidad.java#L1
+
+12. Bienestar · profesionales y especialidades
+Lectura de profesionales y sus especialidades
+services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/repository/ProfesionalRepository.java
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-bienestar-ms/src/main/java/pe/edu/upeu/garritas/bienestar/repository/ProfesionalRepository.java#L1
+
+12. Bienestar · profesionales y especialidades
+Conexión JDBC, puerto, Eureka y emisor JWT del servicio
+infra/garritas-config/config-repo/garritas-bienestar-ms-dev.yml
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-bienestar-ms-dev.yml#L1
+
+12. Bienestar · profesionales y especialidades
+Angular: vista y llamadas API relacionadas
+clients/garritas-frontend/src/app/features/bienestar/especialistas.component.ts
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/bienestar/especialistas.component.ts#L1
+
+13. S6 · comunicación síncrona resiliente
+Declaración Feign por nombre Eureka
+services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/ProductoClient.java
+Línea: 7
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/ProductoClient.java#L7
+
+13. S6 · comunicación síncrona resiliente
+Breaker y fallback reales
+services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/CatalogoConsulta.java
+Línea: 16
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/CatalogoConsulta.java#L16
+
+13. S6 · comunicación síncrona resiliente
+Timeouts Feign y ajustes Resilience4j
+infra/garritas-config/config-repo/garritas-venta-ms-dev.yml
+Línea: 56
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-venta-ms-dev.yml#L56
+
+13. S6 · comunicación síncrona resiliente
+Otras referencias HTTP: conexión 2 s y lectura 3 s
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/HttpServices.java
+Línea: 14
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/HttpServices.java#L14
+
+14. S7 / S07b · identidad y autorización
+Cadena de filtros, rutas y roles en Gateway/servicios
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SecurityConfiguration.java
+Línea: 18
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SecurityConfiguration.java#L18
+
+14. S7 / S07b · identidad y autorización
+sub, rol ADMIN y comprobación de dueño
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/CurrentUser.java
+Línea: 18
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/CurrentUser.java#L18
+
+14. S7 / S07b · identidad y autorización
+Importación de la seguridad común en un backend
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/GarritasUsuarioMsApplication.java
+Línea: 6
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/GarritasUsuarioMsApplication.java#L6
+
+14. S7 / S07b · identidad y autorización
+issuer-uri, JWK Set y audiencia garritas-api
+infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml
+Línea: 29
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-usuario-ms-dev.yml#L29
+
+14. S7 / S07b · identidad y autorización
+Realm, roles y cliente público de demostración
+keycloak/garritas-realm.json
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/keycloak/garritas-realm.json#L1
+
+14. S7 / S07b · identidad y autorización
+Cambio de propietario y unicidad de reintento
+services/garritas-venta-ms/src/main/resources/db/migration/V2__saga_identity.sql
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/resources/db/migration/V2__saga_identity.sql#L1
+
+15. S8 · comunicación por eventos
+Contrato compartido y versionado
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SagaEvent.java
+Línea: 9
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/SagaEvent.java#L9
+
+15. S8 · comunicación por eventos
+Publicador Kafka y confirmación de envío
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java
+Línea: 48
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java#L48
+
+15. S8 · comunicación por eventos
+Topics, DLT y error handler
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/MessagingConfiguration.java
+Línea: 31
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/MessagingConfiguration.java#L31
+
+15. S8 · comunicación por eventos
+Listener que escucha el topic y filtra su tipo
+services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/messaging/PagoEvents.java
+Línea: 26
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-pago-ms/src/main/java/pe/edu/upeu/garritas/pago/messaging/PagoEvents.java#L26
+
+15. S8 · comunicación por eventos
+group-id propio del consumidor
+infra/garritas-config/config-repo/garritas-pago-ms-dev.yml
+Línea: 45
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-pago-ms-dev.yml#L45
+
+16. S9 · consistencia e idempotencia
+Bloqueo por clave y comparación del payload
+services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/service/VentaService.java
+Línea: 48
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/service/VentaService.java#L48
+
+16. S9 · consistencia e idempotencia
+Evento y efecto se confirman juntos
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Inbox.java
+Línea: 13
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Inbox.java#L13
+
+16. S9 · consistencia e idempotencia
+Negocio y evento pendiente se guardan juntos
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java
+Línea: 35
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/Outbox.java#L35
+
+16. S9 · consistencia e idempotencia
+Devolución desde reserva original y guardia RESERVADA
+services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java
+Línea: 76
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-catalogo-ms/src/main/java/pe/edu/upeu/garritas/catalogo/messaging/InventarioEvents.java#L76
+
+16. S9 · consistencia e idempotencia
+Alta/renovación idempotente e historial de precios
+services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java
+Línea: 95
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-usuario-ms/src/main/java/pe/edu/upeu/garritas/usuario/service/SuscripcionService.java#L95
+
+17. S10 · observar y diagnosticar
+Grupos liveness/readiness y exposición de métricas
+infra/garritas-config/config-repo/garritas-venta-ms-dev.yml
+Línea: 75
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-config/config-repo/garritas-venta-ms-dev.yml#L75
+
+17. S10 · observar y diagnosticar
+Lee/genera X-Trace-ID y lo pone en MDC
+services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/filter/CorrelationIdFilter.java
+Línea: 25
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/filter/CorrelationIdFilter.java#L25
+
+17. S10 · observar y diagnosticar
+Propaga el identificador en Feign
+services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/FeignConfiguration.java
+Línea: 10
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/services/garritas-venta-ms/src/main/java/pe/edu/upeu/garritas/venta/client/FeignConfiguration.java#L10
+
+17. S10 · observar y diagnosticar
+Propaga JWT y X-Trace-ID en otras referencias
+infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/ServiceClient.java
+Línea: 35
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/infra/garritas-common/src/main/java/pe/edu/upeu/garritas/common/ServiceClient.java#L35
+
+17. S10 · observar y diagnosticar
+Descubrimiento de servicios y target Keycloak
+obs/prometheus/prometheus-dev.yml
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/obs/prometheus/prometheus-dev.yml#L1
+
+17. S10 · observar y diagnosticar
+Lectura de logs por application
+obs/promtail/promtail-config-dev.yml
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/obs/promtail/promtail-config-dev.yml#L1
+
+17. S10 · observar y diagnosticar
+Panel real: instancias, HTTP, PostgreSQL, Gateway y logs de Catálogo
+obs/grafana/provisioning/dashboards/garritas-infraestructura.json
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/obs/grafana/provisioning/dashboards/garritas-infraestructura.json#L1
+
+18. S11 · Angular, Gateway y PKCE
+Inicializa Auth y registra interceptor HTTP
+clients/garritas-frontend/src/app/app.config.ts
+Línea: 4
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/app.config.ts#L4
+
+18. S11 · Angular, Gateway y PKCE
+Login, PKCE S256, renovación y roles reales
+clients/garritas-frontend/src/app/core/auth.ts
+Línea: 27
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/core/auth.ts#L27
+
+18. S11 · Angular, Gateway y PKCE
+Bearer solo para la URL de API propia
+clients/garritas-frontend/src/app/core/interceptor.ts
+Línea: 6
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/core/interceptor.ts#L6
+
+18. S11 · Angular, Gateway y PKCE
+Carga URLs runtime antes de autenticar
+clients/garritas-frontend/src/app/core/config.ts
+Línea: 11
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/core/config.ts#L11
+
+18. S11 · Angular, Gateway y PKCE
+En DEV apiUrl apunta a Gateway, no a :8081–8088
+clients/garritas-frontend/public/config.dev.json
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/public/config.dev.json#L1
+
+18. S11 · Angular, Gateway y PKCE
+Polling con timer/exhaustMap y estados pendientes
+clients/garritas-frontend/src/app/app.ts
+Línea: 82
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/app.ts#L82
+
+18. S11 · Angular, Gateway y PKCE
+Persistencia del carrito; no de tokens
+clients/garritas-frontend/src/app/features/cart/cart-store.ts
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/clients/garritas-frontend/src/app/features/cart/cart-store.ts#L1
+
+22. Guion de demo por integrante y lista de apertura
+Recorrido de todos los dominios con roles/propiedad
+uso-rapido/scripts/domain_smoke.py
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/uso-rapido/scripts/domain_smoke.py#L1
+
+22. Guion de demo por integrante y lista de apertura
+Demos de las tres parejas y sus N:M
+uso-rapido/scripts/academic_smoke.py
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/uso-rapido/scripts/academic_smoke.py#L1
+
+22. Guion de demo por integrante y lista de apertura
+Perfil, unidades de edad y revisión móvil
+uso-rapido/scripts/frontend_review.py
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/uso-rapido/scripts/frontend_review.py#L1
+
+22. Guion de demo por integrante y lista de apertura
+Fallas controladas en DEV: detiene procesos/broker
+uso-rapido/scripts/faults.py
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/uso-rapido/scripts/faults.py#L1
+
+22. Guion de demo por integrante y lista de apertura
+Dos instancias y retiro de la secundaria en DEV
+uso-rapido/scripts/scaling.py
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/uso-rapido/scripts/scaling.py#L1
+
+22. Guion de demo por integrante y lista de apertura
+Resultados previos publicados: 24 Java y 13 Angular
+docs/evidencias-actualizacion/resultado.json
+Línea: 1
+https://github.com/Nikol235/Garritas-/blob/ed74c90d288a8bc68a55b699a76314967c73c870/docs/evidencias-actualizacion/resultado.json#L1

@@ -1,0 +1,5 @@
+digraph G {graph [fontname="DejaVu Sans",bgcolor="white",pad="0.15",ranksep="0.35"];node [fontname="DejaVu Sans",fontsize=11,shape=box,style="rounded,filled",fillcolor="#edf4ee",color="#47735e"];edge [fontname="DejaVu Sans",fontsize=9,color="#48685a"];rankdir=TB;u[label="Usuario inicia sesión"];kc[label="Keycloak verifica credenciales
+emite JWT firmado"];g[label="Gateway valida JWT
+firma + issuer + audiencia + roles"];s[label="Servicio destino valida otra vez
+roles + CurrentUser.requireOwner"];db[label="Consulta/cambio autorizado
+en su PostgreSQL"];u->kc;kc->g[label="Angular envía Bearer"];g->s->db;direct[label="Petición directa a :808x"];direct->s[label="también debe validarse"];}
