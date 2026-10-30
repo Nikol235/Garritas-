@@ -8,6 +8,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
   pe.edu.upeu.garritas.common.MessagingConfiguration.class
 })
 @org.springframework.cloud.openfeign.EnableFeignClients
+@io.swagger.v3.oas.annotations.OpenAPIDefinition(
+    security = @io.swagger.v3.oas.annotations.security.SecurityRequirement(name = "bearerAuth"))
+@io.swagger.v3.oas.annotations.security.SecurityScheme(
+    name = "bearerAuth",
+    type = io.swagger.v3.oas.annotations.enums.SecuritySchemeType.HTTP,
+    scheme = "bearer",
+    bearerFormat = "JWT")
 @SpringBootApplication
 public class GarritasVentaMsApplication {
 

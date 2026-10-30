@@ -15,9 +15,9 @@ spring:
             predicates:
             - Path=/api/v1/sedes/**
           - id: garritas-envio
-            uri: lb://garritas-envio-ms
+            uri: lb://garritas-venta-ms
             predicates:
-            - Path=/api/v1/envios/**
+            - Path=/api/v1/envios/**,/api/v1/despachos/**
           - id: garritas-citas
             uri: lb://garritas-citas-ms
             predicates:
@@ -42,6 +42,18 @@ spring:
             uri: lb://garritas-usuario-ms
             predicates:
             - Path=/api/v1/mascotas/**
+          - id: garritas-logistica
+            uri: lb://garritas-envio-ms
+            predicates:
+            - Path=/api/v1/transportistas/**,/api/v1/zonas/**,/api/v1/coberturas/**
+          - id: garritas-prestaciones
+            uri: lb://garritas-institucion-ms
+            predicates:
+            - Path=/api/v1/prestaciones/**
+          - id: garritas-suscripciones
+            uri: lb://garritas-usuario-ms
+            predicates:
+            - Path=/api/v1/planes/**,/api/v1/suscripciones/**
           - id: garritas-bienestar
             uri: lb://garritas-bienestar-ms
             predicates:

@@ -12,6 +12,20 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cita {
+  @Version private Long version;
+
+  @Column(nullable = false, precision = 10, scale = 2)
+  @Builder.Default
+  private java.math.BigDecimal total = java.math.BigDecimal.ZERO;
+
+  @Column(name = "duracion_minutos", nullable = false)
+  @Builder.Default
+  private Integer duracionMinutos = 30;
+
+  @OneToMany(mappedBy = "cita", cascade = CascadeType.ALL)
+  @OrderBy("id ASC")
+  @Builder.Default
+  private java.util.List<DetalleCita> detalles = new java.util.ArrayList<>();
 
   @Column(name = "id_profesional")
   private Long profesionalId;

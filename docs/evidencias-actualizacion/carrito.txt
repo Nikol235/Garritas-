@@ -1,0 +1,7 @@
+PASS: Nueva orden, catálogo de mascotas, filtros, cantidades, subtotales y quitar productos
+PASS: carrito conservado al iniciar sesión y recargar, sesión PKCE sin tokens persistidos
+PASS: catálogo público, ventas protegidas y escritura solo ADMIN
+PASS: compra desde Angular, CORS, reserva, pago Kafka y polling hasta PAGADA
+PASS: rechazo, compensación de stock e idempotencia HTTP con conflicto de payload
+PASS: sin sobreventa, cantidad inválida y clave obligatoria
+PASS: preflight CORS con Authorization e Idempotency-Key

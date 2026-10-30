@@ -47,3 +47,19 @@ Se reinició el flujo DEV y se repitieron compilación Java, 15 pruebas Java, 11
 Las pruebas de fallo repitieron replay/duplicado Kafka, detención y recuperación de Pago, caída del broker y entrega tras recuperar outbox. El ejemplo Python publicó/consumió tres mensajes. El ZIP de código se extrajo en una carpeta nueva: el reactor Maven y Angular compilaron sin los targets ni node_modules originales.
 
 Los resultados, límites y PDF están en [manuales](manuales/README.md), con `revision.json` y evidencia resumida. Sigue sin acreditarse ejecución PowerShell en Windows ni arranque simultáneo del despliegue integral Docker.
+
+## Actualización de asignaciones y revisión de sesiones 1–11
+
+La [asignación actual](asignacion-y-sustentacion.md) y la [matriz de referencia docente](alineacion-pagatu.md) sustituyen las descripciones anteriores de Envío operativo: ahora es maestro logístico y los despachos están en Venta. Se mantienen los puertos. La documentación extensa PDF anterior identifica su commit histórico; no se presenta como una copia del código actual.
+
+Resultado de la revisión: **24 pruebas Java, sin fallos/errores/omitidas; 13 pruebas Angular y build de producción correctos**. El reactor completo pasó con 22 pruebas; tras dos refuerzos finales se verificaron de nuevo Usuario y Venta, sumando los casos de edad decimal y propiedad de despacho (24 en los reportes finales).
+
+Los recorridos `domain_smoke.py`, `academic_smoke.py` y `smoke.py` pasaron: cada pareja tiene N:M comprobada desde la UI/API, cabecera/detalle y regla de negocio; el perfil persiste tras recargar; la edad admite días/meses y rechaza decimales/negativos/unidad inválida; la Saga y la entrega conservan permisos y stock. `frontend_review.py` revisó seis vistas con datos cargados en escritorio y móvil, sin desbordamiento horizontal.
+
+Se levantó una segunda instancia de Institución: Gateway alternó las respuestas 8082/18082 y continuó con la principal tras retirar la secundaria. Pasaron replay/duplicados, caída y recuperación de Pago, detención de Kafka y recuperación vía outbox. Kafka UI, Keycloak, Eureka, Grafana, Prometheus y Loki se verificaron otra vez.
+
+Se corrigió un fallo de empaquetado incremental: un JAR ya empaquetado conservaba el soporte común anterior. Los lanzadores ahora hacen `clean package`; se inspeccionó el JAR de Gateway para confirmar que incluye las nuevas reglas de seguridad. La documentación Swagger ofrece esquema Bearer y la API sigue aplicando roles/propiedad.
+
+La copia histórica conservó tres registros exactamente y se repitió sin duplicar ni borrar origen; la migración bloquea escrituras durante el ajuste de secuencia. PowerShell conserva UTF-8 y no necesita Python para migrar. Los cambios Windows se revisaron estáticamente; no se afirma ejecución nativa desde Linux.
+
+[Resultados estructurados](evidencias-actualizacion/resultado.json) y resúmenes de evidencia en `docs/evidencias-actualizacion/`. La alternativa Compose integral valida configuración; su arranque simultáneo continúa sin acreditarse. El pago bancario/API externa real del brief global permanece fuera de la simulación didáctica: no se atribuye como cumplido.

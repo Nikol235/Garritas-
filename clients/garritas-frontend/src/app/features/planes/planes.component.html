@@ -1,0 +1,170 @@
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">ACOMPAÑAMOS SU BIENESTAR</p>
+    <h1>Planes y suscripciones</h1>
+    <p>
+      Contrata y renueva planes de cuidado. Esta demostración registra la
+      contratación, sin cobro bancario ni canje automático de beneficios.
+    </p>
+  </div>
+  <button (click)="load()">Actualizar planes</button>
+</div>
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+@if (message()) {
+  <p class="notice" role="status">{{ message() }}</p>
+}
+@if (needsProfile()) {
+  <div class="panel">
+    <p>Guarda tu perfil antes de contratar un plan.</p>
+    <button class="primary" (click)="cuenta.emit()">Completar mi perfil</button>
+  </div>
+}
+<div class="grid">
+  @for (p of planes(); track p.id) {
+    <article>
+      <h2>{{ p.nombre }}</h2>
+      <p>{{ p.descripcion }}</p>
+      <p>
+        <strong>{{ p.precio | currency: "PEN" : "S/ " }}</strong> /
+        {{ p.duracionDias }} días
+      </p>
+      <span class="badge">{{ p.activo ? "Disponible" : "Inactivo" }}</span>
+      <div class="actions">
+        @if (p.activo && !needsProfile()) {
+          <button
+            class="primary"
+            [disabled]="busy() || active(p)"
+            (click)="contratar(p)"
+          >
+            {{
+              active(p)
+                ? "Ya contratado: utiliza Renovar"
+                : "Contratar " + p.nombre
+            }}
+          </button>
+        }
+        @if (auth.admin()) {
+          <button (click)="edit(p)">Editar plan {{ p.nombre }}</button
+          ><button (click)="remove(p)">Desactivar plan {{ p.nombre }}</button>
+        }
+      </div>
+    </article>
+  }
+</div>
+<h2>{{ auth.admin() ? "Suscripciones de clientes" : "Mis suscripciones" }}</h2>
+<div class="grid">
+  @for (s of suscripciones(); track s.id) {
+    <article>
+      <h3>{{ s.nombrePlan }} · #{{ s.id }}</h3>
+      @if (auth.admin()) {
+        <p>{{ s.cliente }}</p>
+      }
+      <p>
+        Desde {{ s.fechaInicio | date: "short" }} hasta
+        {{ s.fechaFin | date: "short" }}
+      </p>
+      <span class="badge">{{
+        s.estado === "ACTIVA"
+          ? "Activa"
+          : s.estado === "CANCELADA"
+            ? "Cancelada"
+            : "Vencida"
+      }}</span>
+      <p>
+        Total de períodos contratados:
+        {{ s.totalContratado | currency: "PEN" : "S/ " }}
+      </p>
+      <details>
+        <summary>Ver períodos de la suscripción #{{ s.id }}</summary>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Operación</th>
+                <th>Inicio / fin</th>
+                <th>Importe</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (d of s.periodos; track d.id) {
+                <tr>
+                  <td>
+                    {{ d.tipo === "ALTA" ? "Contratación" : "Renovación" }}
+                  </td>
+                  <td>
+                    {{ d.fechaInicio | date: "short" }} —
+                    {{ d.fechaFin | date: "short" }}
+                  </td>
+                  <td>{{ d.precio | currency: "PEN" : "S/ " }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </details>
+      <div class="actions">
+        @if (s.estado !== "CANCELADA") {
+          <button [disabled]="busy()" (click)="renovar(s)">
+            Renovar suscripción #{{ s.id }}</button
+          ><button [disabled]="busy()" (click)="cancelar(s)">
+            Cancelar suscripción #{{ s.id }}
+          </button>
+        }
+      </div>
+    </article>
+  } @empty {
+    <p>Aún no hay suscripciones registradas.</p>
+  }
+</div>
+@if (auth.admin()) {
+  <section class="panel">
+    <h2>{{ id ? "Editar plan" : "Nuevo plan de cuidado" }}</h2>
+    <form #f="ngForm" (ngSubmit)="save()">
+      <div class="field-grid">
+        <label
+          >Nombre del plan<input
+            name="nombre"
+            [(ngModel)]="model.nombre"
+            maxlength="100"
+            required /></label
+        ><label
+          >Descripción del plan<input
+            name="descripcion"
+            [(ngModel)]="model.descripcion"
+            maxlength="255" /></label
+        ><label
+          >Precio del plan<input
+            name="precio"
+            type="number"
+            min="0.01"
+            max="99999999.99"
+            step="0.01"
+            [(ngModel)]="model.precio"
+            required /></label
+        ><label
+          >Duración del plan en días<input
+            name="dias"
+            type="number"
+            min="1"
+            max="366"
+            step="1"
+            [(ngModel)]="model.duracionDias"
+            required /></label
+        ><label class="check"
+          ><input
+            name="activo"
+            type="checkbox"
+            [(ngModel)]="model.activo"
+          />Plan activo</label
+        >
+      </div>
+      <div class="actions">
+        <button class="primary" [disabled]="f.invalid || busy()">
+          Guardar plan</button
+        ><button type="button" (click)="reset()">Limpiar plan</button>
+      </div>
+    </form>
+  </section>
+}

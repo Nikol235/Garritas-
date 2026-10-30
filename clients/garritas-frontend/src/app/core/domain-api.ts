@@ -37,9 +37,18 @@ export interface Mascota {
   nombre: string;
   especie: string;
   raza: string;
-  edad: number;
+  edad: number | null;
+  edadUnidad: "DIAS" | "MESES";
 }
 export interface Cita {
+  total: number;
+  duracionMinutos: number;
+  detalles: {
+    prestacionId: number;
+    nombre: string;
+    precio: number;
+    duracionMinutos: number;
+  }[];
   id: number;
   idMascota: number;
   idSede: number;
@@ -52,6 +61,9 @@ export interface Cita {
   estado: string;
 }
 export interface Envio {
+  zonaId: number | null;
+  transportistaId: number | null;
+  tarifa: number | null;
   id: number;
   idVenta: number;
   direccionEntrega: string;
@@ -75,8 +87,12 @@ export class DomainApi {
   get<T>(path: string) {
     return this.http.get<T>(this.config.value.apiUrl + path);
   }
-  post<T>(path: string, body: unknown = {}) {
-    return this.http.post<T>(this.config.value.apiUrl + path, body);
+  post<T>(path: string, body: unknown = {}, key?: string) {
+    return this.http.post<T>(
+      this.config.value.apiUrl + path,
+      body,
+      key ? { headers: { "Idempotency-Key": key } } : {},
+    );
   }
   put<T>(path: string, body: unknown) {
     return this.http.put<T>(this.config.value.apiUrl + path, body);
@@ -105,6 +121,7 @@ export class Feedback {
   send<T>(operation: Observable<T>, done: (value: T) => void) {
     if (this.busy()) return;
     this.error.set("");
+    this.message.set("");
     this.busy.set(true);
     operation.subscribe({
       next: (value) => {
@@ -119,6 +136,7 @@ export class Feedback {
     });
   }
   report(e: HttpErrorResponse) {
+    this.message.set("");
     this.error.set(errorMessage(e));
   }
 }
@@ -143,4 +161,68 @@ export function stateLabel(state: string) {
       } as Record<string, string>
     )[state] ?? state
   );
+}
+
+export interface Prestacion {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  activo: boolean;
+}
+export interface Oferta {
+  id: number;
+  sedeId: number;
+  prestacionId: number;
+  nombre: string;
+  precio: number;
+  duracionMinutos: number;
+  activo: boolean;
+}
+export interface Transportista {
+  id: number;
+  nombre: string;
+  telefono: string;
+  activo: boolean;
+}
+export interface Zona {
+  id: number;
+  nombre: string;
+  ciudad: string;
+  activo: boolean;
+}
+export interface Cobertura {
+  id: number;
+  transportistaId: number;
+  zonaId: number;
+  transportista: string;
+  zona: string;
+  tarifa: number;
+  diasEstimados: number;
+  activo: boolean;
+}
+export interface Plan {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  duracionDias: number;
+  activo: boolean;
+}
+export interface Suscripcion {
+  id: number;
+  usuarioId: number;
+  cliente: string;
+  planId: number;
+  nombrePlan: string;
+  estado: string;
+  fechaInicio: string;
+  fechaFin: string;
+  totalContratado: number;
+  periodos: {
+    id: number;
+    tipo: string;
+    fechaInicio: string;
+    fechaFin: string;
+    precio: number;
+  }[];
 }

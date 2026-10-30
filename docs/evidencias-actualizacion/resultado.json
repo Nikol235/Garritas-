@@ -1,0 +1,90 @@
+{
+  "fecha": "2026-10-30T02:23:50.897143-05:00",
+  "referencia_pagatu": "9e6fc30a7028c9398641d187b30da98117a5fc76",
+  "rama": "feat/garritas-store",
+  "java": {
+    "tests": 24,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "angular": {
+    "tests": 13,
+    "failures": 0,
+    "production_build": "OK"
+  },
+  "checks": {
+    "dominios": [
+      "PASS: sedes del Perú, ADMIN crea/edita y CLIENTE solo consulta/selecciona",
+      "PASS: perfil y mascotas persistidos; un segundo cliente no puede acceder a ellas",
+      "PASS: Bienestar muchos a muchos real, especialidades compartidas y asociación sin duplicados",
+      "PASS: cita desde Angular con mascota/sede/profesional, sin doble reserva y con permisos de estado",
+      "PASS: producto gestionado en Angular, compra por sede, Kafka, pago y stock correctos",
+      "PASS: envío entregado desde Angular, pagos y clientes visibles con separación por propietario"
+    ],
+    "parejas": [
+      "PASS: Institución maestro, prestación compartida por dos sedes y escritura solo ADMIN",
+      "PASS: Envío maestro, transportistas y zonas N:M con tarifa/plazo y roles",
+      "PASS: Usuario transaccional, clientes y planes N:M, períodos históricos, renovación/cancelación e idempotencia"
+    ],
+    "carrito": [
+      "PASS: Nueva orden, catálogo de mascotas, filtros, cantidades, subtotales y quitar productos",
+      "PASS: carrito conservado al iniciar sesión y recargar, sesión PKCE sin tokens persistidos",
+      "PASS: catálogo público, ventas protegidas y escritura solo ADMIN",
+      "PASS: compra desde Angular, CORS, reserva, pago Kafka y polling hasta PAGADA",
+      "PASS: rechazo, compensación de stock e idempotencia HTTP con conflicto de payload",
+      "PASS: sin sobreventa, cantidad inválida y clave obligatoria",
+      "PASS: preflight CORS con Authorization e Idempotency-Key"
+    ],
+    "frontend-revision": [
+      "PASS: perfil confirmado tras recarga, correo ajeno rechazado sin cambios, edad días/meses y valores inválidos rechazados",
+      "PASS: despacho ajeno rechazado antes de revelar su estado; pedido propio no pagado tampoco admite despacho",
+      "PASS: seis pantallas revisadas en escritorio y móvil sin desbordamiento horizontal; seis sedes peruanas activas"
+    ],
+    "balanceo": [
+      "PASS: dos instancias en Eureka; Gateway alterna X-Service-Instance 8082 y 18082",
+      "PASS: instancia secundaria detenida; Gateway continúa sirviendo la instancia principal"
+    ],
+    "fallos": [
+      "PASS: replay Kafka y duplicado semántico no restauran stock dos veces",
+      "PASS: Pago detenido, venta pendiente y recuperación sin perder el evento",
+      "PASS: Kafka detenido, outbox duradero y recuperación del pago"
+    ],
+    "consolas": [
+      "PASS: Kafka UI abre y muestra el broker conectado",
+      "PASS: consola administrativa Keycloak permite iniciar sesión",
+      "PASS: Eureka abre con los ocho servicios y Gateway registrados",
+      "PASS: Grafana abre, carga dashboards y conecta con Prometheus y Loki",
+      "PASS: Prometheus muestra todos los targets UP; Loki recibe logs de Catálogo"
+    ],
+    "estado": [
+      "OK    Tienda Angular           puerto 4200",
+      "OK    Kafka UI                 puerto 18085",
+      "OK    Keycloak                 puerto 18180",
+      "OK    Eureka                   puerto 18761",
+      "OK    Config Server            puerto 18888",
+      "OK    Gateway                  puerto 18080",
+      "OK    Catálogo por Gateway     puerto 18080",
+      "OK    Bienestar                puerto 8088",
+      "OK    Venta                    puerto 8081",
+      "OK    Institución              puerto 8082",
+      "OK    Envío                    puerto 8083",
+      "OK    Citas                    puerto 8084",
+      "OK    Catálogo                 puerto 8085",
+      "OK    Usuario                  puerto 8086",
+      "OK    Pago                     puerto 8087",
+      "OK    Grafana                  puerto 13000",
+      "OK    Prometheus               puerto 19090",
+      "OK    Loki                     puerto 13100",
+      "OK    Kafka broker y topic de ventas"
+    ]
+  },
+  "historicos_despacho": {
+    "filas": 3,
+    "origen_conservado": true,
+    "reintento_sin_duplicados": true
+  },
+  "compose_config": "DEV e integrado/overlays correctos",
+  "mkdocs_strict": "OK",
+  "alcance": "DEV Linux y Chromium; no Windows ejecutado ni arranque simultáneo del Compose integral; pagos simulados."
+}

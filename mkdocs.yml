@@ -8,6 +8,8 @@ nav:
   - Arquitectura: arquitectura.md
   - Validación: validacion.md
   - Guía de ejecución: ejecucion.md
+  - Asignación y sustentación: asignacion-y-sustentacion.md
+  - Alineación con Pagatu: alineacion-pagatu.md
   - Manuales PDF: manuales/README.md
 markdown_extensions:
   - tables

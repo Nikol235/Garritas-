@@ -1,5 +1,7 @@
 # Manuales de Garritas Store en PDF
 
+**Código actual:** la evolución de prestaciones, logística, suscripciones y edad explícita se documenta en [asignación y sustentación](../asignacion-y-sustentacion.md) y [alineación con Pagatu](../alineacion-pagatu.md). Los PDF extensos y el ZIP siguientes son una edición histórica del commit indicado; no se presentan como el código nuevo. Las guías breves de comandos siguen usando los mismos lanzadores.
+
 Edición revisada el **24 de octubre de 2026**, basada en el código `ceaf408` de la rama `feat/garritas-store`.
 
 | PDF | Extensión | Contenido |

@@ -13,42 +13,52 @@
 }
 @if (loading()) {
   <p role="status">Cargando tu perfil…</p>
+} @else if (loadFailed()) {
+  <button (click)="load()">Reintentar carga de mi perfil</button>
 } @else {
-<section class="panel">
-  <h2>Mi perfil</h2>
-  <form #f="ngForm" (ngSubmit)="save()">
-    <div class="field-grid">
-      <label
-        >Nombre completo<input
-          name="nombre"
-          [(ngModel)]="model.nombre"
-          required
-          maxlength="100" /></label
-      ><label
-        >Correo de contacto<input
-          name="email"
-          type="email"
-          [(ngModel)]="model.email"
-          required
-          email
-          maxlength="150" /></label
-      ><label
-        >Teléfono de contacto<input
-          name="telefono"
-          [(ngModel)]="model.telefono"
-          maxlength="20" /></label
-      ><label
-        >Dirección de contacto<input
-          name="direccion"
-          [(ngModel)]="model.direccion"
-          maxlength="255"
-      /></label>
-    </div>
-    <button class="primary" [disabled]="f.invalid || busy()">
-      Guardar perfil
-    </button>
-  </form>
-</section>
+  <section class="panel">
+    <h2>Mi perfil</h2>
+    <form #f="ngForm" (ngSubmit)="save()">
+      <div class="field-grid">
+        <label
+          >Nombre completo<input
+            name="nombre"
+            [(ngModel)]="model.nombre"
+            required
+            maxlength="100" /></label
+        ><label
+          >Correo de contacto<input
+            name="email"
+            type="email"
+            [(ngModel)]="model.email"
+            required
+            email
+            maxlength="150" /></label
+        ><label
+          >Teléfono de contacto<input
+            name="telefono"
+            [(ngModel)]="model.telefono"
+            maxlength="20" /></label
+        ><label
+          >Dirección de contacto<input
+            name="direccion"
+            [(ngModel)]="model.direccion"
+            maxlength="255"
+        /></label>
+      </div>
+      @if (f.invalid) {
+        <p class="muted">Completa tu nombre y un correo válido para guardar.</p>
+      }
+      <button class="primary" [disabled]="f.invalid || busy()">
+        {{ busy() ? "Guardando…" : "Guardar perfil" }}
+      </button>
+    </form>
+    @if (perfil()) {
+      <p class="muted" aria-live="polite">
+        Perfil registrado: {{ perfil()!.nombre }} · {{ perfil()!.email }}
+      </p>
+    }
+  </section>
 }
 @if (perfil()) {
   <div class="page-heading"><h2>Mis mascotas</h2></div>
@@ -59,7 +69,19 @@
         <h3>{{ p.nombre }}</h3>
         <p>
           {{ p.especie }} · {{ p.raza || "Sin raza indicada" }} ·
-          {{ p.edad ?? 0 }} años
+          {{
+            p.edad === null
+              ? "Edad no registrada"
+              : p.edad +
+                " " +
+                (p.edadUnidad === "DIAS"
+                  ? p.edad === 1
+                    ? "día"
+                    : "días"
+                  : p.edad === 1
+                    ? "mes"
+                    : "meses")
+          }}
         </p>
         <div class="actions">
           <button
@@ -103,15 +125,35 @@
             [(ngModel)]="pet.raza"
             maxlength="100" /></label
         ><label
-          >Edad en años<input
+          >Edad de la mascota<input
             name="edad"
             type="number"
             min="0"
+            max="36500"
+            required
             step="1"
             [(ngModel)]="pet.edad"
         /></label>
+        <label
+          >Unidad de edad<select
+            name="edadUnidad"
+            [(ngModel)]="pet.edadUnidad"
+            required
+          >
+            <option value="MESES">Meses</option>
+            <option value="DIAS">Días</option>
+          </select></label
+        >
       </div>
-      <button class="primary" [disabled]="pf.invalid || busy()">
+      @if (!edadValida()) {
+        <p class="error">
+          Ingresa una edad entera, sin decimales, y selecciona días o meses.
+        </p>
+      }
+      <button
+        class="primary"
+        [disabled]="pf.invalid || !edadValida() || busy()"
+      >
         Guardar mascota
       </button>
     </form>

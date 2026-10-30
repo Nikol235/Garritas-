@@ -1,0 +1,6 @@
+PASS: sedes del Perú, ADMIN crea/edita y CLIENTE solo consulta/selecciona
+PASS: perfil y mascotas persistidos; un segundo cliente no puede acceder a ellas
+PASS: Bienestar muchos a muchos real, especialidades compartidas y asociación sin duplicados
+PASS: cita desde Angular con mascota/sede/profesional, sin doble reserva y con permisos de estado
+PASS: producto gestionado en Angular, compra por sede, Kafka, pago y stock correctos
+PASS: envío entregado desde Angular, pagos y clientes visibles con separación por propietario

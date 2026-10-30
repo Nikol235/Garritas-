@@ -1,0 +1,3 @@
+PASS: Institución maestro, prestación compartida por dos sedes y escritura solo ADMIN
+PASS: Envío maestro, transportistas y zonas N:M con tarifa/plazo y roles
+PASS: Usuario transaccional, clientes y planes N:M, períodos históricos, renovación/cancelación e idempotencia

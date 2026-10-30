@@ -19,6 +19,7 @@ public class CitaService {
   private final CitaRepository repository;
   private final CitaMapper mapper;
   private final ServiceClient services;
+  private final org.springframework.jdbc.core.JdbcTemplate jdbc;
 
   public List<CitaResponse> listar() {
     return (CurrentUser.admin()
@@ -55,7 +56,55 @@ public class CitaService {
         || (profesional.sedeId() != null && !profesional.sedeId().equals(r.getIdSede())))
       throw new ResponseStatusException(
           HttpStatus.CONFLICT, "Sede o profesional no disponible para esta cita");
+    OfertaReferencia[] ofertas =
+        services.get(
+            "garritas-institucion-ms",
+            "/api/v1/sedes/" + r.getIdSede() + "/prestaciones",
+            OfertaReferencia[].class);
+    var ids = new LinkedHashSet<>(r.getPrestacionIds());
+    if (ids.size() != r.getPrestacionIds().size())
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, "No repitas prestaciones en la cita");
     Cita c = mapper.toEntity(r);
+    int duracion = 0;
+    for (Long id : ids) {
+      var oferta =
+          Arrays.stream(ofertas)
+              .filter(o -> o.prestacionId().equals(id) && Boolean.TRUE.equals(o.activo()))
+              .findFirst()
+              .orElseThrow(
+                  () ->
+                      new ResponseStatusException(
+                          HttpStatus.CONFLICT, "La prestación no está disponible en esa sede"));
+      DetalleCita d = new DetalleCita();
+      d.setCita(c);
+      d.setPrestacionId(id);
+      d.setNombre(oferta.nombre());
+      d.setPrecio(oferta.precio());
+      d.setDuracionMinutos(oferta.duracionMinutos());
+      c.getDetalles().add(d);
+      c.setTotal(c.getTotal().add(d.getPrecio()));
+      duracion += d.getDuracionMinutos();
+    }
+    if (duracion > 480)
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, "La cita no puede superar ocho horas");
+    c.setDuracionMinutos(duracion);
+    repository.flush();
+    // Serialize reservations per professional, including overlaps beyond the first 30-min block.
+    jdbc.queryForObject("SELECT pg_advisory_xact_lock(?)", Object.class, r.getProfesionalId());
+    Integer overlaps =
+        jdbc.queryForObject(
+            "SELECT count(*) FROM citas WHERE id_profesional=? AND estado IN"
+                + " ('PROGRAMADA','CONFIRMADA') AND fecha_hora < ? AND fecha_hora +"
+                + " duracion_minutos * interval '1 minute' > ?",
+            Integer.class,
+            r.getProfesionalId(),
+            java.sql.Timestamp.from(r.getFechaHora().plusSeconds(duracion * 60L)),
+            java.sql.Timestamp.from(r.getFechaHora()));
+    if (overlaps != null && overlaps > 0)
+      throw new ResponseStatusException(
+          HttpStatus.CONFLICT, "El profesional ya tiene una cita que se cruza con ese horario");
     c.setNombreMascota(mascota.nombre());
     c.setNombreSede(sede.nombre());
     c.setNombreProfesional(profesional.nombre());

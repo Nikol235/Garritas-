@@ -33,8 +33,17 @@
       >
         Especialistas
       </button>
+      <button
+        [class.selected]="view()==='prestaciones'"
+        (click)="view.set('prestaciones')"
+      >
+        Servicios por sede
+      </button>
       @if(auth.loggedIn()){
       <p class="nav-section">MI ESPACIO</p>
+      <button [class.selected]="view()==='planes'" (click)="view.set('planes')">
+        Planes y suscripciones
+      </button>
       <button [class.selected]="view()==='cuenta'" (click)="view.set('cuenta')">
         Mi cuenta y mascotas
       </button>
@@ -55,6 +64,12 @@
       </button>
       } @if(auth.admin()){
       <p class="nav-section">ADMINISTRACIÓN</p>
+      <button
+        [class.selected]="view()==='logistica'"
+        (click)="view.set('logistica')"
+      >
+        Logística
+      </button>
       <button
         [class.selected]="view()==='productos'"
         (click)="view.set('productos')"
@@ -236,16 +251,20 @@
         </article>
         }
       </section>
-      } @if(view()==='sedes'){<app-sedes (order)="view.set('nueva-orden')" />}
+      } @if(view()==='prestaciones'){<app-prestaciones
+        (reservar)="openPrestacion($event)"
+      />} @if(view()==='sedes'){<app-sedes (order)="view.set('nueva-orden')" />}
       @if(view()==='especialistas'){<app-especialistas
         (reservar)="openCitas($event)"
       />} @if(auth.loggedIn()){ @if(view()==='cuenta'){<app-cuenta />}
+      @if(view()==='planes'){<app-planes (cuenta)="view.set('cuenta')" />}
       @if(view()==='citas'){<app-citas (cuenta)="view.set('cuenta')" />}
       @if(view()==='envios'){<app-envios [initialVenta]="shippingSaleId" />}
       @if(view()==='pagos'){<app-pagos />} } @if(auth.admin()){
+      @if(view()==='logistica'){<app-logistica />}
       @if(view()==='productos'){<app-admin-productos />}
       @if(view()==='clientes'){<app-clientes />} } @if(!auth.loggedIn() &&
-      (view()==='cuenta'||view()==='citas'||view()==='envios'||view()==='pagos'||view()==='pedidos')){
+      (view()==='planes'||view()==='cuenta'||view()==='citas'||view()==='envios'||view()==='pagos'||view()==='pedidos')){
       <section class="empty-state">
         <h1>Inicia sesión para continuar</h1>
         <button class="primary" (click)="auth.login()">Iniciar sesión</button>

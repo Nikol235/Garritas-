@@ -40,7 +40,7 @@ public class SecurityConfiguration {
       cors.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
       cors.setAllowedHeaders(
           List.of("Authorization", "Content-Type", "X-Trace-ID", "Idempotency-Key"));
-      cors.setExposedHeaders(List.of("X-Trace-ID"));
+      cors.setExposedHeaders(List.of("X-Trace-ID", "X-Service-Instance"));
       var source = new UrlBasedCorsConfigurationSource();
       source.registerCorsConfiguration("/**", cors);
       http.cors(c -> c.configurationSource(source));
@@ -55,11 +55,21 @@ public class SecurityConfiguration {
                         "/actuator/health/**", "/actuator/health", "/actuator/prometheus")
                     .permitAll()
                     .requestMatchers(
-                        HttpMethod.GET, "/api/v1/productos/**", "/api/v1/categorias/**")
+                        HttpMethod.GET,
+                        "/api/v1/productos/**",
+                        "/api/v1/categorias/**",
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html")
                     .permitAll()
                     .requestMatchers(
                         HttpMethod.GET,
                         "/api/v1/sedes/**",
+                        "/api/v1/prestaciones/**",
+                        "/api/v1/planes/**",
+                        "/api/v1/transportistas/**",
+                        "/api/v1/zonas/**",
+                        "/api/v1/coberturas/**",
                         "/api/v1/especialistas/**",
                         "/api/v1/especialidades/**")
                     .permitAll()
@@ -68,6 +78,8 @@ public class SecurityConfiguration {
                         "/api/v1/citas/*/confirmar",
                         "/api/v1/citas/*/atender",
                         "/api/v1/envios/*/en-transito",
+                        "/api/v1/despachos/*/en-transito",
+                        "/api/v1/despachos/*/entregado",
                         "/api/v1/envios/*/entregado")
                     .hasRole("ADMIN")
                     .requestMatchers(
@@ -76,6 +88,8 @@ public class SecurityConfiguration {
                         "/api/v1/mascotas/**",
                         "/api/v1/citas/**",
                         "/api/v1/envios/**",
+                        "/api/v1/despachos/**",
+                        "/api/v1/suscripciones/**",
                         "/api/v1/ventas/**")
                     .hasAnyRole("CLIENTE", "ADMIN")
                     .requestMatchers(HttpMethod.GET, "/api/v1/pagos/**")

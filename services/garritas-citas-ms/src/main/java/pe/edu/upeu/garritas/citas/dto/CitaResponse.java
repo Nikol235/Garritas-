@@ -14,6 +14,9 @@ import pe.edu.upeu.garritas.citas.entity.EstadoCita;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CitaResponse {
+  private java.math.BigDecimal total;
+  private Integer duracionMinutos;
+  private java.util.List<DetalleCitaResponse> detalles;
   private Long id;
   private Long profesionalId;
   private String nombreMascota;

@@ -41,7 +41,13 @@ public class UsuarioService {
   }
 
   public void eliminar(Long id) {
-    usuarioRepository.delete(buscarOFallar(id));
+    Usuario user = buscarOFallar(id);
+    if (user.getSubject() != null)
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "Un perfil vinculado a una cuenta no se borra desde Clientes: conserva su historial de"
+              + " mascotas y suscripciones.");
+    usuarioRepository.delete(user);
   }
 
   public UsuarioResponse me() {
@@ -49,6 +55,18 @@ public class UsuarioService {
   }
 
   public UsuarioResponse guardarMe(UsuarioRequest request) {
+    request.setNombre(request.getNombre().strip());
+    request.setEmail(request.getEmail().strip().toLowerCase(java.util.Locale.ROOT));
+    usuarioRepository
+        .findByEmailIgnoreCase(request.getEmail())
+        .ifPresent(
+            existing -> {
+              if (!pe.edu.upeu.garritas.common.CurrentUser.subject().equals(existing.getSubject()))
+                throw new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.CONFLICT,
+                    "Ese correo ya está registrado en otro perfil. Usa otro correo o solicita"
+                        + " revisión al administrador.");
+            });
     Usuario usuario =
         usuarioRepository
             .findBySubject(pe.edu.upeu.garritas.common.CurrentUser.subject())

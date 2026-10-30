@@ -1,17 +1,27 @@
-package pe.edu.upeu.garritas.envio.entity;
+package pe.edu.upeu.garritas.venta.despacho.entity;
 
 import jakarta.persistence.*;
 import java.time.Instant;
 import lombok.*;
 
 @Entity
-@Table(name = "envios")
+@Table(name = "despachos")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Envio {
+public class Despacho {
+  @Version private Long version;
+
+  @Column(name = "id_zona")
+  private Long zonaId;
+
+  @Column(name = "id_transportista")
+  private Long transportistaId;
+
+  @Column(precision = 10, scale = 2)
+  private java.math.BigDecimal tarifa;
 
   @Column(name = "id_cliente", length = 100)
   private String idCliente;
@@ -31,7 +41,7 @@ public class Envio {
 
   @Enumerated(EnumType.STRING)
   @Column(name = "estado", nullable = false, length = 20)
-  private EstadoEnvio estado;
+  private EstadoDespacho estado;
 
   @Column(name = "fecha_envio")
   private Instant fechaEnvio;

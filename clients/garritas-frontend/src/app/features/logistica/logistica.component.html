@@ -1,0 +1,209 @@
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">ENTREGAS CON COBERTURA</p>
+    <h1>Logística de envíos</h1>
+    <p>
+      Administra transportistas, zonas y sus tarifas. El seguimiento de pedidos
+      se encuentra en Envíos.
+    </p>
+  </div>
+  <button (click)="load()">Actualizar logística</button>
+</div>
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+@if (message()) {
+  <p class="notice" role="status">{{ message() }}</p>
+}
+<section class="panel">
+  <h2>{{ tid ? "Editar transportista" : "Nuevo transportista" }}</h2>
+  <form #tf="ngForm" (ngSubmit)="saveT()">
+    <div class="field-grid">
+      <label
+        >Nombre del transportista<input
+          name="nombre"
+          [(ngModel)]="t.nombre"
+          required
+          maxlength="100" /></label
+      ><label
+        >Teléfono del transportista<input
+          name="telefono"
+          [(ngModel)]="t.telefono"
+          maxlength="20" /></label
+      ><label class="check"
+        ><input
+          name="activo"
+          type="checkbox"
+          [(ngModel)]="t.activo"
+        />Transportista activo</label
+      >
+    </div>
+    <div class="actions">
+      <button class="primary" [disabled]="tf.invalid || busy()">
+        Guardar transportista</button
+      ><button type="button" (click)="resetT()">Limpiar transportista</button>
+    </div>
+  </form>
+</section>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Transportista</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (t of transportistas(); track t.id) {
+        <tr>
+          <td>{{ t.nombre }}</td>
+          <td>{{ t.activo ? "Activo" : "Inactivo" }}</td>
+          <td>
+            <button (click)="editT(t)">Editar {{ t.nombre }}</button
+            ><button (click)="remove('/transportistas/' + t.id, t.nombre)">
+              Desactivar {{ t.nombre }}
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+<section class="panel">
+  <h2>{{ zid ? "Editar zona" : "Nueva zona" }}</h2>
+  <form #zf="ngForm" (ngSubmit)="saveZ()">
+    <div class="field-grid">
+      <label
+        >Nombre de zona<input
+          name="nombre"
+          [(ngModel)]="z.nombre"
+          required
+          maxlength="100" /></label
+      ><label
+        >Ciudad de zona<input
+          name="ciudad"
+          [(ngModel)]="z.ciudad"
+          required
+          maxlength="100" /></label
+      ><label class="check"
+        ><input name="activo" type="checkbox" [(ngModel)]="z.activo" />Zona
+        activa</label
+      >
+    </div>
+    <div class="actions">
+      <button class="primary" [disabled]="zf.invalid || busy()">
+        Guardar zona</button
+      ><button type="button" (click)="resetZ()">Limpiar zona</button>
+    </div>
+  </form>
+</section>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Zona</th>
+        <th>Ciudad</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (z of zonas(); track z.id) {
+        <tr>
+          <td>{{ z.nombre }} · {{ z.activo ? "Activa" : "Inactiva" }}</td>
+          <td>{{ z.ciudad }}</td>
+          <td>
+            <button (click)="editZ(z)">Editar {{ z.nombre }}</button
+            ><button (click)="remove('/zonas/' + z.id, z.nombre)">
+              Desactivar {{ z.nombre }}
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+<section class="panel">
+  <h2>Cobertura de transportista por zona</h2>
+  <form #cf="ngForm" (ngSubmit)="saveC()">
+    <div class="field-grid">
+      <label
+        >Transportista de cobertura<select
+          name="transportista"
+          [(ngModel)]="c.transportistaId"
+          required
+        >
+          <option [ngValue]="0">Selecciona</option>
+          @for (t of transportistas(); track t.id) {
+            <option [ngValue]="t.id">{{ t.nombre }}</option>
+          }
+        </select></label
+      ><label
+        >Zona de cobertura<select name="zona" [(ngModel)]="c.zonaId" required>
+          <option [ngValue]="0">Selecciona</option>
+          @for (z of zonas(); track z.id) {
+            <option [ngValue]="z.id">{{ z.nombre }}</option>
+          }
+        </select></label
+      ><label
+        >Tarifa de entrega<input
+          name="tarifa"
+          type="number"
+          min="0"
+          max="99999999.99"
+          step="0.01"
+          [(ngModel)]="c.tarifa"
+          required /></label
+      ><label
+        >Días estimados de entrega<input
+          name="dias"
+          type="number"
+          min="1"
+          max="30"
+          step="1"
+          [(ngModel)]="c.diasEstimados"
+          required /></label
+      ><label class="check"
+        ><input name="activo" type="checkbox" [(ngModel)]="c.activo" />Cobertura
+        activa</label
+      >
+    </div>
+    <button
+      class="primary"
+      [disabled]="cf.invalid || !c.transportistaId || !c.zonaId || busy()"
+    >
+      Guardar cobertura
+    </button>
+  </form>
+</section>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Transportista</th>
+        <th>Zona</th>
+        <th>Tarifa</th>
+        <th>Plazo</th>
+        <th>Estado / acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (c of coberturas(); track c.id) {
+        <tr>
+          <td>{{ c.transportista }}</td>
+          <td>{{ c.zona }}</td>
+          <td>{{ c.tarifa | currency: "PEN" : "S/ " }}</td>
+          <td>{{ c.diasEstimados }} días</td>
+          <td>
+            {{ c.activo ? "Activa" : "Inactiva"
+            }}<button (click)="editC(c)">
+              Editar cobertura {{ c.transportista }} {{ c.zona }}</button
+            ><button (click)="remove('/coberturas/' + c.id, 'la cobertura')">
+              Desactivar cobertura
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
